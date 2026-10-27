@@ -273,3 +273,25 @@ Codes (all in `sims/codes/`):
 - Every factor is tagged sim/lit/est in the JSON. Wall-plug → 6 GeV proton efficiency: RF reference 15 % [lit]; **D2 guided resonant train 3.3 % (today's fibre) – 6.4 % (projected fibre)**; D3 all-optical 0.68 % (transverse-flying-focus coupling) / 0.008 % (transverse pumping); D1 free-space flying focus 0.14–0.43 % (fibre), 10⁻⁵ (Ti:Sa); D4 near-critical RPA 6×10⁻⁵ [lit]; D0 conventional staged 2×10⁻⁴ (fibre), 5×10⁻⁷ (Ti:Sa).
 - LWFA section only (1 → 6 GeV): D2 5.8 % / 2.9 % vs conventional 1.7×10⁻⁴ (fibre) / 4.2×10⁻⁷ (Ti:Sa) → **efficiency multiplier ≈ 340× (same lasers), ≈ 1.4×10⁵× vs Ti:Sa conventional LWFA**.
 - D2 physical sheet [est]: 3 stages (1→2→3.5→6 GeV, n₀ = 3.1×10¹⁸ / 1.2×10¹⁸ / 6×10¹⁷ cm⁻³, 22–51 GV/m) ≈ 18 cm of plasma; 4.4×10⁷ protons (7 pC) and 0.31 J of laser per shot; a 1 MW beam needs 24 MHz, 7.4 MW laser average power, 19.6 MW (projected) / 38 MW (today) wall-plug.
+
+---
+
+## Follow-up (full multi-D check requested) — 2026-10-27
+
+### S031 ⚠️ P1g: guided train with physically correct kinematics (envelope at ~c, pattern at v_a), fixed velocity — 2026-10-27
+- **Why:** in a plasma channel only the beat pattern moves at v_a; the energy envelope travels at the modes' group velocity (≈ 0.9995c here). S024/P1f moved the envelope with the pattern (optimistic). Protons at v_a therefore fall behind the envelope and ride the free plasma wave it leaves, whose phase velocity is imprinted by the peak timing.
+- **Script:** `sims/phase1/p1g_two_velocity_train.py` (TwoVelocityDriver; window moves with the envelope so the imprinted wave is kept) · data `results/data/P1g_nenv12.json` · log `results/data/P1g_nenv12.log`
+- **Setup:** 3 GeV design (P = 2, N = 3, spacings 0.981/1.019 ω_p), a_avg = 0.35, 12-period envelope, mobile ions, bunch (load 0.4 E_peak) in the first bucket behind the envelope; pattern velocity **fixed** at the injection velocity (no taper, no feedback).
+- **Result:** protons ride the imprinted wave and gain 3000 → 3043 MeV in the first 600 c/ω_p (≈ 0.14 E₀ — same as the rigid model), then dephase and **lose** energy (2795 MeV after 2700 c/ω_p): a 1.4 % energy change at 3 GeV changes β by 7×10⁻⁴, i.e. ~⅓ wake period of slip over 3000 c/ω_p.
+- **Conclusion:** the free imprinted wave works as an accelerating structure (the driver need not stay with the protons), but the pattern velocity must follow the proton velocity *as a function of position*. Physical implementation: a **static** channel-width taper with v_pat(z) = v_proton(z) (open loop; tested in S032).
+
+### S032 ⚠️ P1g static channel-taper (open-loop) test — partial (stopped by host, low memory) — 2026-10-27
+- **Script:** `sims/phase1/p1g_two_velocity_train.py --taper --G 0.07` (TaperedTwoVelocityDriver: pattern is a function of t − τ(z), τ(z) = ∫dz/v_pat(z), v_pat(z) = velocity of a proton gaining G = 0.07 MeV per c/ω_p — fixed before the run, no feedback) · log `results/data/P1g_taper_G0.07.log`
+- **What happened:** stopped by the host's memory-pressure safeguard after 900 of 3000 c/ω_p (another heavy job had started); not restarted.
+- **Partial result:** ⟨T⟩ = 3034 / 3072 / 3088 MeV at 300 / 600 / 900 c/ω_p (design 3021 / 3042 / 3063), spread ±9–14 MeV — still accelerating where the fixed-velocity case (S031) had already turned to deceleration; protons ride the imprinted wave 88–114 c/ω_p behind the envelope centre.
+- **Conclusion (provisional):** an open-loop static channel taper keeps protons on the imprinted wave; the gain slightly exceeds the design rate, so a second iteration of v_pat(z) would be needed for long stages. Full run pending.
+
+### S033 ❌ FBPIC guided-train rerun with proton bunch — stopped by host (low memory) at step ~500–750 — 2026-10-27
+- **Script:** `sims/phase2/fbpic_waveguide_train.py --steps 4500 --protons` (adds a 1 GeV, 16 fC proton bunch, mode-0 E_r/B_θ maps for the proton focusing force, snapshots every 250 steps after step 1500) · log `sims/phase2/fbpic_train_run2.log`
+- **What happened:** reached step 500 (t = 104 fs, train still in vacuum; max RSS 2.0 GB) before the host stopped it; no new physics information. Not restarted. The first (partial) run's snapshots are preserved in `sims/phase2/fbpic_train_out_v1partial/` (analysis S029 unchanged).
+- Analysis scripts for the full run are ready: `sims/phase2/analyse_fbpic_train_full.py`, `sims/phase2/fbpic_vs_1d_two_velocity.py`.

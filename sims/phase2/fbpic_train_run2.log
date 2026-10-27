@@ -1,0 +1,25 @@
+
+UserWarning: /home/thierry/.local/lib/python3.10/site-packages/fbpic/utils/mpi.py:47:
+MPI is not properly installed.
+Simulations without domain decomposition will still run properly.
+In order to diagnose the problem, type:
+mpirun -np 2 python -c "from mpi4py.MPI import COMM_WORLD"
+
+FBPIC (0.27.1)
+
+Running on CPU (6 threads per process) 
+
+Initializing laser pulse on the mesh...
+Done.
+
+Initializing laser pulse on the mesh...
+Done.
+
+Initializing laser pulse on the mesh...
+Done.
+
+Calculating initial space charge field...
+Done.
+
+n0=3.092e+18, W=6.83 um, dn/n0=0.78, lam_p=19.0 um, tau=134 fs, grid 3985x136x2, steps 4500
+step 500: t=104 fs, max|Ez| on axis = 0.00 GV/m, max a(axis) = 0.740, maxRSS=2006 MB, <T_p>=1000.01 MeV, r_rms=2.56 um (1125s)

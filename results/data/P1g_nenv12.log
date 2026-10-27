@@ -1,0 +1,26 @@
+   dist=     0 <T>=  2999.9±  9.0 MeV protons 84 c/wp behind envelope centre, surv=1.000 (67s)
+   dist=   300 <T>=  3024.1±  9.6 MeV protons 92 c/wp behind envelope centre, surv=1.000 (190s)
+   dist=   600 <T>=  3043.0± 12.0 MeV protons 101 c/wp behind envelope centre, surv=1.000 (314s)
+   dist=   900 <T>=  3042.8± 18.0 MeV protons 110 c/wp behind envelope centre, surv=1.000 (437s)
+   dist=  1200 <T>=  2997.0± 18.6 MeV protons 118 c/wp behind envelope centre, surv=1.000 (559s)
+   dist=  1500 <T>=  2981.7± 20.7 MeV protons 127 c/wp behind envelope centre, surv=1.000 (679s)
+   dist=  1800 <T>=  2957.5± 20.7 MeV protons 136 c/wp behind envelope centre, surv=1.000 (803s)
+   dist=  2100 <T>=  2887.9± 26.7 MeV protons 145 c/wp behind envelope centre, surv=1.000 (925s)
+   dist=  2400 <T>=  2822.3± 21.9 MeV protons 154 c/wp behind envelope centre, surv=1.000 (1048s)
+   dist=  2700 <T>=  2795.5± 31.2 MeV protons 164 c/wp behind envelope centre, surv=1.000 (1172s)
+{
+ "T_inj": 3000.0,
+ "beta_pattern": 0.97120518273036,
+ "beta_env": 0.9995,
+ "n_env": 12.0,
+ "a_avg": 0.35,
+ "load_frac": 0.4,
+ "E_peak_behind_env": 0.27151677252584966,
+ "beam_gain": -500.00133001032555,
+ "laser_work_total": 179.65167714346518,
+ "work_during": 171.409061427612,
+ "note": "wake->beam efficiency here = beam gain / laser work over the same plasma length (the envelope drives plasma ahead of the protons; work is accounted over the full run)",
+ "eff_beam_over_total_work": -2.7831709559328934,
+ "T_final": 2795.4744611420083,
+ "runtime_s": 1291.924533367157
+}

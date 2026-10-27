@@ -15,7 +15,7 @@ import fluid1d as F, plasma as PL
 here = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(here, "..", "..")
 d = json.load(open(os.path.join(here, "fbpic_train_design.json")))
 n0 = d["n_cm3"] * 1e6; kp = PL.k_p(n0); E0 = PL.E0(n0); beta = d["beta"]
-snaps = {int(os.path.basename(f)[5:11]): np.load(f) for f in sorted(glob.glob(os.path.join(here, "fbpic_train_out", "snap_*.npz")))}
+snaps = {int(os.path.basename(f)[5:11]): np.load(f) for f in sorted(glob.glob(os.path.join(here, "fbpic_train_out_v1partial", "snap_*.npz")))}
 s = snaps[max(snaps)]
 z, Ez, a = s["z"], s["Ez0"], 2 * s["env_a"]
 ramp = 10e-6

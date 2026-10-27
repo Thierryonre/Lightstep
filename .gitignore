@@ -23,4 +23,4 @@ original-sims/flying-focus-lwfa-weizmann/axiprop_utils/
 # Large archives (link kept in SOURCE.md)
 original-sims/differentiable-optimisation/related-code-adept-snapshot/*.zip
 # FBPIC raw snapshots (summaries/figures are kept)
-sims/phase2/fbpic_*_out/*.npz
+sims/phase2/fbpic_*/*.npz

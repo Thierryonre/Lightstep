@@ -1,0 +1,88 @@
+{
+ "T_inj": 3000.0,
+ "beta_pattern": 0.97120518273036,
+ "beta_env": 0.9995,
+ "n_env": 12.0,
+ "a_avg": 0.35,
+ "load_frac": 0.4,
+ "E_peak_behind_env": 0.27151677252584966,
+ "beam_gain": -500.00133001032555,
+ "laser_work_total": 179.65167714346518,
+ "work_during": 171.409061427612,
+ "note": "wake->beam efficiency here = beam gain / laser work over the same plasma length (the envelope drives plasma ahead of the protons; work is accounted over the full run)",
+ "eff_beam_over_total_work": -2.7831709559328934,
+ "T_final": 2795.4744611420083,
+ "snaps": [
+  {
+   "dist": 0.019424076584130034,
+   "T_mean": 2999.940501588973,
+   "T_std": 9.034180412609029,
+   "survival": 1.0,
+   "behind_envelope": 83.77294223851558
+  },
+  {
+   "dist": 300.02176949614807,
+   "T_mean": 3024.1208790507094,
+   "T_std": 9.573679336496117,
+   "survival": 1.0,
+   "behind_envelope": 92.45617681906066
+  },
+  {
+   "dist": 600.0262292613352,
+   "T_mean": 3042.9540039025837,
+   "T_std": 12.02751642359623,
+   "survival": 1.0,
+   "behind_envelope": 101.03734705398244
+  },
+  {
+   "dist": 900.0436670869211,
+   "T_mean": 3042.7697033639315,
+   "T_std": 18.0462232771237,
+   "survival": 1.0,
+   "behind_envelope": 109.56555922850544
+  },
+  {
+   "dist": 1200.05026076418,
+   "T_mean": 2997.022994719221,
+   "T_std": 18.603481651378026,
+   "survival": 1.0,
+   "behind_envelope": 118.2045655513557
+  },
+  {
+   "dist": 1500.0642663345893,
+   "T_mean": 2981.6783544417744,
+   "T_std": 20.690371743037097,
+   "survival": 1.0,
+   "behind_envelope": 127.03605998105536
+  },
+  {
+   "dist": 1800.0752330534253,
+   "T_mean": 2957.522452767392,
+   "T_std": 20.659002487904036,
+   "survival": 1.0,
+   "behind_envelope": 135.87059326157555
+  },
+  {
+   "dist": 2100.0877044363833,
+   "T_mean": 2887.864093901329,
+   "T_std": 26.709871407410112,
+   "survival": 1.0,
+   "behind_envelope": 144.9834818752106
+  },
+  {
+   "dist": 2400.093927931143,
+   "T_mean": 2822.305709204399,
+   "T_std": 21.92817765553178,
+   "survival": 1.0,
+   "behind_envelope": 154.46243837704014
+  },
+  {
+   "dist": 2700.104504396741,
+   "T_mean": 2795.4744611420083,
+   "T_std": 31.245018559903933,
+   "survival": 1.0,
+   "behind_envelope": 164.21690190802792
+  }
+ ],
+ "runtime_s": 1291.924533367157
+}

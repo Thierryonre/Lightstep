@@ -14,6 +14,8 @@ from scipy.constants import c, e, m_e, m_p, epsilon_0
 from scipy.signal import hilbert
 from fbpic.main import Simulation
 from fbpic.lpa_utils.laser import add_laser_pulse, LaguerreGaussLaser
+from fbpic.lpa_utils.bunch import add_particle_bunch_gaussian
+import resource
 
 here = os.path.dirname(os.path.abspath(__file__))
 ap = argparse.ArgumentParser()
@@ -23,6 +25,9 @@ ap.add_argument("--fwhm_periods", type=float, default=2.5)
 ap.add_argument("--dz_per_lambda", type=float, default=16)
 ap.add_argument("--diag_every", type=int, default=500)
 ap.add_argument("--out", default="fbpic_train_out")
+ap.add_argument("--protons", action="store_true", help="add a 1 GeV, ~16 fC proton test bunch")
+ap.add_argument("--zb_um", type=float, default=-175.0)
+ap.add_argument("--fine_after", type=int, default=1500, help="diagnose every 250 steps after this step")
 a = ap.parse_args()
 d = json.load(open(os.path.join(here, "fbpic_train_design.json")))
 n0 = d["n_cm3"] * 1e6
@@ -62,6 +67,14 @@ sim.add_new_species(q=e, m=m_p, n=n0, dens_func=dens, p_nz=1, p_nr=2, p_nt=4,
 for lam, p in zip(d["lambdas"], d["p_modes"]):
     las = LaguerreGaussLaser(p=p, m=0, a0=a.a0, waist=W, tau=tau, z0=z0, zf=z_ent, lambda0=lam)
     add_laser_pulse(sim, las)
+bunch = None
+if a.protons:
+    g0 = 1 + 1000.0 / 938.272
+    bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=1.5e-6, sig_z=8e-6, n_emit=1e-7,
+                                        gamma0=g0, sig_gamma=1e-3 * g0, n_physical_particles=1e5,
+                                        n_macroparticles=20000, tf=0.0, zf=a.zb_um * 1e-6)
+    if bunch is None:
+        bunch = sim.ptcl[-1]
 sim.set_moving_window(v=c)
 print(f"n0={n0/1e6:.3e}, W={W*1e6:.2f} um, dn/n0={dn/n0:.2f}, lam_p={lam_p*1e6:.1f} um, "
       f"tau={tau*1e15:.0f} fs, grid {Nz}x{Nr}x2, steps {a.steps}", flush=True)
@@ -71,21 +84,30 @@ os.makedirs(os.path.join(here, a.out), exist_ok=True)
 t0 = time.time()
 done = 0
 while done < a.steps:
-    n = min(a.diag_every, a.steps - done)
+    every = a.diag_every if done < a.fine_after else max(a.diag_every // 2, 1)
+    n = min(every, a.steps - done)
     sim.step(n, show_progress=False)
     done += n
     z = sim.fld.interp[0].z
     Ez0 = sim.fld.interp[0].Ez[:, 0].real                    # on-axis wake (mode 0)
     Er1 = sim.fld.interp[1].Er[:, 0]                         # laser field on axis (mode 1)
-    Ex_axis = (Er1).real                                     # theta = 0 projection
-    env = np.abs(hilbert(Ex_axis))
+    env = np.abs(hilbert(Er1.real))
     E0las = m_e * c ** 2 * (2 * np.pi / 1e-6) / e
-    rho0 = sim.fld.interp[0].rho[:, :].real
+    extra = {}
+    if bunch is not None:
+        extra = dict(pz=bunch.z.copy(), px=bunch.x.copy(), py=bunch.y.copy(), pux=bunch.ux.copy(),
+                     puy=bunch.uy.copy(), puz=bunch.uz.copy(), pw=bunch.w.copy())
     np.savez_compressed(os.path.join(here, a.out, f"snap_{done:06d}.npz"), z=z, Ez0=Ez0,
-                        env_a=env / E0las, r=sim.fld.interp[0].r, Ez_map=sim.fld.interp[0].Ez.real[::2, ::2],
-                        rho_map=rho0[::2, ::2], t=sim.time)
+                        env_a=2 * env / E0las, r=sim.fld.interp[0].r,
+                        Ez_map=sim.fld.interp[0].Ez.real[::2, ::2], Er_map=sim.fld.interp[0].Er.real[::2, ::2],
+                        Bt_map=sim.fld.interp[0].Bt.real[::2, ::2],
+                        rho_map=sim.fld.interp[0].rho.real[::2, ::2], t=sim.time, **extra)
+    rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
     out["snaps"].append(dict(step=done, t=sim.time, Ez_max=float(np.abs(Ez0).max()),
-                             a_env_max=float((env / E0las).max())))
-    print(f"step {done}: t={sim.time*1e15:.0f} fs, max|Ez| on axis = {np.abs(Ez0).max()/1e9:.2f} GV/m, "
-          f"max a(axis) = {(env/E0las).max():.3f} ({time.time()-t0:.0f}s)", flush=True)
+                             a_env_max=float((2 * env / E0las).max()), max_rss_MB=rss))
+    msg = f"step {done}: t={sim.time*1e15:.0f} fs, max|Ez| on axis = {np.abs(Ez0).max()/1e9:.2f} GV/m, max a(axis) = {(2*env/E0las).max():.3f}, maxRSS={rss:.0f} MB"
+    if bunch is not None:
+        gam = np.sqrt(1 + bunch.ux**2 + bunch.uy**2 + bunch.uz**2)
+        msg += f", <T_p>={((gam.mean()-1)*938.272):.2f} MeV, r_rms={np.sqrt(np.mean(bunch.x**2+bunch.y**2))*1e6:.2f} um"
+    print(msg + f" ({time.time()-t0:.0f}s)", flush=True)
     json.dump(out, open(os.path.join(here, a.out, "summary.json"), "w"), indent=1)
