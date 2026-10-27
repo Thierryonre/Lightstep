@@ -109,6 +109,21 @@ schemes). These are labelled throughout.
   had entered the channel; velocity inside the channel, cm-scale guiding of the p = 6 mode, proton
   focusing and long-train ion motion remain to be checked in a full run.
 
+**Kinematic caveat found in the follow-up (S031–S032).** In a channel only the beat pattern moves
+at v_a; the light's energy envelope travels at the modes' group velocity (≈ c). Protons therefore
+ride the plasma wave *left behind* by the envelope, whose phase velocity is imprinted by the peak
+timing. In 1D this works (3000 → 3043 MeV in 600 c/ω_p, same field as the rigid model), but the
+pattern velocity must follow the proton velocity *as a function of position*: with a fixed velocity
+the protons dephase within ~10³ c/ω_p (S031), while an open-loop static channel-width taper
+v_pat(z) = v_proton(z) kept them accelerating at/above the design rate over the 900 c/ω_p
+simulated before the host stopped the run (S032). Consequences for D2: (i) the channel taper is
+mandatory, not optional; (ii) the imprinted wave must survive the delay between envelope and
+protons, ≈ (1/β − 1)·L/c ≈ 5–7 ps for the designed stages — comparable to the measured wake
+lifetime in hydrogen/deuterium (≈ 9–16 ps, Jonnerby 2023 [lit]), and channel-induced phase-front
+curvature may shorten it; mitigations are longer envelopes (multi-ps trains from thin-disk/fibre
+lasers, which also keep the drive near the protons) or shorter stages. This is the main open
+physics risk of the recommended design and the purpose of the pending full FBPIC run.
+
 ## 7. Rankings
 
 Wall-plug efficiencies from `sims/design/design_calc.py` (S030); multipliers are relative to a
@@ -148,8 +163,10 @@ and, at projected fibre-laser costs, capital cost.
   whatever the accelerator [lit].
 
 ## 9. What would change the conclusions / next steps
-1. A full FBPIC run of the guided train (≈2.5 h, ≈2 GB RAM) and a proton-loaded RZ stage — to
-   confirm velocity, cm-scale guiding of high-order modes and proton focusing.
+1. A full FBPIC run of the guided train with protons (≈3 h, ≈2–3 GB RAM; two attempts were
+   stopped by the host on low memory) — to measure the imprinted-wave phase velocity and lifetime
+   behind the envelope in a real channel, the proton accelerating+focusing phase, and proton
+   energy gain; plus the full static-taper 1D run (S032).
 2. Experimental guiding of LG_{p≥3} modes in HOFI channels and multi-line fibre drivers.
 3. The low-energy section (< 1 GeV) is the efficiency bottleneck of any all-optical design: an
    efficient slow-wave drive would remove the RF injector.
