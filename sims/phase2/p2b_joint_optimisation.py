@@ -25,6 +25,28 @@ MP = 938.27208816
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 
 
+def resonant_train(xi, h, b, a0p, L, N):
+    """Greedy nonlinear-resonant train: pulse k+1 is placed (within one period behind pulse k)
+    where it maximises the wake amplitude behind it. xi is ordered front->back.
+    Returns list of pulse centres and the <a^2> profile."""
+    lam = 2 * np.pi * b
+    centres = [0.0]
+    for k in range(1, N):
+        best = None
+        for c in np.linspace(centres[-1] - 0.6 * lam, centres[-1] - 1.6 * lam, 81):
+            cs = centres + [c]
+            a2 = sum(F.gaussian_envelope(xi, cc, L, a0p) for cc in cs)
+            phi, E, sm = J.solve(h, jnp.array(a2), jnp.zeros(xi.size), b)
+            E = np.asarray(E)
+            m = xi < c - 2 * L
+            amp = np.abs(E[m]).max() if float(sm) > 0.05 else -1
+            if best is None or amp > best[0]:
+                best = (amp, c)
+        centres.append(best[1])
+    a2 = sum(F.gaussian_envelope(xi, cc, L, a0p) for cc in centres)
+    return centres, a2
+
+
 def build(T, n_periods_drv=1.0, Nd=64, Nb=48, f_field=0.7, a0_max=None, s_max=0.05,
           grad_factor=1.0, load_base=0.5, a0frac=1.3):
     from scipy.optimize import nnls
@@ -88,11 +110,13 @@ def build(T, n_periods_drv=1.0, Nd=64, Nb=48, f_field=0.7, a0_max=None, s_max=0.
     def loss(p):
         eta, Eb, spread, W, Q, Emax, smin, amax = metrics(*fields(p))
         pen = 0.0
-        pen += 20.0 * jnp.maximum(spread - s_max, 0.0) ** 2 / s_max**2
-        pen += 20.0 * jnp.maximum(G_min - Eb, 0.0) ** 2 / G_min**2
-        pen += 200.0 * jnp.maximum(0.08 - smin, 0.0) ** 2 / 0.08**2
-        pen += 50.0 * jnp.maximum(Emax - 0.8 * Ewb, 0.0) ** 2 / Ewb**2
-        pen += 50.0 * jnp.maximum(amax - a2max, 0.0) ** 2 / a2max**2
+        # barrier weights chosen so that no broken-wake solution can win (v1 weights were too
+        # weak: the sqrt clamp allowed unphysical fields, logged in S016)
+        pen += 50.0 * jnp.maximum(spread - s_max, 0.0) ** 2 / s_max**2
+        pen += 50.0 * jnp.maximum(G_min - Eb, 0.0) ** 2 / G_min**2
+        pen += 2.0e4 * jnp.maximum(0.08 - smin, 0.0) ** 2 / 0.08**2
+        pen += 2.0e3 * jnp.maximum(Emax - 0.8 * Ewb, 0.0) ** 2 / Ewb**2
+        pen += 2.0e3 * jnp.maximum(amax - a2max, 0.0) ** 2 / a2max**2
         return -eta + pen, (eta, Eb, spread, W, Q, Emax, smin)
 
     vg = jax.jit(jax.value_and_grad(lambda p: loss(p)[0]))
@@ -100,16 +124,35 @@ def build(T, n_periods_drv=1.0, Nd=64, Nb=48, f_field=0.7, a0_max=None, s_max=0.
     p0d = nnls(Bd.T * a2max, a2_base)[0]
     p0b = nnls(Bb.T * nbmax, nb_base)[0]
     p0 = np.clip(np.concatenate([p0d, p0b]), 0, 1)
+    train_info = None
     if n_periods_drv > 1.0:
-        p0[:Nd] = 0.0
-        # initial train guess: equal pulses spaced by lam, total similar wake
+        # hand-designed resonant train (Phase-1 'RE' baseline) as the initial guess
         npul = int(round(n_periods_drv))
-        for k in range(npul):
-            j = np.argmin(np.abs(cd - (-k * lam)))
-            p0[j] = min(1.0, (a0b**2 * 0.5 / npul) / a2max * 1.5)
-        # beam to the bucket behind the last pulse
+        a0p = np.sqrt(2 * a2max)
+        centres, a2_tr = resonant_train(xi, h, b, a0p, L, npul)
+        phiU, EU, sU = J.solve(h, jnp.array(a2_tr), jnp.zeros(xi.size), b)
+        EU = np.asarray(EU)
+        cl = centres[-1]
+        m = (xi < cl - 0.5 * L) & (xi > cl - 0.5 * L - 1.1 * lam)
+        idx = np.where(m)[0]
+        ipk = idx[np.argmax(EU[idx])]
+        j = ipk
+        while j < xi.size - 1 and EU[j] > 0.8 * EU[ipk]:
+            j += 1
+        nb_tr = np.exp(-0.5 * ((xi - xi[j]) / sig) ** 2)
+        nb_tr = load_base * EU[ipk] * nb_tr / (np.sum(nb_tr) * h)
+        p0 = np.clip(np.concatenate([nnls(Bd.T * a2max, a2_tr)[0], nnls(Bb.T * nbmax, nb_tr)[0]]), 0, 1)
+        phiL, ELt, sLt = J.solve(h, jnp.array(a2_tr), jnp.array(nb_tr), b)
+        Wt = J.laser_work(h, phiU, jnp.array(a2_tr), b)
+        mt = [float(v) for v in metrics(jnp.array(a2_tr), jnp.array(nb_tr), ELt, jnp.array(EU), sLt, sU, Wt)]
+        train_info = dict(centres=[float(c) for c in centres], a0_per_pulse=float(a0p), eta=mt[0],
+                          mean_field=mt[1], spread=mt[2], E_peak_unloaded=float(EU[ipk]))
+        print(f"   hand-designed resonant train ({npul} x a0={a0p:.3f}): eta={mt[0]:.4f} field={mt[1]:.4f} "
+              f"spread={mt[2]:.4f} unloaded E+={EU[ipk]:.3f}; spacings={np.round(-np.diff(centres)/lam,3)} lambda_lin")
+        # the gradient requirement for trains: same as the single-pulse baseline
     meta = dict(T=T, beta=b, lam=lam, Ewb=Ewb, h=h, Nd=Nd, Nb=Nb, a0_max=float(np.sqrt(2 * a2max)),
-                s_max=s_max, G_min=float(G_min), xi=xi, a2_base=a2_base, nb_base=nb_base, a2max=a2max)
+                s_max=s_max, G_min=float(G_min), xi=xi, a2_base=a2_base, nb_base=nb_base, a2max=a2max,
+                train=train_info)
     print(f"   start point: {[round(float(v),4) for v in aux(jnp.array(p0))]}  (eta, field, spread, W, Q, Emax, smin)")
     return vg, aux, base, meta, p0, fields
 
@@ -152,6 +195,7 @@ if __name__ == "__main__":
     ap.add_argument("--a0max", type=float, default=None)
     ap.add_argument("--nper", type=float, default=1.0)
     ap.add_argument("--a0frac", type=float, default=1.3)
+    ap.add_argument("--restarts", type=int, default=3)
     ap.add_argument("--tag", default="free")
     a = ap.parse_args()
     summary = []
@@ -159,7 +203,7 @@ if __name__ == "__main__":
     axs = np.atleast_1d(axs)
     for ax, T in zip(axs, a.T):
         print(f"T = {T} MeV, a0_max = {a.a0max}, a0frac = {a.a0frac}, driver window = {a.nper} periods")
-        base, best, meta = optimise(T, a0_max=a.a0max, n_periods_drv=a.nper, a0frac=a.a0frac)
+        base, best, meta = optimise(T, a0_max=a.a0max, n_periods_drv=a.nper, a0frac=a.a0frac, restarts=a.restarts)
         print(f"  baseline: eta={base['eta']:.4f} field={base['mean_field']:.4f} spread={base['spread']:.4f} a0={base['a0']:.3f}")
         print(f"  optimised: eta={best['eta']:.4f} field={best['mean_field']:.4f} spread={best['spread']:.4f} "
               f"peak a0={np.sqrt(2*best['a2'].max()):.3f} feasible={best['feasible']}  -> x{best['eta']/base['eta']:.2f}")
@@ -171,6 +215,7 @@ if __name__ == "__main__":
         ax.set_title(f"T={T:.0f} MeV (β={meta['beta']:.3f}): η {base['eta']:.3f} → {best['eta']:.3f}")
         ax.legend(fontsize=7); ax.set_xlabel("ξ [c/ω_p]")
         summary.append(dict(T=T, beta=meta["beta"], a0_max=a.a0max, n_periods_drv=a.nper, baseline=base,
+                            train_baseline=meta.get("train"),
                             optimised={k: (v.tolist() if isinstance(v, np.ndarray) else v) for k, v in best.items()},
                             xi=xi.tolist()))
     plt.tight_layout()

@@ -1,21 +1,27 @@
 T = 100.0 MeV, a0_max = None, a0frac = 0.5, driver window = 5.0 periods
-   start point: [0.0, 0.0, 100.0, 0.0319, 0.0, 0.2526, 0.0411]  (eta, field, spread, W, Q, Emax, smin)
-   restart 0: eta=0.0000 field=0.0000 spread=100.0000 feasible=False nit=1 (3s)
-   restart 1: eta=-5.1923 field=-0.9945 spread=1.1286 feasible=False nit=7 (6s)
-   restart 2: eta=0.0000 field=0.0000 spread=100.0000 feasible=False nit=1 (6s)
+   hand-designed resonant train (5 x a0=0.285): eta=0.5420 field=0.1233 spread=0.4133 unloaded E+=0.227; spacings=[0.975 0.975 0.812 1.488] lambda_lin
+   start point: [0.5421, 0.1238, 0.4119, 0.026, 0.1137, 0.2313, 0.0504]  (eta, field, spread, W, Q, Emax, smin)
+   restart 0: eta=0.4699 field=0.1339 spread=0.0501 feasible=True nit=68 (10s)
+   restart 1: eta=8.4799 field=0.5945 spread=1.1840 feasible=False nit=6 (13s)
+   restart 2: eta=0.4801 field=0.1357 spread=0.0501 feasible=True nit=317 (37s)
+   restart 3: eta=-2.2659 field=-0.6506 spread=0.7217 feasible=False nit=6 (40s)
   baseline: eta=0.5232 field=0.1353 spread=0.2055 a0=0.570
-  optimised: eta=0.0000 field=0.0000 spread=100.0000 peak a0=0.269 feasible=False  -> x0.00
+  optimised: eta=0.4801 field=0.1357 spread=0.0501 peak a0=0.285 feasible=True  -> x0.92
 T = 1000.0 MeV, a0_max = None, a0frac = 0.5, driver window = 5.0 periods
-   start point: [0.0, 0.0, 100.0, 0.2266, 0.0, 0.924, 0.2783]  (eta, field, spread, W, Q, Emax, smin)
-   restart 0: eta=0.0000 field=0.0000 spread=100.0000 feasible=False nit=0 (3s)
-   restart 1: eta=108.1241 field=6.8753 spread=1.0034 feasible=False nit=10 (14s)
-   restart 2: eta=0.0000 field=0.0000 spread=100.0000 feasible=False nit=0 (14s)
+   hand-designed resonant train (5 x a0=0.855): eta=0.5475 field=0.6420 spread=0.3637 unloaded E+=1.173; spacings=[1.    1.038 1.112 1.338] lambda_lin
+   start point: [0.0, 1.1727, 0.0124, 0.6981, 0.0, 1.1817, 0.0507]  (eta, field, spread, W, Q, Emax, smin)
+   restart 0: eta=0.2325 field=0.9522 spread=0.0503 feasible=True nit=159 (18s)
+   restart 1: eta=-0.9173 field=-0.9840 spread=0.8466 feasible=False nit=6 (20s)
+   restart 2: eta=0.0000 field=1.1482 spread=0.0077 feasible=True nit=0 (21s)
+   restart 3: eta=-0.7581 field=-0.9485 spread=0.5539 feasible=False nit=58 (34s)
   baseline: eta=0.5028 field=0.4111 spread=0.3934 a0=1.709
-  optimised: eta=108.1241 field=6.8753 spread=1.0034 peak a0=1.247 feasible=False  -> x215.03
+  optimised: eta=0.2325 field=0.9522 spread=0.0503 peak a0=0.848 feasible=True  -> x0.46
 T = 6000.0 MeV, a0_max = None, a0frac = 0.5, driver window = 5.0 periods
-   start point: [0.0, 0.0, 100.0, 1.0548, 0.0, 1.4545, 0.7596]  (eta, field, spread, W, Q, Emax, smin)
-   restart 0: eta=0.0000 field=0.0000 spread=100.0000 feasible=False nit=0 (3s)
-   restart 1: eta=-5.5531 field=-2.2861 spread=0.6023 feasible=False nit=53 (14s)
-   restart 2: eta=0.0000 field=0.0000 spread=100.0000 feasible=False nit=0 (14s)
+   hand-designed resonant train (5 x a0=3.331): eta=0.0331 field=0.3883 spread=0.4992 unloaded E+=0.720; spacings=[1.438 0.612 1.25  0.638] lambda_lin
+   start point: [0.0331, 0.3883, 0.4992, 4.2196, 0.3598, 2.9781, 0.0597]  (eta, field, spread, W, Q, Emax, smin)
+   restart 0: eta=0.0331 field=0.3883 spread=0.4992 feasible=False nit=1 (3s)
+   restart 1: eta=-5.7590 field=-5.0066 spread=0.7049 feasible=False nit=2 (3s)
+   restart 2: eta=0.0477 field=0.8490 spread=0.2110 feasible=False nit=1 (3s)
+   restart 3: eta=-0.1545 field=-0.4431 spread=2.2576 feasible=False nit=1 (3s)
   baseline: eta=0.2445 field=1.1110 spread=0.0857 a0=6.662
-  optimised: eta=0.0000 field=0.0000 spread=100.0000 peak a0=3.331 feasible=False  -> x0.00
+  optimised: eta=0.0477 field=0.8490 spread=0.2110 peak a0=3.495 feasible=False  -> x0.20

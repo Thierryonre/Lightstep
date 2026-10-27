@@ -10,3 +10,7 @@ T100_const_L0.3: T=6001 MeV L=70533 c/wp grad=0.164 E0 eff=0.380 spread=0.000 ca
 T100_const_L0.5: T=6000 MeV L=84167 c/wp grad=0.137 E0 eff=0.531 spread=0.000 capt=1.000 stalled=False broken=False a0 0.57->0.88 (322s)
 T100_track_L0.3: T=2085 MeV L=12022 c/wp grad=0.323 E0 eff=0.050 spread=0.003 capt=0.999 stalled=True broken=False a0 0.57->2.38 (54s)
 T100_track_L0.5: T=2080 MeV L=12023 c/wp grad=0.322 E0 eff=0.088 spread=0.002 capt=1.000 stalled=True broken=False a0 0.57->2.75 (59s)
+T30_const_L0.3: T=6000 MeV L=129648 c/wp grad=0.090 E0 eff=0.382 spread=0.000 capt=1.000 stalled=False broken=False a0 0.31->0.63 (778s)
+T30_const_L0.5: T=6000 MeV L=154714 c/wp grad=0.076 E0 eff=0.534 spread=0.000 capt=1.000 stalled=False broken=False a0 0.31->0.63 (887s)
+T30_track_L0.3: T=2254 MeV L=14023 c/wp grad=0.310 E0 eff=0.023 spread=0.003 capt=1.000 stalled=True broken=False a0 0.31->2.56 (131s)
+T30_track_L0.5: T=6007 MeV L=21099 c/wp grad=0.554 E0 eff=0.029 spread=0.020 capt=1.000 stalled=False broken=False a0 0.31->6.70 (172s)

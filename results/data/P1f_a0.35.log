@@ -1,0 +1,35 @@
+   dist=      0 <T>=  3000.1±  9.1 MeV laser left=0.993 Emax=3.790 surv=1.000 (44s)
+   dist=    200 <T>=  2997.4± 15.1 MeV laser left=0.988 Emax=1.004 surv=1.000 (106s)
+   dist=    400 <T>=  2991.9± 41.4 MeV laser left=0.985 Emax=0.946 surv=1.000 (169s)
+   dist=    600 <T>=  2981.8± 70.8 MeV laser left=0.982 Emax=1.122 surv=1.000 (234s)
+   dist=    800 <T>=  2963.8± 96.3 MeV laser left=0.980 Emax=1.118 surv=1.000 (297s)
+   dist=   1000 <T>=  2935.5±117.9 MeV laser left=0.979 Emax=1.195 surv=1.000 (359s)
+   dist=   1200 <T>=  2907.4±132.1 MeV laser left=0.977 Emax=1.228 surv=1.000 (424s)
+   dist=   1400 <T>=  2882.8±144.2 MeV laser left=0.974 Emax=1.165 surv=1.000 (493s)
+   dist=   1600 <T>=  2865.7±154.3 MeV laser left=0.968 Emax=0.912 surv=1.000 (559s)
+   dist=   1800 <T>=  2867.1±148.0 MeV laser left=0.963 Emax=0.805 surv=1.000 (627s)
+   dist=   2000 <T>=  2869.9±146.3 MeV laser left=0.957 Emax=0.789 surv=1.000 (697s)
+   dist=   2200 <T>=  2872.7±148.7 MeV laser left=0.952 Emax=0.692 surv=1.000 (765s)
+   dist=   2400 <T>=  2870.7±156.0 MeV laser left=0.948 Emax=0.924 surv=1.000 (826s)
+   dist=   2600 <T>=  2861.5±165.7 MeV laser left=0.945 Emax=1.060 surv=1.000 (887s)
+   dist=   2800 <T>=  2848.2±176.3 MeV laser left=0.944 Emax=1.133 surv=1.000 (950s)
+{
+ "T_inj": 3000.0,
+ "k0_over_kp": 28.5,
+ "a_avg": 0.35,
+ "n_env": 12.0,
+ "Nf": 3,
+ "n_bunches": 18,
+ "load_frac": 0.4,
+ "L_acc": 3000.0,
+ "U0": 3877.708031432609,
+ "laser_work_total": 217.6308197368003,
+ "laser_used_frac": 0.05612357041135899,
+ "work_during_acc": 189.00238282629152,
+ "beam_gain": -1019.5106949395267,
+ "eff_wake_to_beam": -5.3941684739315665,
+ "eff_laser_to_beam_1D": -0.26291579630941714,
+ "T_final": 2834.6856577155827,
+ "runtime_s": 1011.2051997184753,
+ "depletion": true
+}

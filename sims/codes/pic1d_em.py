@@ -98,6 +98,17 @@ class SimEM1D:
         self.xb = np.zeros(0); self.ub = np.zeros(0); self.wb = np.zeros(0)
         self.beam_qm = ME_OVER_MP
 
+    def add_beam(self, x, u, w, qm=ME_OVER_MP):
+        """Positive-charge beam (protons by default): positions, momenta u = gamma*beta, areal weights."""
+        self.xb = np.asarray(x, float).copy()
+        self.ub = np.asarray(u, float).copy()
+        self.wb = np.asarray(w, float).copy()
+        self.beam_qm = qm
+
+    def beam_kinetic_mec2(self):
+        """Beam kinetic energy per area in m_e c^2 n_ref c/w_p units (protons)."""
+        return float(np.sum(self.wb * (np.sqrt(1 + self.ub**2) - 1)) / self.beam_qm)
+
     def _uniform(self, xa, xb):
         n = int(round((xb - xa) / self.dx))
         offs = (np.arange(self.ppc) + 0.5) / self.ppc
@@ -153,9 +164,8 @@ class SimEM1D:
             if not m.all():
                 setattr(self, "x" + nm, x[m]); setattr(self, "u" + nm, getattr(self, "u" + nm)[m])
                 setattr(self, "w" + nm, getattr(self, "w" + nm)[m])
-        if self.xb.size:
-            m = self.xb >= self.x0
-            self.xb, self.ub, self.wb = self.xb[m], self.ub[m], self.wb[m]
+        # beam particles are kept even when they leave the window (they are then frozen:
+        # push/deposit skip particles outside the grid); survival = fraction inside.
         xs = self._uniform(x_old_end, x_old_end + dx)
         ws = self.density(xs) * dx / self.ppc
         k = ws > 0

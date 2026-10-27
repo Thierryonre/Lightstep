@@ -128,3 +128,117 @@ Codes (all in `sims/codes/`):
 - **Problem:** v1 locked the beam centroid at a fixed distance ξ behind the driver. The wake wavelength 2πβ_p grows as protons speed up, so the beam drifted towards a field zero: field at the beam fell 0.60 → 0.17 E₀ over Δβ = 0.02 (`sims/tests/debug_lock.py`); the full 1→6 GeV run never finished (stalled), and was stopped.
 - **Fix (v2):** lock to a fixed phase of the *first* proton-accelerating lobe (front, phase-stable side, E = 0.8 E_peak), re-located from the current unloaded wake whenever β changes; stall detector added.
 - **Check:** 1.0 → 1.5 GeV: 2223 c/ω_p, mean gradient 0.44 E₀, **wake→beam efficiency 40.7 %**, energy spread 0.5 % rms, 99.7 % captured (runtime 6 s).
+
+### S014 ✅ P1c-v2: kinetic PIC validation of the corrected (phase-locked) design — 2026-10-27
+- **Script:** `sims/phase1/p1c_pic_check_matched.py --Tinj 300` · log `results/data/P1c_run_T300_lockv2.log`
+- **Setup:** T_inj = 300 MeV (β = 0.65), a0 = 0.971, E⁺ = 0.448 E₀, load 0.4, phase lock v2 (first bucket), 2000 c/ω_p, mobile H ions, PIC dx = 0.02, ppc = 16.
+- **Result:** gain PIC 214.3 MeV vs tracker 213.3 MeV; wake→beam efficiency 44.2 % vs 45.7 %; laser work/length 0.0849 vs 0.0818; energy spread PIC 1.6 MeV vs tracker 4.5 MeV; beam survival 99.95 %; no background-electron trapping.
+- **Conclusion:** velocity-matched, beam-loaded proton acceleration is reproduced kinetically to ≈ 3 %; the tracker is conservative on energy spread.
+
+### S015 ✅ P1b: velocity-matched acceleration to 6 GeV, scan — 2026-10-27
+- **Script:** `sims/phase1/p1b_scan.py` (v2 lock, K = 0.05, lock at 0.8 E_peak, τ = 2.355, f = 0.7, 1000 macro-protons, σ_ξ = 0.03λ, ΔT/T = 0.5 %) · data `results/data/P1b_scan.json`, trajectories `results/data/P1b_traj_*.npy`
+- **'const' field program (E⁺ = 0.56 E_wb(T_inj) held constant):**
+
+  | T_inj | load | length (c/ω_p) | mean gradient (E₀) | wake→beam η | final spread | captured |
+  |---|---|---|---|---|---|---|
+  | 1000 MeV | 0.3 | 19 263 | 0.508 | 35.3 % | 0.2 % | 99.7 % |
+  | 1000 MeV | 0.5 | 22 916 | 0.427 | 49.5 % | 0.2 % | 99.7 % |
+  | 300 MeV | 0.3 | 39 565 | 0.282 | 37.4 % | 0.1 % | 99.9 % |
+  | 300 MeV | 0.5 | 47 188 | 0.236 | 52.3 % | <0.1 % | 99.9 % |
+  | 100 MeV | 0.3 | 70 533 | 0.164 | 38.0 % | <0.1 % | 99.9 % |
+  | 100 MeV | 0.5 | 84 167 | 0.137 | 53.1 % | <0.1 % | 100 % |
+  | 30 MeV | 0.3 | 129 648 | 0.090 | 38.2 % | <0.1 % | 100 % |
+- **'track' program (E⁺ = 0.56 E_wb(β), growing with energy):** ❌ every case stalled at ≈ 2.0–2.2 GeV with η = 5–17 % (wake breaking flagged in the 1 GeV and 300 MeV cases): at fixed beam charge a growing field is weakly loaded and eventually breaks.
+- **Conclusion:** in 1D, a phase-locked velocity-matched wake accelerates protons from 30 MeV–1 GeV to 6 GeV with 35–53 % wake→beam efficiency and sub-% spread. Length ∝ 1/E_wb(T_inj): starting slower costs length, not efficiency. Physical length = L × c/ω_p (e.g. 100 MeV start, load 0.3: 37 cm at 10¹⁸ cm⁻³, 12 cm at 10¹⁹ cm⁻³).
+- **Acceleration multiplier vs conventional LWFA (S009, same injection energy):** 100 MeV start: 5900 MeV vs 0.8 MeV per stage (≈ 7 000×); 1 GeV start: 5000 MeV vs 8 MeV (≈ 600×).
+
+### S016 ⚠️ P2b: differentiable joint optimisation (driver shape + beam profile) — 2026-10-27
+- **Script:** `sims/phase2/p2b_joint_optimisation.py`, model `sims/codes/jax_wake.py` (JAX solver identical to fluid1d to 10⁻¹¹; laser-work formula W' = −∫(n_e/2γ)∂_ξ⟨a²⟩ dξ checked against the wake energy density to < 0.6 %). L-BFGS-B, 64 driver + 48 beam amplitudes (112 parameters), constraints: field spread over the bunch ≤ 5 %, mean field ≥ hand design, unbroken wake, |E| ≤ 0.8 E_wb, a0 cap.
+- **Failures on the way:** (i) v1 basis too coarse for the bunch and a sqrt-clamp exploit gave unphysical "fields" ≈ 18 E₀; (ii) the first train run started with zero beam (bunch not shifted behind the last pulse); (iii) barrier weights too weak let broken-wake solutions win (η = 550, flagged infeasible) → weights raised ×100, finer bucket-local beam basis, dimensionless bounded parameters.
+- **Results — single-pulse window, a0 ≤ 1.3 × hand design** (`results/data/P2b_joint_opt_free.json`, figure `results/figures/P2b_joint_opt_free.png`):
+  - 100 MeV: η 0.523 → 0.531 (field spread 0.21 → 0.05); marginally below the gradient constraint
+  - 1 GeV: η 0.503 → **0.710 (×1.41)**, same mean field 0.41 E₀, field spread 0.39 → 0.05
+  - 6 GeV: η 0.245 → **0.601 (×2.46)**, field 1.11 → 1.13 E₀, spread 0.086 → 0.05
+- **Results — "lower-power lasers": peak a0 ≤ 0.5 × hand design, 5-period window** (`..._lowpower_train.json`): a greedy hand-designed nonlinear-resonant train of 5 pulses (each ¼ of the single-pulse peak power) gives η = 0.542 (100 MeV, spacings 0.98/0.98/0.81/1.49 λ_lin) and η = 0.548 with 1.6× higher loaded field (1 GeV, spacings 1.00/1.04/1.11/1.34 λ_lin) — equal or better than the single pulse. At 6 GeV (a0 ≈ 3.3 per pulse) stacking failed (η = 0.033): nonlinear detuning. Local optimisation from the train starts did not improve on them under the 5 % flatness constraint (multimodal landscape).
+- **Conclusion:** joint optimisation of pulse shape + beam loading raises wake→beam efficiency 1.4–2.5× at 1–6 GeV while flattening the field; resonant trains of quarter-power pulses are as efficient as one pulse in the quasi-linear regime (a0 ≲ 1–2 per pulse).
+
+### S017 ✅/⚠️ R2: reproduction of Hooker et al. J. Phys. B 47, 234003 (2014) — 2026-10-27
+- **Script:** `sims/phase1/r2_hooker2014_multipulse.py` · data `results/data/R2_hooker2014.json` · figure `results/figures/R2_hooker2014_multipulse.png`
+- **Setup:** 120 pulses × a0 = 0.052, 100 fs FWHM, λ = 1 µm, spacing = plasma period, n = 1.75×10¹⁷ cm⁻³ (E₀ = 40.2 GV/m), 1D envelope PIC (dx = 0.05, ppc = 8), immobile ions and mobile protons. (A first run was stopped after 3 h — CPU shared with other jobs and an inefficient driver evaluation; driver evaluation was then restricted to each pulse's support, ~10× faster.)
+- **Result:** linear growth 1.36 / 2.76 / 5.01 GV/m after 30 / 60 / 120 pulses (immobile) vs paper **4.7 GV/m** ✔ (7 %). Mobile H: 4.28 GV/m vs paper ≈ 2.5 GV/m.
+- **Conclusion:** the multi-pulse resonant build-up is reproduced; the ion-motion saturation reported in the paper is only partly captured in 1D (−15 % vs −47 %), i.e. it is mostly transverse ion motion (multi-D) — a known limitation of our 1D models for long trains in hydrogen.
+
+### S018 ✅ P1d: proton self-injection from rest by a slow, accelerating driver (FF from rest; + NP layer) — 2026-10-27
+- **Script:** `sims/phase1/p1d_scan.py` (1D envelope PIC, hydrogen with mobile protons, dx = 0.02, ppc = 8, dt = 0.01) · data `results/data/P1d_scan.json`
+- **Setup:** Gaussian driver a0 = 3, FWHM ℓ = 1 c/ω_p, ramped on at rest over 20/ω_p, then constant proper acceleration α₀ (1D analogue of the transverse-flying-focus scheme of Gong et al. 2024). Λ = eE_max/m_p with E_max = 1.73 E₀ (adiabatic front-slope estimate) → Λ = 9.44×10⁻⁴ c ω_p. Target 300 MeV.
+- **Result:**
+
+  | case | trapped areal charge (n c/ω_p) | final T (MeV) | laser→trapped-proton efficiency |
+  |---|---|---|---|
+  | α₀ = 0.5 Λ | 0.70 | 317 ± 5 | **28.6 %** |
+  | α₀ = 0.8 Λ | 0.0025 | 278 | 0.16 % |
+  | α₀ = 1.2 Λ | 0 | — | 0 |
+  | α₀ = 0.5 Λ + dense H layer (10× n, 0.5 c/ω_p thick, "nanoparticle-like") | **4.85** | 321 ± 11 | **74 %** |
+- **Conclusion:** a slow accelerating driver can pick up background protons from rest without an injector; the trapping threshold lies between 0.5 Λ and 0.8 Λ (below the ideal α₀ < Λ because the captured charge loads the field). A local hydrogen-rich layer (the 1D stand-in for a nanoparticle/cluster) raises the captured charge 7× and the 1D efficiency to 74 %. **Caveats:** 1D (the layer is an infinite sheet, no transverse loss), prescribed non-depleting driver; the optical embodiment of a slow, steep driver (transverse flying focus / transverse pumping) is very inefficient in 3D per the literature (Gong 2024: 0.13 %; Nutting 2026: ~10⁻⁵).
+
+---
+
+## Phase 2 — additional optimisations / alternative embodiments
+
+### S019 ✅ P2a-explore: wake phase velocity and depletion in dense plasma (full-EM 1D PIC) — 2026-10-27
+- **Script:** `sims/phase2/p2a_explore_dense_em.py` · data `results/data/P2a_explore_dense_em.json`
+- **Idea tested:** make the laser's own group velocity match the protons (n ≈ n_c/γ_p²) so that a guided pulse is reused until depleted — no flying-focus optics.
+- **Result:** the wake moves markedly slower than the linear group velocity (pulse-front etching and red-shift):
+
+  | n/n_c | a0 | linear γ_g | measured wake γ_φ | E_max (E₀) | depletion length (c/ω_p) | energy lost in 400 c/ω_p |
+  |---|---|---|---|---|---|---|
+  | 1/16 | 1 | 4.0 | 2.43 | 0.17 | 1375 | 47 % |
+  | 1/16 | 2 | 4.0 | 2.15 | 0.29 | 973 | 86 % |
+  | 1/55 | 1 | 7.4 | 5.76 | 0.39 | 897 | 38 % |
+  | 1/55 | 2 | 7.4 | 2.85 | 1.15 | 447 | 76 % |
+- **Conclusion:** in dense plasma the phase velocity can be lowered by a0 at fixed density (n_c/55 with a0 = 2 matches ~1.7 GeV protons on average). Important constraint (analytic): with ω/ω_p ≈ γ_p a resonant pulse is only ≈ γ_p/2 optical cycles long → few-cycle drivers are required.
+
+### S020 ❌ P2a: single density-matched, depletion-limited stage with protons (full-EM 1D PIC) — 2026-10-27
+- **Script:** `sims/phase2/p2a_dense_stage.py --k0 7.4 --a0 2 --Tc 1700` · data `results/data/P2a_stage_k7.4_a2.0.json`
+- **Setup:** k0/kp = 7.4, a0 = 2, 2.8-cycle pulse; 1140 test protons over 1.3 wake periods × T = 1.0–2.55 GeV; then loaded bunches σ_b = 0.05/0.15/0.3.
+- **Result:** 64 % of the laser energy is lost in the first 260 c/ω_p and the wake keeps slowing; best-phase proton gain only **84 MeV** (at the 2.55 GeV edge of the scanned grid). Loaded runs invalid: protons slipped out of the c-moving window (survival 0) — reported efficiencies (≤ 1.5 %) are not meaningful.
+- **Conclusion:** a single guided pulse at matched density gives an unsteady wake (velocity evolves with depletion) and transfers little energy to protons. Not pursued further (the planned 6–12 h FBPIC check was not run). Better route: keep the light guided but control velocity optically (next study).
+- **Also tested:** FBPIC 0.27.1 (quasi-3D) installed in WSL; timing for this case 1.9 s/step → 12.6 h per mm at λ/24 (CPU shared with other jobs).
+
+### S021 ✅ B3: conventional LWFA with a loaded proton bunch — efficiency baseline — 2026-10-27
+- **Script:** `sims/baseline/b3_conventional_protons_loaded.py` · data `results/data/B3_conventional_protons_loaded.json`
+- **Setup:** fluid tracker; group-velocity wake (a0 = 2, resonant Gaussian), γ_p = 7.4 / 20 / 41.7; bunch 0.4 E_peak, 9 injection phases; efficiency evaluated at the point of maximum beam energy (stage ended exactly at dephasing — best case).
+- **Result:** wake→proton efficiency 0.18 (100 MeV), 0.36 (1 GeV), 0.40 (3 GeV), essentially independent of γ_p; but the mean gain is only 0.49–0.50 MeV (100 MeV), 4.6–5.0 MeV (1 GeV), 22–33 MeV (3 GeV) because the protons dephase within a few c/ω_p.
+- **Derived (sim + energy accounting):** the guided driver's depletion length at 10¹⁸ cm⁻³/0.8 µm is ≈ 2.15×10⁴ c/ω_p (S002 scaled ∝ (k0/kp)²) while a stage lasts only ≈ 5.5 c/ω_p (100 MeV) or ≈ 25 c/ω_p (1 GeV) → laser→wake coupling 2.6×10⁻⁴ / 1.2×10⁻³ → **laser→proton efficiency per stage ≈ 4.5×10⁻⁵ (100 MeV) / 4.3×10⁻⁴ (1 GeV)**, and ~12 000 / ~1 100 separately-driven stages to reach 6 GeV.
+- **Conclusion:** the conventional baseline loses not on beam loading but on laser→wake coupling: protons use only a tiny fraction of the driver's depletion length. This defines the efficiency baseline for the multipliers.
+
+### S022 ✅ P1e: optics of the guided resonant flying-focus train (FF + resonant excitation) — 2026-10-27
+- **Scripts:** `sims/phase1/p1e_waveguide_train_optics.py`, `p1e_feasibility_boundary.py` · data `results/data/P1e_*.json` · figure `results/figures/P1e_waveguide_train_optics.png`
+- **Concept:** N laser frequencies ≈ ω_p apart, each launched into a different radial mode LG_{p=qP,0} of a matched parabolic channel. With all components placed exactly on the line ω = v_a k + ω_c (exact modal dispersion, solved numerically) the on-axis intensity is a *rigid* train of peaks moving at v_a < c, spaced by one plasma period (resonant). First attempt with the first-order rule (uniform ω_p spacing) failed at 1 GeV: higher modes cut off and the comb decohered in ~0.1 mm (logged) → replaced by the exact rigid design with W chosen so the mean spacing is ω_p.
+- **Result (λ = 1 µm):**
+  - 3 GeV protons (β = 0.971): N = 3–5, P = 1–2, n = 0.35–1.2×10¹⁸ cm⁻³, W = 10.7–20.5 µm, k_pW ≈ 2.2–2.3, Δn/n₀ ≈ 0.76–0.82, bandwidth 3.5–13 %, spacings 0.89–1.13 ω_p; peaks N× the mean intensity, FWHM 0.18–0.31 T_p, radius 0.31–0.53 W.
+  - 6 GeV protons (β = 0.9908): n = 1.0–1.4×10¹⁷ cm⁻³, W = 32–49 µm, bandwidth 1.9–4.5 %, spacings 0.97–1.04 ω_p.
+  - Feasibility boundary (N = 3): k_pW ≥ 2.2 down to **1.0 GeV** (P = 3, n = 3.1×10¹⁸, W = 6.8 µm, Δn/n₀ = 0.78); k_pW ≥ 1.8 down to 0.75 GeV; k_pW ≥ 1.4 down to 0.5 GeV (Δn/n₀ ≈ 1.9).
+- **Conclusion:** a guided, arbitrary-velocity, resonant drive exists for protons above ≈ 0.75–1 GeV using only 3–5 narrow-band, long (≥ 100 fs) pulses — compatible with efficient fibre/thin-disk lasers (no few-cycle pulses). Below ~0.75 GeV only side-pumped geometries remain.
+
+### S023 ❌ P1f-v1: multi-bunch train, overloaded — 2026-10-27
+- **Script:** `sims/phase1/p1f_waveguide_train_multibunch.py` (v1) · log `results/data/P1f_a0.35.log`
+- **Setup:** 3 GeV, k0/kp = 28.5, spacings 0.963/1.037 (P = 1 design), a_avg = 0.35, 12-period envelope, 18 bunches **each** loaded with 0.4 E_peak.
+- **Result:** protons *lost* energy (3000 → 2835 MeV): the cumulative loading of 18 bunches reversed the wake; additionally ±3.7 % spacing non-uniformity accumulates ~3 rad of drive/wake phase error over 12 periods. Laser used: 5.6 % in 3000 c/ω_p (depletion length ≈ 6×10⁴ c/ω_p).
+- **Fix:** total (not per-bunch) loading = 0.4 E_peak; use the more uniform P = 2 design.
+
+### S024 ✅ P1f-v2: guided resonant train driving velocity-locked protons (1D PIC) — 2026-10-27
+- **Setup:** 3 GeV design P = 2, N = 3 (spacings 0.981/1.019 ω_p), k0/kp = 56.4 (n = 3.5×10¹⁷ at 1 µm), a_avg = 0.35, 12-period Gaussian envelope, mobile ions, energy-consistent depletion, velocity lock (K = 0.02), 3000 c/ω_p.
+- **Single bunch behind the train** (`results/data/P1f_single_v2.json`): 3000 → **3215 MeV** (0.14 E₀), **wake→beam 58.5 %**, laser energy used 0.65 % (depletion length ≈ 5.4×10⁵ c/ω_p at this dilute design point).
+- **18 bunches in the train's buckets (total load 0.4 E_peak)** (`P1f_multi_v2.json`): 3000 → **3252 MeV** (0.16 E₀), **wake→beam 49.9 %**, laser used 0.87 %.
+- **Energy-accounting scaling (derived):** in the linear regime, the fraction of laser energy absorbed per unit proton-energy gain ∝ ΔT/(k0/kp)², independent of drive amplitude → denser plasma (enabled by larger k_pW in the rigid-comb design) raises laser→wake coupling towards depletion. Used in the design calculator.
+
+### S025 ✅ P2c: programming the train velocity with a channel-width taper (Phase 2.1) — 2026-10-27
+- **Script:** `sims/phase2/p2c_channel_taper_velocity.py` · data `results/data/P2c_channel_taper.json`
+- **Setup:** fixed laser frequencies of the 1 GeV rigid design (λ = 1.000/1.052/1.118 µm, modes p = 0/3/6); vary channel spot W and on-axis density n₀; compute peak velocity, comb rigidity (coherence length) and resonance (mean spacing/ω_p).
+- **Result:** at constant n₀, W/W₀ = 1 → 1.25 → 1.5 → 2 → 3 gives β = 0.875 → 0.916 → 0.940 → 0.965 → 0.983 (matched proton energy 1.0 → 1.4 → 1.8 → 2.6 → 4.2 GeV) with coherence length ≥ 120 mm and spacing/ω_p = 1.000. Changing n₀ instead detunes the resonance (spacing/ω_p = 1.12 at 0.8 n₀, 1.29 at 0.6 n₀).
+- **Conclusion:** the train velocity can be programmed along the accelerator purely by tapering the channel *width* (engineered optical guiding) with fixed lasers. Caveat: at fixed train power the on-axis intensity falls ∝ 1/W² → use 2–3 stages with modest tapers.
+
+### S026 ⚠️ R3 (Wake-T) attempt — too slow on this machine — 2026-10-27
+- **Script:** `sims/phase2/r3_lahaye_gradient_waket.py` (Wake-T 0.9.1, quasistatic_2d, laser evolution, matched channel; Lahaye FBPIC parameters).
+- **Result:** fixed two set-up errors (ParticleBunch takes weights, not charge; zero density at z = 0 causes a division by zero in Wake-T's bunch deposition → ramp from 2 % n₀). Still > 550 s for 0.5 mm at n_xi = 600 and > 580 s for 2 mm at n_xi = 300 on the shared CPU (≈ 2–6 h per 24 mm case) → replaced by the kinetic 1D mechanism study (S027).
