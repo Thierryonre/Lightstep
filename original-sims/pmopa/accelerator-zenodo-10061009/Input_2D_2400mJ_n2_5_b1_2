@@ -1,0 +1,154 @@
+
+#Restart from checkpoint
+#amr.restart = diags/Checkpoint1200000/
+
+###################################################
+################## MY PARAMETERS ##################
+###################################################
+
+my_constants.w0 = 30.e-6 # meters
+
+#==================== Plasma =====================#
+
+# Calculated plasma quantities
+my_constants.n0 = 2.5e23
+my_constants.Omegap = sqrt(n0*q_e**2/(epsilon0*m_e))
+my_constants.VG0 = sqrt(1-Omegap**2/Omega0**2) 
+my_constants.Tp = 2.0*pi/Omegap
+
+# Define parabolic guiding channel as in Esarey
+
+my_constants.alpha = 10
+my_constants.re = (1/(4*pi*epsilon0))*(q_e**2/(m_e*clight**2))
+
+my_constants.w_matched = w0
+my_constants.rel_delta_n_over_w2 = 1./( pi * re * w_matched**2 * n0 ) 
+
+my_constants.ChannelEnd = 1.2*w_matched  #Channel ends here and goes constant
+
+my_constants.UniformSectionStart = ChannelEnd
+my_constants.US=UniformSectionStart
+my_constants.UniformSectionLength = 10e-6
+my_constants.UniformSectionEnd = UniformSectionStart+UniformSectionLength
+my_constants.UE=UniformSectionEnd
+
+my_constants.LinearDownRampStart = UniformSectionEnd
+my_constants.LS=LinearDownRampStart
+my_constants.LinearDownRampLength = 10e-6
+my_constants.LinearDownRampEnd = LinearDownRampStart+LinearDownRampLength
+my_constants.LE=LinearDownRampEnd
+
+my_constants.ChannelHeight=n0 * ( 1 + rel_delta_n_over_w2 * (US/w_matched)**alpha)
+my_constants.n_e_h=ChannelHeight
+
+     
+###################################################
+################# BOX PARAMETERS ##################
+###################################################      
+#max_step = 1
+stop_time = 150e-3/clight   # This sets for how long the simulation runs. 
+amr.n_cell = 384 63872    # The dimensions must be an divisible by blocking_factor
+amr.max_grid_size = 1024
+amr.blocking_factor_z = 128
+amr.blocking_factor_x = 128
+amr.max_level = 0
+geometry.coord_sys   = 0                  # 0: Cartesian
+
+geometry.dims = 2
+geometry.prob_lo     =  -80.e-6   -0.15e-2   
+geometry.prob_hi     =  80.e-6     0.0e-6
+warpx.serialize_initial_conditions = 1
+
+# boundary conditions
+boundary.field_lo       = pml   pml
+boundary.field_hi       = pml   pml
+
+###################################################
+#################### NUMERICS #####################
+###################################################   
+
+warpx.verbose = 1
+warpx.do_dive_cleaning = 0
+warpx.use_filter = 1
+warpx.cfl = 1. # if 1., the time step is set to its CFL limit
+warpx.pml_ncell = 96
+warpx.do_pml_in_domain = 0
+warpx.do_moving_window = 1
+warpx.moving_window_dir = z # Only z is supported for the moment
+warpx.moving_window_v = 1 #0.9999019998818721 
+algo.maxwell_solver = ckc
+# Order of particle shape factors, >= 3 recommended for injection
+algo.particle_shape = 3
+
+
+###################################################
+################# CHOFI Channel ###################
+###################################################   
+
+particles.species_names = electrons bunch
+
+electrons.charge = -q_e
+electrons.mass = m_e
+electrons.injection_style = NUniformPerCell
+electrons.num_particles_per_cell_each_dim = 1 1
+electrons.momentum_distribution_type = "gaussian"
+electrons.xmin = -230.e-6
+electrons.xmax =  230.e-6
+electrons.zmin =  0.0e-6
+electrons.zmax = 400.e-3
+electrons.do_continuous_injection = 1
+electrons.profile = parse_density_function
+electrons.density_function(x,y,z) ="if(sqrt(x**2+y**2) < US,n0 * ( 1 + rel_delta_n_over_w2 * (sqrt(x**2+y**2)/w_matched)**alpha),if(sqrt(x**2+y**2) < UE,n_e_h,if(sqrt(x**2+y**2) < LE,n_e_h*(((1/(LS-LE))*sqrt(x**2+y**2) -(LE/(LS-LE))) ), 0 )))"
+
+bunch.charge = -q_e
+bunch.mass = m_e
+bunch.injection_style = "gaussian_beam"
+bunch.x_rms = 4.e-6
+bunch.y_rms = 4.e-6
+bunch.z_rms = 1.5e-6
+bunch.x_m = 0.
+bunch.y_m = 0.
+bunch.z_m = -0.9893e-3
+bunch.npart = 1000
+bunch.q_tot = -1.e-12
+bunch.momentum_distribution_type = "gaussian"
+bunch.ux_m = 0.0
+bunch.uy_m = 0.0
+bunch.uz_m = 69.5
+bunch.ux_th = 0.
+bunch.uy_th = 0.
+bunch.uz_th = 0.
+
+
+#################################
+############# LASER #############
+#################################
+lasers.names        = txye_laser
+txye_laser.position     = 0. 0. -1.e-6 # This point is on the laser plane
+txye_laser.direction    = 0. 0. 1.     # The plane normal direction
+txye_laser.polarization = 1. 0. 0.     # The main polarization vector
+txye_laser.e_max        = 2.003e12     # Maximum amplitude of the laser field (in V/m)
+txye_laser.wavelength = 1.030e-6         # The wavelength of the laser (in meters)
+#txye_laser.profile      = from_txye_file
+#txye_laser.txye_file_name = "n2_5_b1_2_s30.txye"
+txye_laser.profile      = from_file
+txye_laser.binary_file_name = "n2_5_b1_2_s30.txye"
+#txye_laser.time_chunk_size = 50
+txye_laser.delay = 0.0
+
+
+# Diagnostics
+diagnostics.enable=1 # Whether to enable or disable diagnostics
+diagnostics.diags_names = diag_SpectralMod2D Checkpoint
+diag_SpectralMod2D.format = openpmd
+diag_SpectralMod2D.openpmd_backend = h5
+diag_SpectralMod2D.intervals = 120000 #   #https://warpx.readthedocs.io/en/latest/usage parameters.html?highlight=geometry.coord_sys#intervals-parser
+diag_SpectralMod2D.diag_type = Full
+diag_SpectralMod2D.fields_to_plot = Ex Ey Ez By rho_electrons
+diag_SpectralMod2D.bunch.variables = w ux uy uz
+
+Checkpoint.format = checkpoint
+Checkpoint.diag_type = Full
+Checkpoint.write_species = 1
+Checkpoint.intervals = 1200000   #https://warpx.readthedocs.io/en/latest/usage parameters.html?highlight=geometry.coord_sys#intervals-parser
+

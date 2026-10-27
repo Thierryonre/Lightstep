@@ -1,0 +1,180 @@
+
+#Restart from checkpoint
+#amr.restart = diags/Checkpoint11490340/
+
+###################################################
+################## MY PARAMETERS ##################
+###################################################
+
+#================== Drive Pulse ==================#
+# Input parameters for drive pulse
+my_constants.T0_driver = 1200e-3 # Joules
+my_constants.w0_driver  = 30.e-6 # meters
+my_constants.TauFWHM_driver  = 1.0e-12 # Duration FWHM
+my_constants.Lambda0_driver  = 1030.e-9 # meters
+my_constants.Lambda0  = Lambda0_driver
+
+# Calculated quantities from input parameters for drive pulse
+my_constants.Omega0_driver = 2.0*pi*clight/Lambda0_driver # meters
+my_constants.Tau_driver=TauFWHM_driver/(sqrt(2*log(2)))
+my_constants.Pp_driver=T0_driver/(TauFWHM_driver/0.94)
+my_constants.I0_driver=Pp_driver/(pi*w0_driver**2/2)
+my_constants.a0_driver=sqrt(I0_driver*(7.3*1e-19*(Lambda0_driver*1.e6)**2)/1e4)
+my_constants.Emax_driver=a0_driver*(2*pi*m_e*clight**2/(q_e*Lambda0_driver))
+
+#================== Seed Pulse ==================#
+
+# Input parameters for seed pulse
+my_constants.T0_seed = 50e-3 # Joules
+my_constants.w0_seed  = 30.e-6 # meters
+my_constants.TauFWHM_seed  = 40e-15 # Duration FWHM
+my_constants.Lambda0_seed  = 1030.e-9 # meters
+
+# Calculated quantities from input parameters for seed pulse
+my_constants.Omega0_seed = 2.0*pi*clight/Lambda0_seed # meters
+my_constants.Tau_seed=TauFWHM_seed/(sqrt(2*log(2)))
+my_constants.Pp_seed=T0_seed/(TauFWHM_seed/0.94)
+my_constants.I0_seed=Pp_seed/(pi*w0_seed**2/2)
+my_constants.a0_seed=sqrt(I0_seed*(7.3*1e-19*(Lambda0_seed*1.e6)**2)/1e4)
+my_constants.Emax_seed=a0_seed*(2*pi*m_e*clight**2/(q_e*Lambda0_seed))
+
+# Define intial centroid position and space between pulse centroids
+my_constants.t0_seed = 4*Tau_seed + 250e-6/clight  
+my_constants.t0_driver = 4*Tau_seed + 250e-6/clight + 1.0*TauFWHM_driver
+#my_constants.SpaceBehindDriver = 2.5*Tau_driver
+
+#==================== Plasma =====================#
+
+# Calculated plasma quantities
+my_constants.n0 = 2.5e23
+my_constants.Omegap = sqrt(n0*q_e**2/(epsilon0*m_e))
+my_constants.VG0_seed = sqrt(1-Omegap**2/Omega0_seed**2) 
+my_constants.VG0_driver = sqrt(1-Omegap**2/Omega0_driver**2) 
+my_constants.Tp = 2.0*pi/Omegap
+
+# Define parabolic guiding channel as in Esarey
+
+my_constants.alpha = 10
+my_constants.re = (1/(4*pi*epsilon0))*(q_e**2/(m_e*clight**2))
+
+my_constants.w_matched = w0_seed
+my_constants.rel_delta_n_over_w2 = 1./( pi * re * w_matched**2 * n0 ) 
+
+my_constants.ChannelEnd = 1.2*w_matched  #Channel ends here and goes constant
+
+my_constants.UniformSectionStart = ChannelEnd
+my_constants.US=UniformSectionStart
+my_constants.UniformSectionLength = 10e-6
+my_constants.UniformSectionEnd = UniformSectionStart+UniformSectionLength
+my_constants.UE=UniformSectionEnd
+
+my_constants.LinearDownRampStart = UniformSectionEnd
+my_constants.LS=LinearDownRampStart
+my_constants.LinearDownRampLength = 10e-6
+my_constants.LinearDownRampEnd = LinearDownRampStart+LinearDownRampLength
+my_constants.LE=LinearDownRampEnd
+
+my_constants.ChannelHeight=n0 * ( 1 + rel_delta_n_over_w2 * (US/w_matched)**alpha)
+my_constants.n_e_h=ChannelHeight
+
+     
+###################################################
+################# BOX PARAMETERS ##################
+###################################################      
+#max_step = 1
+stop_time = 240e-3/clight   # This sets for how long the simulation runs. 
+amr.n_cell = 384 63872    # The dimensions must be an divisible by blocking_factor
+amr.max_grid_size = 1024
+amr.blocking_factor_z = 128
+amr.blocking_factor_x = 128
+amr.max_level = 0
+geometry.coord_sys   = 0                  # 0: Cartesian
+
+geometry.dims = 2
+geometry.prob_lo     =  -80.e-6   -0.13e-2   
+geometry.prob_hi     =  80.e-6     0.0e-6
+warpx.serialize_initial_conditions = 1
+
+# boundary conditions
+boundary.field_lo       = pml   pml
+boundary.field_hi       = pml   pml
+
+###################################################
+#################### NUMERICS #####################
+###################################################   
+
+warpx.verbose = 1
+warpx.do_dive_cleaning = 0
+warpx.use_filter = 1
+warpx.cfl = 1. # if 1., the time step is set to its CFL limit
+warpx.pml_ncell = 96
+warpx.do_pml_in_domain = 0
+warpx.do_moving_window = 1
+warpx.moving_window_dir = z # Only z is supported for the moment
+warpx.moving_window_v = 1 #0.9999019998818721 
+algo.maxwell_solver = ckc
+# Order of particle shape factors, >= 3 recommended for injection
+algo.particle_shape = 3
+
+
+###################################################
+################# CHOFI Channel ###################
+###################################################   
+
+particles.species_names = electrons
+
+electrons.charge = -q_e
+electrons.mass = m_e
+electrons.injection_style = NUniformPerCell
+electrons.num_particles_per_cell_each_dim = 1 1
+electrons.momentum_distribution_type = "gaussian"
+electrons.xmin = -230.e-6
+electrons.xmax =  230.e-6
+electrons.zmin =  0.0e-6
+electrons.zmax = 600.e-3
+electrons.do_continuous_injection = 1
+electrons.profile = parse_density_function
+electrons.density_function(x,y,z) ="if(sqrt(x**2+y**2) < US,n0 * ( 1 + rel_delta_n_over_w2 * (sqrt(x**2+y**2)/w_matched)**alpha),if(sqrt(x**2+y**2) < UE,n_e_h,if(sqrt(x**2+y**2) < LE,n_e_h*(((1/(LS-LE))*sqrt(x**2+y**2) -(LE/(LS-LE))) ), 0 )))"
+
+
+###################################################
+#################### Lasers #####################
+###################################################   
+lasers.names        = seed driver
+driver.profile      = Gaussian
+driver.position     = 0.0 0.0 -0.1e-6 # This point is on the laser plane
+driver.direction    = 0.0 0.0 1.0      # The plane normal direction
+driver.polarization = 1.0 0.0 0.0      # The main polarization vector
+driver.e_max        = Emax_driver       # Maximum amplitude of the laser field (in V/m)
+driver.profile_waist = w0_driver       # The waist of the laser (in meters)
+driver.profile_duration = Tau_driver   # The duration of the laser (in seconds)
+driver.profile_t_peak = t0_driver    # The time at which the laser reaches its peak (in seconds)
+driver.profile_focal_distance = 0.0  # Focal distance from the antenna (in meters)
+driver.wavelength = Lambda0_driver         # The wavelength of the laser (in meters)
+
+seed.profile      = Gaussian
+seed.position     = 0.0 0.0 -0.1e-6 # This point is on the laser plane
+seed.direction    = 0.0 0.0 1.0      # The plane normal direction
+seed.polarization = 0.0 1.0 0.0      # The main polarization vector
+seed.e_max        = Emax_seed       # Maximum amplitude of the laser field (in V/m)
+seed.profile_waist = w0_seed       # The waist of the laser (in meters)
+seed.profile_duration = Tau_seed   # The duration of the laser (in seconds)
+seed.profile_t_peak = t0_seed    # The time at which the laser reaches its peak (in seconds)
+seed.profile_focal_distance = 0.0  # Focal distance from the antenna (in meters)
+seed.wavelength = Lambda0_seed         # The wavelength of the laser (in meters)
+
+
+# Diagnostics
+diagnostics.enable=1 # Whether to enable or disable diagnostics
+diagnostics.diags_names = diag_SpectralMod2D Checkpoint1
+diag_SpectralMod2D.format = openpmd
+diag_SpectralMod2D.openpmd_backend = h5
+diag_SpectralMod2D.intervals = 60000 #   #https://warpx.readthedocs.io/en/latest/usage parameters.html?highlight=geometry.coord_sys#intervals-parser
+diag_SpectralMod2D.diag_type = Full
+diag_SpectralMod2D.fields_to_plot = Ex Ey Ez By rho_electrons
+
+Checkpoint1.format = checkpoint
+Checkpoint1.diag_type = Full
+Checkpoint1.write_species = 1
+Checkpoint1.intervals = 600000   #https://warpx.readthedocs.io/en/latest/usage parameters.html?highlight=geometry.coord_sys#intervals-parser
+

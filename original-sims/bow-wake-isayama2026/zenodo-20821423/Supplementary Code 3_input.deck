@@ -1,0 +1,152 @@
+begin:control
+  nx = 2500
+  ny = 250
+  nz = 250
+
+  # Final time of simulation
+  t_end = 3000 * femto
+
+  # Size of domain
+  x_min = -10 * micron
+  x_max =  190 *micron 
+  y_min = -10 * micron
+  y_max = 10 * micron
+  z_min = y_min
+  z_max = y_max
+  nprocx = 50
+  nprocy = 4
+  nprocz = 4
+
+  use_pre_balance   = F
+ # balance_first     = F
+ # dlb_threshold     = 0.0
+  restart_snapshot = roll0001.sdf 
+  stdout_frequency = 10
+end:control
+
+begin:boundaries
+  bc_x_min = simple_laser
+  bc_x_max = open
+  bc_y_min = periodic
+  bc_y_max = periodic
+  bc_z_min = periodic
+  bc_z_max = periodic
+end:boundaries
+
+begin:constant
+  Te = 10e3
+  Ti = 10e3
+  pmass = 1836.2
+  pcharge = 1
+  hemass = 1836.2 * 4.0
+  hecharge = 2
+  armass = 1836.2 * 39.95
+  archarge = 18 
+  cmass=1836.2 * 12.0
+  ccharge=6
+  oxymass=1836.2 * 16.0
+  oxycharge=6
+end:constant
+
+
+
+begin:constant
+  lambda0 = 0.81 * micron
+  w_FWHM = 1.6 * micron
+  w_0 = w_FWHM / sqrt(2.0*loge(2.0))     
+  x_spot = -x_min    # Distance from x_min to spot
+
+  # These are the parameters calculated for driving the laser
+  # These should not need to be modified
+  x_R  = pi * w_0^2 / lambda0               # Rayleigh range
+  RC   = x_spot * (1.0 + (x_R/x_spot)^2)    # Radius of curvature on x_min
+  w_bnd = w_0 * sqrt( 1.0 + (x_spot/x_R)^2) # Spot size at x_min
+  gouy  = atan(x_spot/x_R)                  # Gouy phase shift at x_min
+  Tau_FWHM = 45 * femto
+  wt0 = Tau_FWHM/ sqrt(2.0*loge(2.0))
+end:constant
+
+
+begin:laser
+  boundary = x_min
+  intensity_w_cm2 = 5.48e21 * (w_0/w_bnd)^2
+  lambda = lambda0
+  phase = 2.0 * pi / lambda0 * (y^2 + z^2) / (2.0 * RC) - gouy
+  t_profile = gauss(time, 2 * Tau_FWHM, wt0)
+  t_end = end
+  profile = gauss( sqrt(y^2 + z^2), 0.0, w_bnd )
+  pol_angle = 0.0
+end:laser
+
+
+begin:species
+  name = electron_ncd
+  charge = -1
+  mass = 1
+  temp = 1e4 * 11604
+  npart_per_cell = 10
+  density =  "/vol0004/mdt1/data/hp240019/u14248/epoch_inputs/filament_density/fil3d_n17_1/electron_density_3d_fil3d_n17_1.bin"
+  dump = T
+end:species
+
+begin:species
+  name = carbon_ncd
+  charge = ccharge
+  mass = cmass
+  temp = 1e4 * 11604
+  npart_per_cell = 10
+  density =  "/vol0004/mdt1/data/hp240019/u14248/epoch_inputs/filament_density/fil3d_n17_1/carbon_density_3d_fil3d_n17_1.bin"
+  dump = T
+end:species
+
+begin:species
+  name = proton_ncd
+  charge = pcharge
+  mass = pmass
+  temp = 1e4 * 11604
+  npart_per_cell = 10
+  density =  "/vol0004/mdt1/data/hp240019/u14248/epoch_inputs/filament_density/fil3d_n17_1/proton_density_3d_fil3d_n17_1.bin"
+  dump = T
+end:species
+
+begin:species
+  name = oxy_ncd
+  charge = oxycharge
+  mass = oxymass
+  temp = 1e4 * 11604
+  npart_per_cell = 10
+  density =  "/vol0004/mdt1/data/hp240019/u14248/epoch_inputs/filament_density/fil3d_n17_1/oxy_density_3d_fil3d_n17_1.bin"
+  dump = T
+end:species
+
+begin:output
+  name = o1
+  dt_snapshot = 80 * femto
+  #restart_dump_every=30
+  particle_energy = always 
+  grid = always
+  ex = always
+  ey = always
+  bz = always
+  number_density =  always 
+  #ekbar = always + species
+  # Properties at particle positions 
+  # particles = always
+    px = always
+    py = always
+    pz = always
+  # gamma = always
+  # Properties on grid
+  # ez = always
+  # bx = always
+  # by = always
+    id =always
+  # charge_density = always
+  # temperature = always + species
+end:output
+
+begin:output
+  name = o2
+  dt_snapshot = 40 * femto
+  rolling_restart = T
+end:output

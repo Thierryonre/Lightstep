@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Large raw simulation output (keep summaries/figures only)
+**/diags/
+**/lab_diags/
+*.h5
+*.hdf5
+*.bp
+*.npz.large
+results/raw/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Third-party code without a licence: keep locally, do not redistribute
+original-sims/flying-focus-lwfa-weizmann/axiprop_utils/
+# Large archives (link kept in SOURCE.md)
+original-sims/differentiable-optimisation/related-code-adept-snapshot/*.zip
