@@ -242,3 +242,34 @@ Codes (all in `sims/codes/`):
 ### S026 ⚠️ R3 (Wake-T) attempt — too slow on this machine — 2026-10-27
 - **Script:** `sims/phase2/r3_lahaye_gradient_waket.py` (Wake-T 0.9.1, quasistatic_2d, laser evolution, matched channel; Lahaye FBPIC parameters).
 - **Result:** fixed two set-up errors (ParticleBunch takes weights, not charge; zero density at z = 0 causes a division by zero in Wake-T's bunch deposition → ramp from 2 % n₀). Still > 550 s for 0.5 mm at n_xi = 600 and > 580 s for 2 mm at n_xi = 300 on the shared CPU (≈ 2–6 h per 24 mm case) → replaced by the kinetic 1D mechanism study (S027).
+
+### S028 ✅ R4: reproduction of Palastro et al. PRL 124, 134802 (2020) — dephasingless LWFA (flying focus) — 2026-10-27
+- **Script:** `sims/phase1/r4_palastro2020_dlwfa.py` · data `results/data/R4_palastro2020.json` (tracker generalised to electrons: `track1d.Tracker(species='electron')`)
+- **Setup:** λ = 1 µm, 30 fs, a0 = 0.5, n = 3.5×10¹⁸ cm⁻³ (k0/kp = 17.8), 8 cm; conventional driver at the linear group velocity vs ideal flying focus at v = c; 800 test electrons over two periods, 10 MeV injection; 1D (diffraction-free, as provided by the flying focus).
+- **Result:** conventional maximum **75 MeV** (paper 75 MeV); dephasingless **1216 MeV** after 8 cm (paper 1.3 GeV, −6.5 %).
+- **Conclusion:** the flying-focus acceleration multiplier (×16 for electrons in this case) is reproduced quantitatively by our 1D models.
+
+### S027 ✅ R3-1D: Lahaye et al. density up-ramp mechanism, kinetic 1D PIC — 2026-10-27
+- **Script:** `sims/phase2/r3_lahaye_mechanism_1d.py` · data `results/data/R3_lahaye_mechanism_1d.json` · log `results/data/R3_1d.log`
+- **Setup:** n₀ = 10¹⁸ cm⁻³, 0.8 µm (k0/kp = 41.7), a0 = 1.6, 25 fs; driver at the etching-corrected velocity c√(1 − 3n/n_c) (Lu 2007) so that the flat-density dephasing length is bubble-like; sin² entrance ramp 60 c/ω_p then n₀(1 + g z[mm]); 3000 test electrons over the first bucket (50 MeV); dx = 0.02, ppc = 12.
+- **Result:** peak energy (distance) — flat 793 MeV (20.8 mm); g = 0.04/mm: 909 MeV (16.9 mm, **+14.7 %**); g = 0.08/mm (paper's value): 892 MeV (14.0 mm, **+12.6 %**); g = 0.12/mm: 859 MeV (12.2 mm, +8.3 %).
+- **Comparison:** paper's FBPIC +20 % at 0.08 n₀/mm (≈1.4 GeV; experiment ×1.4). Our 1D model reproduces the sign and size of the dephasing-mitigation effect and the shorter distance to peak energy; the remaining difference is consistent with self-focusing, laser evolution and delayed injection, which are absent in 1D.
+- **Conclusion:** density up-ramps give a modest (~10–15 %) electron-energy gain in 1D; for protons the relevant Phase-2 lever is the channel-width taper (S025), since protons need the wake *slowed*, not sped up.
+
+### S029 ⚠️ FBPIC quasi-3D check of the guided resonant train (partial run) — 2026-10-27
+- **Scripts:** `sims/phase2/fbpic_waveguide_train.py` (WSL, FBPIC 0.27.1 CPU, 6 threads), analysis `sims/phase2/analyse_fbpic_train_partial.py` · data `results/data/FBPIC_train_analysis_partial.json` · figure `results/figures/FBPIC_guided_train_partial.png`
+- **Setup:** 1 GeV rigid-comb design (S022): three LG_{p,0} components p = 0/3/6 at λ = 1.000/1.052/1.118 µm, a0 = 0.3 each, intensity FWHM 2.5 plasma periods, all focused at the entrance of a matched parabolic channel (n₀ = 3.09×10¹⁸ cm⁻³, W = 6.83 µm, Δn/n₀ = 0.78, 10 µm entrance ramp); grid 3985×136, 2 modes, dz = λ/16, dr = 0.2 µm, mobile ions, moving window at c.
+- **What happened:** the run (4000 steps planned, ~2.1 s/step) was **stopped by the host at ~step 1500–2000 because the system ran critically low on memory** (other jobs were running); not restarted. Snapshots at steps 500/1000/1500 (t = 313 fs) were saved — at t = 313 fs the front half of the train is inside the channel.
+- **Normalisation check:** FBPIC's azimuthal decomposition gives Er_{m=1} = E_x/2 on axis → a = 2|Er₁|/E₀; peak a = 0.89 at the entrance vs design 3×0.3 = 0.9 ✔ (first analysis attempt missed the factor 2).
+- **Result (in the channel, z > 17 µm):** the on-axis envelope is the designed rigid-comb pattern — main peaks every **16.4–16.6 µm** (design β_aλ_p = 16.62 µm) with the expected one-third-amplitude secondary maxima (measured ratio 0.34). The on-axis wake grows resonantly peak by peak and matches the 1D fluid wake driven by the *same measured on-axis drive* in shape and phase; amplitude ratio FBPIC/1D = **0.79** (field), i.e. **f_3D ≈ 0.62** in energy terms (the value used in the design calculator). The wake is confined to r ≲ 5 µm (designed peak radius 0.46 W).
+- **Not established by this partial run:** peak-train velocity inside the channel (too short a window), guiding of the p = 6 mode over cm lengths, proton focusing, ion motion over long trains. A full run needs ~2.5 h and ~2 GB RAM in WSL.
+
+---
+
+## Design synthesis (estimates built on the simulated ratios)
+
+### S030 — design calculator — 2026-10-27
+- **Script:** `sims/design/design_calc.py 0.62` · data `results/data/design_calc.json`, `results/data/D2_physical_sheet.json` · figures `results/figures/summary_efficiency_ranking.png`, `summary_gain_per_stage.png`
+- Every factor is tagged sim/lit/est in the JSON. Wall-plug → 6 GeV proton efficiency: RF reference 15 % [lit]; **D2 guided resonant train 3.3 % (today's fibre) – 6.4 % (projected fibre)**; D3 all-optical 0.68 % (transverse-flying-focus coupling) / 0.008 % (transverse pumping); D1 free-space flying focus 0.14–0.43 % (fibre), 10⁻⁵ (Ti:Sa); D4 near-critical RPA 6×10⁻⁵ [lit]; D0 conventional staged 2×10⁻⁴ (fibre), 5×10⁻⁷ (Ti:Sa).
+- LWFA section only (1 → 6 GeV): D2 5.8 % / 2.9 % vs conventional 1.7×10⁻⁴ (fibre) / 4.2×10⁻⁷ (Ti:Sa) → **efficiency multiplier ≈ 340× (same lasers), ≈ 1.4×10⁵× vs Ti:Sa conventional LWFA**.
+- D2 physical sheet [est]: 3 stages (1→2→3.5→6 GeV, n₀ = 3.1×10¹⁸ / 1.2×10¹⁸ / 6×10¹⁷ cm⁻³, 22–51 GV/m) ≈ 18 cm of plasma; 4.4×10⁷ protons (7 pC) and 0.31 J of laser per shot; a 1 MW beam needs 24 MHz, 7.4 MW laser average power, 19.6 MW (projected) / 38 MW (today) wall-plug.

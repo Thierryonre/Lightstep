@@ -148,3 +148,52 @@ if __name__ == "__main__":
     json.dump(res, open(os.path.join(D, "design_calc.json"), "w"), indent=1, default=float)
     for k, v in sorted(res.items(), key=lambda kv: -kv[1]["eta_total"]):
         print(f"{v['eta_total']:10.3e}  {k}")
+
+
+# --------------------------------------------------------------------- physical sheet
+def d2_physical_sheet(f3D=0.6, eta_wb=0.585, eta_lw=0.5, eta_couple=0.62, grad_E0=0.3,
+                      load_areal=0.2, kpW_beam_frac=0.4, P_beam_W=1e6):
+    """Estimate-level physical design of D2 (RF injector to 1 GeV + 3 guided resonant-train
+    stages). Uses simulated 1D ratios (gradient in E0 units, areal beam loading, efficiencies)
+    and the rigid-comb optics designs (P1e: density, W per stage)."""
+    import plasma as PL
+    stages = [  # (T_in, T_out, n0 [cm^-3], W [m]) from P1e designs (lambda = 1 um)
+        (1000, 2000, 3.09e18, 6.83e-6),
+        (2000, 3500, 1.16e18, 11.1e-6),
+        (3500, 6000, 6.0e17, 12.6e-6),
+    ]
+    rows, Ltot, Nps = [], 0.0, []
+    for T_in, T_out, n, W in stages:
+        nm = n * 1e6
+        E0 = PL.E0(nm)
+        G = grad_E0 * E0
+        L = (T_out - T_in) * 1e6 / G
+        cwp = 1 / PL.k_p(nm)
+        A = np.pi * (kpW_beam_frac * W) ** 2
+        Np = load_areal * nm * cwp * A
+        rows.append(dict(T_in=T_in, T_out=T_out, n0_cm3=n, W_um=W * 1e6, gradient_GVm=G / 1e9,
+                         length_cm=L * 100, protons_per_bunch=Np))
+        Ltot += L
+        Nps.append(Np)
+    Np = min(Nps)                                  # charge limited by the narrowest stage
+    E_beam_shot = Np * 5.0e9 * PL.e                # J gained in the LWFA (1 -> 6 GeV)
+    eta_opt = eta_couple * eta_lw * eta_wb * f3D   # laser (at plasma entrance) -> beam
+    E_laser_shot = E_beam_shot / eta_opt
+    rep = P_beam_W / (Np * 6.0e9 * PL.e)
+    sheet = dict(stages=rows, plasma_length_cm=Ltot * 100, protons_per_shot=Np,
+                 charge_pC=Np * PL.e * 1e12, laser_energy_per_shot_J=E_laser_shot,
+                 laser_to_beam_efficiency=eta_opt, rep_rate_Hz_for_1MW=rep,
+                 laser_average_power_MW=E_laser_shot * rep / 1e6,
+                 assumptions=dict(f3D=f3D, eta_wb=eta_wb, eta_lw=eta_lw, eta_couple=eta_couple,
+                                  gradient_E0=grad_E0, load_areal=load_areal,
+                                  beam_radius_over_W=kpW_beam_frac))
+    for las in ["fibre_today", "fibre_projected"]:
+        L_ = LASERS[las]
+        P_wall = sheet["laser_average_power_MW"] / L_["eta"] + 1e6 * (1.0 / 6.0) / RF_INJECTOR["eta"] / 1e6
+        sheet[f"wall_plug_MW_{las}"] = P_wall
+        sheet[f"laser_cost_USD_{las}"] = [sheet["laser_average_power_MW"] * 1e6 * c for c in L_["cost_per_W"]]
+    return sheet
+
+
+if __name__ == "__main__" and False:
+    pass

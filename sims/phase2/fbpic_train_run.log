@@ -19,3 +19,6 @@ Initializing laser pulse on the mesh...
 Done.
 
 n0=3.092e+18, W=6.83 um, dn/n0=0.78, lam_p=19.0 um, tau=134 fs, grid 3985x136x2, steps 4000
+step 500: t=104 fs, max|Ez| on axis = 0.00 GV/m, max a(axis) = 0.370 (1059s)
+step 1000: t=208 fs, max|Ez| on axis = 0.50 GV/m, max a(axis) = 0.397 (1976s)
+step 1500: t=313 fs, max|Ez| on axis = 11.46 GV/m, max a(axis) = 0.444 (2893s)

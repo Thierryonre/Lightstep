@@ -1,0 +1,57 @@
+{
+ "stages": [
+  {
+   "T_in": 1000,
+   "T_out": 2000,
+   "n0_cm3": 3.09e+18,
+   "W_um": 6.83,
+   "gradient_GVm": 50.70973374134942,
+   "length_cm": 1.9720079878561583,
+   "protons_per_bunch": 43807621.08569106
+  },
+  {
+   "T_in": 2000,
+   "T_out": 3500,
+   "n0_cm3": 1.16e+18,
+   "W_um": 11.1,
+   "gradient_GVm": 31.069987972128253,
+   "length_cm": 4.827810044038623,
+   "protons_per_bunch": 70893101.2462576
+  },
+  {
+   "T_in": 3500,
+   "T_out": 6000,
+   "n0_cm3": 6e+17,
+   "W_um": 12.6,
+   "gradient_GVm": 22.345378515341682,
+   "length_cm": 11.187995756185437,
+   "protons_per_bunch": 65697030.26667394
+  }
+ ],
+ "plasma_length_cm": 17.98781378808022,
+ "protons_per_shot": 43807621.08569106,
+ "charge_pC": 7.018754689461992,
+ "laser_energy_per_shot_J": 0.3121194397512381,
+ "laser_to_beam_efficiency": 0.112437,
+ "rep_rate_Hz_for_1MW": 23745902.80479544,
+ "laser_average_power_MW": 7.411557879820107,
+ "assumptions": {
+  "f3D": 0.62,
+  "eta_wb": 0.585,
+  "eta_lw": 0.5,
+  "eta_couple": 0.62,
+  "gradient_E0": 0.3,
+  "load_areal": 0.2,
+  "beam_radius_over_W": 0.4
+ },
+ "wall_plug_MW_fibre_today": 38.16890051021164,
+ "laser_cost_USD_fibre_today": [
+  7411557879.8201065,
+  74115578798.20107
+ ],
+ "wall_plug_MW_fibre_projected": 19.640005810661375,
+ "laser_cost_USD_fibre_projected": [
+  148231157.59640214,
+  852329156.1793122
+ ]
+}

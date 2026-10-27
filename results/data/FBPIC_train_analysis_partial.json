@@ -1,0 +1,28 @@
+{
+ "snapshot_step": 1500,
+ "t_fs": 312.71633924827177,
+ "peak_a_in_plasma": 0.36186471934522985,
+ "train_peak_velocity_c": [],
+ "design_velocity_c": 0.875,
+ "peak_spacing_um": [],
+ "design_spacing_um": 16.615691507572492,
+ "Ez_max_FBPIC_GVm": 5.770280819360216,
+ "Ez_max_FBPIC_E0": 0.03412773300699346,
+ "Ez_max_1D_E0": 0.043240655224305334,
+ "f3D_on_axis_field": 0.7892510608352311,
+ "f3D_energy_like": 0.6229172370295377,
+ "note": "partial run (front half of train inside plasma)",
+ "peak_spacing_in_plasma_um": [
+  8.438,
+  7.938,
+  8.313,
+  8.25
+ ],
+ "peaks_in_plasma_um": [
+  6.72,
+  15.16,
+  23.09,
+  31.41,
+  39.66
+ ]
+}

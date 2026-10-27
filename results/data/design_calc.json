@@ -218,15 +218,15 @@
    "lit: Ross 2024 coupling 64 % x channel-forming overhead 3 %"
   ],
   "f_3D": [
-   0.6,
-   "est (pending FBPIC)"
+   0.62,
+   "sim FBPIC"
   ],
   "eta_laser": [
    0.2,
    "lit"
   ],
-  "eta_LWFA_part": 0.027947024887385447,
-  "eta_total": 0.032331664745794124
+  "eta_LWFA_part": 0.028878592383631628,
+  "eta_total": 0.033369428046196574
  },
  "D2_guided_train_k0kp20_fibre_projected": {
   "description": "Guided resonant flying-focus train (N=3 fibre lines in LG_0,3,6 channel modes), channel-width taper, 1->6 GeV, RF injector to 1 GeV",
@@ -247,15 +247,15 @@
    "lit: Ross 2024 coupling 64 % x channel-forming overhead 3 %"
   ],
   "f_3D": [
-   0.6,
-   "est (pending FBPIC)"
+   0.62,
+   "sim FBPIC"
   ],
   "eta_laser": [
    0.4,
    "lit"
   ],
-  "eta_LWFA_part": 0.055894049774770894,
-  "eta_total": 0.062420916014149515
+  "eta_LWFA_part": 0.057757184767263256,
+  "eta_total": 0.06435283680641504
  },
  "D2_guided_train_k0kp28_fibre_today": {
   "description": "Guided resonant flying-focus train (N=3 fibre lines in LG_0,3,6 channel modes), channel-width taper, 1->6 GeV, RF injector to 1 GeV",
@@ -276,15 +276,15 @@
    "lit: Ross 2024 coupling 64 % x channel-forming overhead 3 %"
   ],
   "f_3D": [
-   0.6,
-   "est (pending FBPIC)"
+   0.62,
+   "sim FBPIC"
   ],
   "eta_laser": [
    0.2,
    "lit"
   ],
-  "eta_LWFA_part": 0.01727802450899256,
-  "eta_total": 0.020266737168765418
+  "eta_LWFA_part": 0.01785395865929231,
+  "eta_total": 0.020926587161729966
  },
  "D2_guided_train_k0kp28_fibre_projected": {
   "description": "Guided resonant flying-focus train (N=3 fibre lines in LG_0,3,6 channel modes), channel-width taper, 1->6 GeV, RF injector to 1 GeV",
@@ -305,15 +305,15 @@
    "lit: Ross 2024 coupling 64 % x channel-forming overhead 3 %"
   ],
   "f_3D": [
-   0.6,
-   "est (pending FBPIC)"
+   0.62,
+   "sim FBPIC"
   ],
   "eta_laser": [
    0.4,
    "lit"
   ],
-  "eta_LWFA_part": 0.03455604901798512,
-  "eta_total": 0.03964081872176562
+  "eta_LWFA_part": 0.03570791731858462,
+  "eta_total": 0.04090212772247702
  },
  "D2_guided_train_k0kp40_fibre_today": {
   "description": "Guided resonant flying-focus train (N=3 fibre lines in LG_0,3,6 channel modes), channel-width taper, 1->6 GeV, RF injector to 1 GeV",
@@ -334,15 +334,15 @@
    "lit: Ross 2024 coupling 64 % x channel-forming overhead 3 %"
   ],
   "f_3D": [
-   0.6,
-   "est (pending FBPIC)"
+   0.62,
+   "sim FBPIC"
   ],
   "eta_laser": [
    0.2,
    "lit"
   ],
-  "eta_LWFA_part": 0.009854950642690617,
-  "eta_total": 0.011672564047809003
+  "eta_LWFA_part": 0.010183448997446972,
+  "eta_total": 0.0120564373110063
  },
  "D2_guided_train_k0kp40_fibre_projected": {
   "description": "Guided resonant flying-focus train (N=3 fibre lines in LG_0,3,6 channel modes), channel-width taper, 1->6 GeV, RF injector to 1 GeV",
@@ -363,15 +363,15 @@
    "lit: Ross 2024 coupling 64 % x channel-forming overhead 3 %"
   ],
   "f_3D": [
-   0.6,
-   "est (pending FBPIC)"
+   0.62,
+   "sim FBPIC"
   ],
   "eta_laser": [
    0.4,
    "lit"
   ],
-  "eta_LWFA_part": 0.019709901285381234,
-  "eta_total": 0.023046229660317375
+  "eta_LWFA_part": 0.020366897994893943,
+  "eta_total": 0.023794127503549672
  },
  "D3_alloptical_TFF_lit_noNP": {
   "description": "All-optical: self-injection from rest by slow accelerating side-pumped driver (0->1 GeV) + guided train (1->6 GeV)",
@@ -383,7 +383,7 @@
    0.004545454545454545,
    "lit: Gong 2024 / Nutting 2026 normalised by 1D"
   ],
-  "eta_total": 0.0029017053103670976
+  "eta_total": 0.0029082701031482015
  },
  "D3_alloptical_TFF_lit_NP": {
   "description": "All-optical: self-injection from rest by slow accelerating side-pumped driver (0->1 GeV) + guided train (1->6 GeV)",
@@ -395,7 +395,7 @@
    0.004545454545454545,
    "lit: Gong 2024 / Nutting 2026 normalised by 1D"
   ],
-  "eta_total": 0.006782523812320187
+  "eta_total": 0.006818499834324555
  },
  "D3_alloptical_TPA_lit_noNP": {
   "description": "All-optical: self-injection from rest by slow accelerating side-pumped driver (0->1 GeV) + guided train (1->6 GeV)",
@@ -407,7 +407,7 @@
    4.545454545454546e-05,
    "lit: Gong 2024 / Nutting 2026 normalised by 1D"
   ],
-  "eta_total": 3.117686331771103e-05
+  "eta_total": 3.1177619468395786e-05
  },
  "D3_alloptical_TPA_lit_NP": {
   "description": "All-optical: self-injection from rest by slow accelerating side-pumped driver (0->1 GeV) + guided train (1->6 GeV)",
@@ -419,7 +419,7 @@
    4.545454545454546e-05,
    "lit: Gong 2024 / Nutting 2026 normalised by 1D"
   ],
-  "eta_total": 8.093005763803754e-05
+  "eta_total": 8.093515305842936e-05
  },
  "D4_nearcritical_RPA_lit": {
   "description": "Ultra-intense near-critical schemes (RPA + wake / light-spring), single multi-PW Ti:Sa laser",

@@ -1,0 +1,156 @@
+# Results: energy-efficient laser wakefield acceleration of protons to ~6 GeV
+
+*Status: 2026-10-27. Every number is tagged **[sim]** (simulated in this repository, ID in
+`docs/SIMULATION_LOG.md`), **[lit]** (published value, see `docs/research/`) or **[est]**
+(our estimate / assumption, not a simulation result).*
+
+## 1. Bottom line
+
+1. **A conventional LWFA cannot accelerate protons from any practical injector** [sim S009,
+   S021]. Its wake moves at the laser group velocity, so protons slip out within a few c/ω_p:
+   best-phase gain per stage is 0.2 MeV (10 MeV injection), 0.8 MeV (100 MeV) and 8 MeV
+   (1 GeV), at every density tested. Laser→proton efficiency per stage is 5×10⁻⁵–4×10⁻⁴
+   because protons use only ~10⁻³ of the driver's depletion length.
+2. **What works is a wake whose phase velocity is matched to the protons and programmed to
+   follow them** (the proton version of the dephasingless flying focus). In 1D kinetic
+   simulations a phase-locked, beam-loaded wake takes protons from 30 MeV, 100 MeV, 300 MeV or
+   1 GeV to **6 GeV in a single continuous stage**, with **35–53 % wake→beam efficiency** and
+   sub-percent energy spread [sim S015, validated by PIC to ≈3 % in S012/S014].
+   Joint (differentiable) optimisation of pulse shape and bunch profile raises wake→beam
+   efficiency to **60–71 %** at 1–6 GeV [sim S016].
+3. **The decisive question is how the slow, moving drive is made optically.** Free-space
+   flying foci waste most light (each focal zone used once) and cannot form slow, short drivers
+   below β ≈ 0.9; side-pumped/transverse schemes are very inefficient in 3D [lit].
+   **Best embodiment found: a guided, resonant flying-focus train** — 3–5 narrow-band laser
+   lines spaced by ω_p, each in a different radial mode of a matched plasma channel. Their
+   beating forms a rigid train of intensity peaks spaced by one plasma period (resonant
+   excitation, Phase 1.3) that travels at a programmable sub-luminal velocity (flying focus,
+   Phase 1.1); tapering the channel *width* sweeps the velocity from 0.875c to 0.983c with
+   fixed lasers (Phase 2.1). The light stays guided and is reused until absorbed.
+   [sim optics S022, S025; 1D PIC with protons S024: 58.5 % wake→beam]
+4. **Best design (D2):** RF injector to 1 GeV + three guided resonant-train stages (≈18 cm of
+   plasma, 22–51 GV/m) driven by efficient Yb-fibre lasers. **Estimated wall-plug efficiency
+   3.3–6.4 %** (today's → projected fibre lasers) [est on sim ratios, incl. a quasi-3D FBPIC
+   correction f_3D ≈ 0.62, S029]. That is **≈300× better than a
+   conventional staged LWFA with the same lasers and ≈10⁵× better than a Ti:Sa conventional
+   LWFA** — but still **below a conventional RF proton accelerator (~10–18 %)** [lit].
+5. **For muon-catalysed fusion the accelerator is not the limiting factor.** With demonstrated
+   μCF physics (~150 fusions per muon) no accelerator efficiency reaches energy break-even [lit];
+   our best LWFA design would return ≈1 % of its wall-plug power as fusion power [est].
+
+## 2. Evidence base and its limits
+
+| Tool | What it simulates | Validation |
+|---|---|---|
+| 1D cold-fluid quasi-static wake (`fluid1d.py`), JAX version (`jax_wake.py`) | nonlinear wakes for any phase velocity, beam loading | analytic linear theory to 10⁻⁴ (S001); JAX = numpy to 10⁻¹¹ |
+| 1D envelope PIC (`pic1d_env.py`) | kinetic plasma, mobile ions, programmed driver trajectories, exact energy budget | fluid (S003), full-EM PIC and gridless sheet model (S006–S008) |
+| 1D full-EM PIC (`pic1d_em.py`) | resolved laser, depletion, etching, red-shift | envelope PIC/fluid (S008) |
+| Quasi-static proton tracker (`track1d.py`) | 0.03→6 GeV accelerations in seconds | kinetic PIC to ≈3–4 % incl. ion motion (S012, S014) |
+| Linear optics of channel modes (`p1e_*`) | rigid-comb flying-focus trains, channel tapers | exact modal dispersion |
+| FBPIC quasi-3D (WSL) | multi-D check of the guided train | see §6 |
+
+**Reproductions of published results** [sim vs lit]:
+
+| Paper | Quantity | Published | This work |
+|---|---|---|---|
+| Palastro et al. PRL 124, 134802 (2020) — flying-focus DLWFA | conventional vs dephasingless energy, 8 cm | 75 MeV vs 1.3 GeV | **75 MeV vs 1.22 GeV** (S028) |
+| Hooker et al. J. Phys. B 47, 234003 (2014) — multi-pulse | wake after 120 pulses | 4.7 GV/m (2.5 with mobile H) | **5.01 GV/m** (4.28 mobile H; transverse ion motion not in 1D) (S017) |
+| Ross et al. PRR 6, L022001 (2024) — resonance in a channel | resonance density / width | 4.3×10¹⁷ / 0.37 (meas.), 8/(3N)=0.27 (theory) | **4.3×10¹⁷ / 0.21** (S011) |
+| Lahaye et al. PRR 8, 023274 (2026) — density up-ramp | energy gain vs flat | +20 % (FBPIC, 0.08 n₀/mm); ×1.4 experiment | **+12.6 % at 0.08 n₀/mm, +14.7 % at 0.04** (1D mechanism; no self-focusing) (S027) |
+
+Main limitations: most plasma physics here is 1D (no diffraction, self-focusing, transverse
+beam dynamics or hosing); the laser coupling of each optical embodiment is either computed with
+energy accounting (guided train) or taken from the literature (free-space and side-pumped
+schemes). These are labelled throughout.
+
+## 3. Conventional LWFA baseline [sim]
+(S009, S021, figure `results/figures/summary_gain_per_stage.png`)
+
+| Injection energy | best gain / stage | wake→proton η (best stopping point) | laser→proton η per stage | stages to 6 GeV |
+|---|---|---|---|---|
+| 10 MeV | 0.18 MeV | — | — | ~33 000 |
+| 100 MeV | 0.78 MeV | 0.18 | 4.5×10⁻⁵ | ~7 700–12 000 |
+| 1 GeV | 7–8 MeV | 0.36 | 4.3×10⁻⁴ | ~600–1 100 |
+| 6 GeV (γ = γ_p) | 0.93 GeV | — | — | — |
+
+## 4. Phase 1 — individual techniques and combinations
+
+| ID | Technique(s) | Key simulated result | Improvement vs conventional |
+|---|---|---|---|
+| FF | velocity-matched (flying-focus-type) wake, single stage | 0.1→6 GeV (and 0.03, 0.3, 1 GeV starts) with 35–53 % wake→beam (S015) | per-stage gain ×600 (1 GeV start) to ×7 000 (100 MeV start); laser→wake coupling limited by the optical embodiment |
+| NP | nanoparticle-like dense H layer, conventional wake | no capture possible (protons from NP are far below γ_p) (S009 logic) | none alone |
+| RE | resonant pulse trains (multi-pulse) | trains of ¼-power pulses equal/beat one pulse in the quasi-linear regime: η 0.54 vs 0.52 (100 MeV), 0.55 vs 0.50 with 1.6× field (1 GeV); fail at a0 ≈ 3 (S016); Hooker/Ross reproduced (S011, S017) | enables low-peak-power, high-efficiency lasers; does not solve proton velocity matching alone |
+| FF + NP | slow accelerating driver from rest + dense layer | self-injection of background protons; 317 MeV at 28.6 % (no layer) → 321 MeV, 7× charge, 74 % (with layer) laser→proton in 1D (S018) | removes the injector; but the slow-driver optics are ~10⁻³–10⁻⁵ efficient in 3D [lit] |
+| FF + RE (+ channel) | guided resonant flying-focus train | rigid trains for ≥ 0.75–1 GeV (S022); 3→3.2 GeV at 58.5 % wake→beam, 18-bunch train 49.9 % (S024) | **best overall**; guided light reused → laser→wake set by depletion (design value 50 %) |
+| NP + RE | — | NP gives no velocity matching; same limitation as NP alone | none for protons |
+| FF + NP + RE | all-optical: self-injection (FF+NP) to ~1 GeV, then guided train | D3: 0.7 % wall-plug with transverse-flying-focus coupling [est from lit], 0.008 % with transverse pumping | limited by the low-energy optics |
+| (dense matched) | laser group velocity matched by density (no flying focus) | wake slows below v_g by etching (S019), but a single guided pulse transfers only ~84 MeV to protons, wake unsteady (S020) | rejected |
+
+## 5. Phase 2 — optimisations
+
+- **Engineered density gradients and guiding.** Lahaye mechanism reproduced in 1D (S027):
+  a linear up-ramp raises the dephasing-limited electron energy from 793 MeV (flat) to 909 MeV
+  (+15 %, 0.04 n₀/mm) and 892 MeV (+13 %, 0.08 n₀/mm), reached in a shorter distance.
+  For protons the useful version is the **channel-width taper** of the guided train: velocity
+  0.875c → 0.983c at fixed laser frequencies, coherence ≥ 120 mm, resonance preserved (S025).
+  Density changes detune the resonance and are avoided.
+- **Joint differentiable optimisation** (JAX + L-BFGS-B, 112 parameters: pulse shape + bunch
+  profile + phase, constraints on spread, gradient, wave breaking and a0): wake→beam efficiency
+  ×1.41 (1 GeV) and ×2.46 (6 GeV) at equal gradient with the field flattened to ±5 % (S016).
+
+## 6. Multi-D check of the guided resonant train (FBPIC quasi-3D) [sim, partial]
+(S029, figure `results/figures/FBPIC_guided_train_partial.png`)
+- Three LG modes (p = 0/3/6) at the designed frequencies, injected into a matched channel,
+  form the designed rigid-comb train inside the plasma: main peaks every 16.4–16.6 µm (design
+  16.62 µm), secondary maxima at the expected 1/3 amplitude, peak a = 0.89 (design 0.9).
+- The on-axis wake grows resonantly and matches the 1D wake for the same on-axis drive in shape
+  and phase, at **0.79×** the 1D field (**f_3D ≈ 0.62** in energy) — used in the efficiency chain.
+- Caveat: the run was stopped by the host (low system memory) after the front half of the train
+  had entered the channel; velocity inside the channel, cm-scale guiding of the p = 6 mode, proton
+  focusing and long-train ion motion remain to be checked in a full run.
+
+## 7. Rankings
+
+Wall-plug efficiencies from `sims/design/design_calc.py` (S030); multipliers are relative to a
+conventional LWFA (group-velocity wake, staged at every proton dephasing, RF injector to the same
+energy) using **the same laser technology** unless stated. Figure:
+`results/figures/summary_efficiency_ranking.png`.
+
+| Rank | Design | 1. Energy efficiency (wall-plug → 6 GeV) | 2. Acceleration multiplier vs conventional | 3. Ease of construction | 4. Construction cost (1 MW, 6 GeV beam) | 5. Operating power (1 MW beam) | 6. Proton output / muon suitability |
+|---|---|---|---|---|---|---|---|
+| 1 | **D2 — RF injector (1 GeV) + guided resonant flying-focus train** (FF + RE + channel-width taper + joint optimisation) | **3.3 % (today's fibre) – 6.4 % (projected)** [est on sim]; LWFA section 2.9–5.8 % | per-stage gain ≈ 200× (≈1.7 GeV/stage vs 8 MeV); efficiency ≈ 320–340× (same lasers, whole machine / LWFA section), ≈ 1.4×10⁵× vs Ti:Sa conventional | Hard: HOFI channels ~18 cm with width taper, 3–5 narrow-band fibre lines into radial modes (p ≤ 6), ~10 fs injector–laser synchronisation; HOFI channels and fibre combining are demonstrated, guiding of high-order modes (p ≥ 3) in plasma channels is not | lasers $0.15–0.85 B (projected $20–115/W) or $7–74 B at today's prices; + 1 GeV RF injector $0.3–1 B [est] | 20 MW (projected) / 38 MW (today) [est] | 4×10⁷ p (7 pC)/shot, < 1 % spread [sim 1D]; 1 MW needs 24 MHz × 0.31 J = 7.4 MW of laser (≈10⁴× today's ~1 kW fibre systems); a 1 kW demonstrator needs ~7 kW; beam quality ample for pion targets |
+| 2 | D3 — all-optical: slow accelerating driver from rest + nanoparticle-like H layer (self-injection) to 1 GeV, then D2 | 0.68 % (transverse-flying-focus coupling) / 0.008 % (transverse pumping) [est on sim + lit] | no injector needed; 1D: 0 → 317 MeV in one stage (28.6 %), 7× charge with NP layer (74 %) | Very hard: slow, steep drivers need transverse flying focus or ~10³–10⁴ timed beamlets (not demonstrated) | dominated by the inefficient low-energy section: ~10× D2 laser power | ~150 MW [est] | high charge per shot in 1D; 3D charge/efficiency unverified |
+| 3 | D1 — free-space (on-axis) flying focus, velocity-matched, RF injector to 1 GeV | 0.14–0.43 % (fibre), 10⁻⁵ (Ti:Sa) [est on sim] | per-stage gain ≈ 600× (single 1 → 6 GeV stage) [sim 1D]; efficiency ≈ 20× (same lasers) | Hard: axiparabola/echelon or chromatic optics, tight foci, limited to β ≳ 0.9; energy ∝ L/Z_R | very high laser power (~95 MW optical, ~$2–11 B at projected $/W) | ~235 MW [est] | as D2 per shot; poor wall-plug |
+| 4 | D4 — near-critical RPA + wake / light-spring (single multi-PW laser) | 6×10⁻⁵ (Ti:Sa) [lit, not simulated here]; ~1 % if a 20 %-efficient PW laser existed | multi-GeV in one stage [lit] | Very hard: 5–10 PW, ultra-thin targets, ≲ 1 Hz | multi-PW facility ($0.1–0.5 B) for ≲ 10¹⁰ p/s | n/a at 1 MW | ~10⁹–10¹⁰ p/shot at ≤ 1 Hz → 10⁵× short of a muon factory |
+| 5 | D0 — conventional LWFA (baseline) | 2×10⁻⁴ (fibre), 5×10⁻⁷ (Ti:Sa) [sim + est] | 1 (reference): 8 MeV/stage from 1 GeV, ~600–1 100 stages | Impractical (thousands of stages) | — | ~5 GW (fibre) | — |
+| ref. | RF proton accelerator (SC linac / RCS) | ~10–18 % [lit] | — | Mature | ~$1–2 B, 300–800 m | ~7–10 MW | 1–2 MW beams exist today |
+
+**Overall:** among LWFA options the guided resonant flying-focus train (D2) is best on every
+criterion that matters for a muon source; it is the only one within an order of magnitude of RF
+efficiency, and its advantage over conventional LWFA comes from (i) velocity matching (no
+dephasing), (ii) guided light reused until absorbed, (iii) resonant drive from narrow-band,
+efficient lasers, (iv) beam-loading/pulse-shape optimisation. It does **not** beat RF on
+efficiency; its potential advantages are compactness (≈18 cm of plasma vs hundreds of metres)
+and, at projected fibre-laser costs, capital cost.
+
+## 8. Recommended design (D2) — summary sheet [est on sim]
+- Injector: 1 GeV RF (cyclotron/linac), bunches synchronised to the laser train (~10 fs).
+- Three plasma stages, λ = 1 µm fibre lines (N = 3 per stage, radial modes p = 0/P/2P):
+  1→2 GeV (n₀ = 3.1×10¹⁸ cm⁻³, W = 6.8 µm), 2→3.5 GeV (1.2×10¹⁸, 11 µm),
+  3.5→6 GeV (6×10¹⁷, 12.6 µm); channel width tapered ×1.5–2 inside each stage to keep the
+  train velocity on the proton velocity; ≈18 cm of plasma at 22–51 GV/m.
+- Per shot: 4×10⁷ protons (7 pC), 0.31 J of laser at the plasma; laser→beam 11 %
+  (coupling 0.62 × laser→wake 0.64 × wake→beam 0.585 × f_3D 0.62); joint optimisation can lift
+  wake→beam to ≈0.7 (S016).
+- Muon production at 1 MW (1×10¹⁵ p/s): 24 MHz, 7.4 MW laser, 20–38 MW wall-plug →
+  ≈0.5–0.9×10¹⁵ stopped μ⁻/s [lit yield]; with 150 fusions/μ this is ≈0.3 MW of fusion power,
+  ≈1–1.5 % of the wall-plug power: μCF break-even needs far more fusions per muon (≥ 400–1000),
+  whatever the accelerator [lit].
+
+## 9. What would change the conclusions / next steps
+1. A full FBPIC run of the guided train (≈2.5 h, ≈2 GB RAM) and a proton-loaded RZ stage — to
+   confirm velocity, cm-scale guiding of high-order modes and proton focusing.
+2. Experimental guiding of LG_{p≥3} modes in HOFI channels and multi-line fibre drivers.
+3. The low-energy section (< 1 GeV) is the efficiency bottleneck of any all-optical design: an
+   efficient slow-wave drive would remove the RF injector.
+4. Deuteron beams (≈1.6–1.9× more pions per GeV [lit]) would improve the muon cost directly.

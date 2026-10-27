@@ -1,2 +1,5 @@
 gradient 0.00 n0/mm: peak energy 793 MeV at z = 20.8 mm (484s)
 gradient 0.04 n0/mm: peak energy 909 MeV at z = 16.9 mm (530s)
+gradient 0.08 n0/mm: peak energy 892 MeV at z = 14.0 mm (603s)
+gradient 0.12 n0/mm: peak energy 859 MeV at z = 12.2 mm (582s)
+ratios vs flat: [1.0, 1.147, 1.126, 1.083]

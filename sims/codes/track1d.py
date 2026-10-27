@@ -57,7 +57,9 @@ class Tracker:
     beta_program(t, xd, tracker) -> beta_d. density(x) -> local n/n_ref (scales the wake;
     a uniform plasma uses lambda x: 1.0)."""
 
-    def __init__(self, xi_min, xi_max, dxi, driver_a2, beta_program, density=None):
+    def __init__(self, xi_min, xi_max, dxi, driver_a2, beta_program, density=None,
+                 species="proton"):
+        """species: 'proton' (default) or 'electron' (test/loaded electron beams)."""
         self.xi = np.arange(xi_min, xi_max + dxi / 2, dxi)
         self.dxi = dxi
         self.driver_a2 = driver_a2
@@ -72,13 +74,17 @@ class Tracker:
         self.hist = []
         self._u = None
         self.static_driver = False   # if True and beam unloaded, reuse the wake between steps
+        if species == "electron":
+            self.qm, self.mc2_me, self.zb = -1.0, 1.0, -1.0
+        else:
+            self.qm, self.mc2_me, self.zb = ME_MP, MPC2_ME, 1.0
         self._cache = None
 
     def set_beam(self, xi, T_MeV, weight):
         """Protons at positions xi (c/w_p behind/ahead of driver), kinetic energies T [MeV],
         areal weights (n_ref c/w_p units; 0 => test particles)."""
         self.pxi = np.asarray(xi, float).copy()
-        g = 1 + np.asarray(T_MeV, float) / 938.27208816
+        g = 1 + np.asarray(T_MeV, float) / (self.mc2_me * 0.51099895)
         self.pu = np.sqrt(g * g - 1)
         self.pw = np.broadcast_to(np.asarray(weight, float), self.pxi.shape).copy()
         self.alive = np.ones(self.pxi.size, bool)
@@ -86,14 +92,14 @@ class Tracker:
 
     def kinetic(self):
         """Kinetic energy of each proton in m_e c^2."""
-        return (np.sqrt(1 + self.pu**2) - 1) * MPC2_ME
+        return (np.sqrt(1 + self.pu**2) - 1) * self.mc2_me
 
     def wake(self, beta_d, with_beam=True):
         """Return (E, broken, u_unloaded) in local-density normalisation."""
         a2 = self.driver_a2(self.xi, self.t, self.xd)
         nb = np.zeros_like(self.xi)
         if with_beam and self.pw.sum() > 0:
-            deposit_cic(self.pxi[self.alive], self.pw[self.alive], self.xi[0], self.dxi, nb)
+            deposit_cic(self.pxi[self.alive], self.zb * self.pw[self.alive], self.xi[0], self.dxi, nb)
         phi, E, br = F.solve_wake(self.xi, a2, nb, beta_d)
         return E, br, a2, nb
 
@@ -119,7 +125,7 @@ class Tracker:
         # push protons (field scaled to the reference-density normalisation: E_ref = E_loc*sqrt(n))
         Ek, alive_now = gather_cic(self.pxi, self.xi[0], self.dxi, E)
         self.alive &= alive_now
-        du = ME_MP * Ek * np.sqrt(nloc) * dt
+        du = self.qm * Ek * np.sqrt(nloc) * dt
         du[~self.alive] = 0.0
         self.pu += du
         b = proton_beta(self.pu)
