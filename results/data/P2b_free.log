@@ -1,0 +1,21 @@
+T = 100.0 MeV, a0_max = None, driver window = 1.0 periods
+   start point: [0.5234, 0.1354, 0.2052, 0.0334, 0.1293, 0.2586, 0.0388]  (eta, field, spread, W, Q, Emax, smin)
+   restart 0: eta=0.5228 field=0.1307 spread=0.0502 feasible=False nit=163 (8s)
+   restart 1: eta=0.5310 field=0.1312 spread=0.0501 feasible=False nit=148 (13s)
+   restart 2: eta=0.5180 field=0.1321 spread=0.0501 feasible=False nit=132 (17s)
+  baseline: eta=0.5232 field=0.1353 spread=0.2055 a0=0.570
+  optimised: eta=0.5310 field=0.1312 spread=0.0501 peak a0=0.579 feasible=False  -> x1.01
+T = 1000.0 MeV, a0_max = None, driver window = 1.0 periods
+   start point: [0.503, 0.4114, 0.3931, 0.3343, 0.4088, 0.8177, 0.2535]  (eta, field, spread, W, Q, Emax, smin)
+   restart 0: eta=0.6733 field=0.4072 spread=0.0507 feasible=True nit=400 (14s)
+   restart 1: eta=0.2311 field=6.8630 spread=0.2799 feasible=False nit=23 (16s)
+   restart 2: eta=0.7100 field=0.4075 spread=0.0503 feasible=True nit=265 (27s)
+  baseline: eta=0.5028 field=0.4111 spread=0.3934 a0=1.709
+  optimised: eta=0.7100 field=0.4075 spread=0.0503 peak a0=1.780 feasible=True  -> x1.41
+T = 6000.0 MeV, a0_max = None, driver window = 1.0 periods
+   start point: [0.2234, 1.2729, 0.0767, 4.553, 0.799, 3.0176, 0.2465]  (eta, field, spread, W, Q, Emax, smin)
+   restart 0: eta=0.6014 field=1.1339 spread=0.0501 feasible=True nit=400 (18s)
+   restart 1: eta=0.2788 field=0.4401 spread=1.1736 feasible=False nit=1 (18s)
+   restart 2: eta=0.1853 field=1.3492 spread=0.0500 feasible=False nit=18 (21s)
+  baseline: eta=0.2445 field=1.1110 spread=0.0857 a0=6.662
+  optimised: eta=0.6014 field=1.1339 spread=0.0501 peak a0=6.978 feasible=True  -> x2.46

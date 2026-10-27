@@ -117,7 +117,19 @@ class Pulse:
         self.a0, self.length, self.offset, self.shape = a0, length, offset, shape
         self.fac = 0.5 if pol == "linear" else 1.0
 
+    @classmethod
+    def table(cls, xi_tab, a2_tab, offset=0.0):
+        """Arbitrary <a^2> profile (e.g. from the differentiable optimiser), linear interpolation."""
+        p = cls(1.0, 1.0, offset, "table")
+        p.tab_xi = np.asarray(xi_tab, float)
+        p.tab_a2 = np.asarray(a2_tab, float)
+        if p.tab_xi[0] > p.tab_xi[-1]:
+            p.tab_xi, p.tab_a2 = p.tab_xi[::-1], p.tab_a2[::-1]
+        return p
+
     def a2(self, xi):
+        if self.shape == "table":
+            return np.interp(xi - self.offset, self.tab_xi, self.tab_a2, left=0.0, right=0.0)
         if self.shape == "gauss":
             sig = self.length / (2 * np.sqrt(2 * np.log(2)))
             return self.fac * self.a0**2 * np.exp(-0.5 * ((xi - self.offset) / sig) ** 2)
@@ -144,10 +156,19 @@ class Driver:
         return v(t, self.xd, sim) if callable(v) else v
 
     def a2(self, x, t):
+        """<a^2> on a uniform grid x; each pulse is evaluated only over its own support
+        (+-5 sigma for Gaussians, full length for sin^2), which keeps long trains cheap."""
         xi = x - self.xd
         out = np.zeros_like(x)
+        dxg = x[1] - x[0] if x.size > 1 else 1.0
         for p in self.pulses:
-            out += p.a2(xi)
+            half = (5.0 * p.length / 2.3548) if p.shape == "gauss" else 0.5 * p.length
+            if p.shape == "table":
+                half = 0.5 * (p.tab_xi[-1] - p.tab_xi[0]) + abs(p.tab_xi[-1] + p.tab_xi[0]) / 2
+            j0 = max(int(np.floor((p.offset - half - xi[0]) / dxg)), 0)
+            j1 = min(int(np.ceil((p.offset + half - xi[0]) / dxg)) + 1, x.size)
+            if j1 > j0:
+                out[j0:j1] += p.a2(xi[j0:j1])
         m = self.depletion_scale
         if self.amp is not None:
             m = m * self.amp(t, self.xd)
