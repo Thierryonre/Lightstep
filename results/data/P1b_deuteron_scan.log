@@ -1,0 +1,4 @@
+D_T2000_L0.3: T=3600 MeV L=6455 c/wp grad=0.485 E0 eff=0.334 spread=0.0040 capt=0.997 stalled=False broken=False (7s)
+D_T2000_L0.5: T=3600 MeV L=7593 c/wp grad=0.412 E0 eff=0.474 spread=0.0036 capt=0.998 stalled=False broken=False (9s)
+D_T1500_L0.3: T=3602 MeV L=9641 c/wp grad=0.427 E0 eff=0.355 spread=0.0029 capt=0.997 stalled=False broken=False (13s)
+D_T1500_L0.5: T=3601 MeV L=11389 c/wp grad=0.361 E0 eff=0.502 spread=0.0027 capt=0.998 stalled=False broken=False (15s)

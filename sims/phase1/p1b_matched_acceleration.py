@@ -21,12 +21,13 @@ import fluid1d as F
 import track1d as TR
 
 MP = 938.27208816
+MD = 1875.61294257
 ME = 0.51099895
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 
 
-def beta_of_T(T):
-    g = 1 + np.asarray(T) / MP
+def beta_of_T(T, M=MP):
+    g = 1 + np.asarray(T) / M
     return np.sqrt(1 - 1 / g**2)
 
 
@@ -72,15 +73,16 @@ def a0_for_field(beta, tau, E_target):
 
 def run(T_inj=100.0, T_final=6000.0, tau=2.355, program="const", f_field=0.7, load=0.4,
         sig_xi_frac=0.03, dT_frac=0.005, nmac=1000, K=0.05, lock_frac=0.8, verbose=True,
-        tag=None, max_time_s=1500):
-    b0 = float(beta_of_T(T_inj))
-    Ewb0 = np.sqrt(2 * T_inj / MP)
+        tag=None, max_time_s=1500, species="proton"):
+    M = MD if species == "deuteron" else MP
+    b0 = float(beta_of_T(T_inj, M))
+    Ewb0 = np.sqrt(2 * T_inj / M)
     Tgrid = np.geomspace(T_inj, T_final * 1.1, 30)
-    bgrid = beta_of_T(Tgrid)
+    bgrid = beta_of_T(Tgrid, M)
     if program == "const":
         Et = np.full_like(Tgrid, f_field * 0.8 * Ewb0)
     else:
-        Et = f_field * 0.8 * np.sqrt(2 * Tgrid / MP)
+        Et = f_field * 0.8 * np.sqrt(2 * Tgrid / M)
     a0grid = np.array([a0_for_field(b, tau, e) for b, e in zip(bgrid, Et)])
     a0_of_beta = lambda b: float(np.interp(b, bgrid, a0grid))
 
@@ -111,7 +113,8 @@ def run(T_inj=100.0, T_final=6000.0, tau=2.355, program="const", f_field=0.7, lo
         return b
 
     lam_f = 2 * np.pi
-    tr = TR.Tracker(-1.6 * lam_f - 4 * tau, 4 * tau, min(2 * np.pi * b0 / 300, b0 * tau / 30), drv, bprog)
+    tr = TR.Tracker(-1.6 * lam_f - 4 * tau, 4 * tau, min(2 * np.pi * b0 / 300, b0 * tau / 30), drv, bprog,
+                    species=species)
     rng = np.random.default_rng(1)
     lam0 = 2 * np.pi * b0
     xi0 = xl0 + sig_xi_frac * lam0 * rng.standard_normal(nmac)
@@ -151,7 +154,7 @@ def run(T_inj=100.0, T_final=6000.0, tau=2.355, program="const", f_field=0.7, lo
     w = tr.pw
     Tm = float(np.average(T[al], weights=w[al]))
     gain = np.sum(w[al] * (T[al] - tr.T0[al] * ME)) / ME
-    out = dict(T_inj=T_inj, T_final_target=T_final, program=program, tau=tau, f_field=f_field,
+    out = dict(species=species, T_inj=T_inj, T_final_target=T_final, program=program, tau=tau, f_field=f_field,
                load=load, K=K, lock_frac=lock_frac, length_cwp=float(tr.xd), time_wp=float(tr.t),
                T_mean=Tm, T_rms_frac=float(np.sqrt(np.average((T[al] - Tm)**2, weights=w[al])) / Tm),
                captured=float(w[al].sum() / w.sum()), eff_wake_to_beam=float(gain / tr.laser_work),

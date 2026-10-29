@@ -1,0 +1,26 @@
+   dist=     0 <T>=  2999.9±  9.0 MeV (design 3000) behind env 88 c/wp (48s)
+   dist=   300 <T>=  3034.4± 11.7 MeV (design 3021) behind env 97 c/wp (138s)
+   dist=   600 <T>=  3072.4± 14.0 MeV (design 3042) behind env 106 c/wp (228s)
+   dist=   900 <T>=  3088.3±  8.9 MeV (design 3063) behind env 114 c/wp (319s)
+   dist=  1200 <T>=  3063.3±  8.6 MeV (design 3084) behind env 122 c/wp (410s)
+   dist=  1500 <T>=  3099.2± 16.5 MeV (design 3105) behind env 131 c/wp (489s)
+   dist=  1800 <T>=  3147.3± 31.3 MeV (design 3126) behind env 139 c/wp (567s)
+   dist=  2100 <T>=  3179.3± 50.6 MeV (design 3147) behind env 147 c/wp (645s)
+   dist=  2400 <T>=  3176.8± 38.5 MeV (design 3168) behind env 155 c/wp (726s)
+   dist=  2700 <T>=  3172.3± 45.3 MeV (design 3189) behind env 163 c/wp (811s)
+{
+ "mode": "static_taper",
+ "plasma_ion_qm": 0.0005446170214876324,
+ "T_inj": 3000.0,
+ "G_design": 0.07,
+ "n_env": 12.0,
+ "a_avg": 0.35,
+ "load_frac": 0.4,
+ "E_peak_behind_env": 0.3316474592645279,
+ "beam_gain": 34.859883960007096,
+ "T_final": 3172.321676320373,
+ "T_final_std": 45.34778145538705,
+ "work_per_length": 0.12120847055668199,
+ "eff_wake_to_beam": 0.10651529120877708,
+ "runtime_s": 908.026460647583
+}

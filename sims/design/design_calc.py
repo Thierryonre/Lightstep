@@ -197,3 +197,33 @@ def d2_physical_sheet(f3D=0.6, eta_wb=0.585, eta_lw=0.5, eta_couple=0.62, grad_E
 
 if __name__ == "__main__" and False:
     pass
+
+
+def energy_per_muon(f3D=0.62, eta_couple=0.62, eta_lw=0.64):
+    """Wall-plug energy per stopped muon [GeV] for proton (6 GeV) and deuteron (3.6 GeV) designs.
+    Muon yields are literature estimates (docs/research/muon-production-and-mucf.md):
+      protons @ 6 GeV: 0.5-0.9 stopped mu- per proton (est. from pi- yield, flat 2-11 GeV);
+      deuterons @ 3.6 GeV: 5-6 GeV of beam per mu- (Jaendel/Eliezer; Kelly 2021 4.7 GeV best case).
+    eta_wb: protons P1f single-bunch train 0.585 [sim]; deuterons scaled by the matched-wake ratio
+    D(2.0->3.6 GeV, load 0.5)/p(1->6 GeV, load 0.5) from P1b scans [sim]."""
+    p = load("P1b_scan.json"); dsc = load("P1b_deuteron_scan.json")
+    rp = pick(p, T_inj=1000.0, program="const", load=0.5)
+    rd = [r for r in dsc if abs(r["T_inj"] - 2000) < 1 and abs(r["load"] - 0.5) < 1e-6][0]
+    eta_wb_p = 0.585
+    eta_wb_d = 0.585 * rd["eff_wake_to_beam"] / rp["eff_wake_to_beam"]
+    rows = {}
+    for las in ["fibre_today", "fibre_projected"]:
+        eL = LASERS[las]["eta"]
+        for sp, T_inj, T_fin, eta_wb, mu_per in [("proton", 1.0, 6.0, eta_wb_p, (0.5, 0.9)),
+                                                 ("deuteron", 2.0, 3.6, eta_wb_d, (3.6 / 6.0, 3.6 / 5.0))]:
+            eta = eL * eta_couple * eta_lw * eta_wb * f3D
+            wall = T_inj / RF_INJECTOR["eta"] + (T_fin - T_inj) / eta
+            rows[f"{sp}_{las}"] = dict(T_final_GeV=T_fin, injector_GeV=T_inj, eta_wb=eta_wb,
+                                       eta_LWFA=eta, wall_GeV_per_particle=wall,
+                                       wall_GeV_per_muon=(wall / mu_per[1], wall / mu_per[0]),
+                                       overall_eff=T_fin / wall,
+                                       plasma_length_cwp=(rd["length_cwp"] if sp == "deuteron" else rp["length_cwp"]))
+    for sp, T, mu in [("proton", 6.0, (0.5, 0.9)), ("deuteron", 3.6, (0.6, 0.72))]:
+        w = T / RF_INJECTOR["eta"]
+        rows[f"{sp}_RF_only"] = dict(wall_GeV_per_particle=w, wall_GeV_per_muon=(w / mu[1], w / mu[0]))
+    return rows

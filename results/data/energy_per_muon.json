@@ -1,0 +1,68 @@
+{
+ "proton_fibre_today": {
+  "T_final_GeV": 6.0,
+  "injector_GeV": 1.0,
+  "eta_wb": 0.585,
+  "eta_LWFA": 0.028783872,
+  "wall_GeV_per_particle": 180.37505447495042,
+  "wall_GeV_per_muon": [
+   200.41672719438935,
+   360.75010894990083
+  ],
+  "overall_eff": 0.03326402321798467,
+  "plasma_length_cwp": 22915.993650350047
+ },
+ "deuteron_fibre_today": {
+  "T_final_GeV": 3.6,
+  "injector_GeV": 2.0,
+  "eta_wb": 0.5601332607247191,
+  "eta_LWFA": 0.027560348854090498,
+  "wall_GeV_per_particle": 71.3877508761116,
+  "wall_GeV_per_muon": [
+   99.14965399459945,
+   118.97958479351934
+  ],
+  "overall_eff": 0.050428819451778864,
+  "plasma_length_cwp": 7592.967665544839
+ },
+ "proton_fibre_projected": {
+  "T_final_GeV": 6.0,
+  "injector_GeV": 1.0,
+  "eta_wb": 0.585,
+  "eta_LWFA": 0.057567744,
+  "wall_GeV_per_particle": 93.52086057080855,
+  "wall_GeV_per_muon": [
+   103.91206730089839,
+   187.0417211416171
+  ],
+  "overall_eff": 0.0641568091159421,
+  "plasma_length_cwp": 22915.993650350047
+ },
+ "deuteron_fibre_projected": {
+  "T_final_GeV": 3.6,
+  "injector_GeV": 2.0,
+  "eta_wb": 0.5601332607247191,
+  "eta_LWFA": 0.055120697708180996,
+  "wall_GeV_per_particle": 42.36054210472246,
+  "wall_GeV_per_muon": [
+   58.834086256558976,
+   70.60090350787077
+  ],
+  "overall_eff": 0.08498474809647591,
+  "plasma_length_cwp": 7592.967665544839
+ },
+ "proton_RF_only": {
+  "wall_GeV_per_particle": 40.0,
+  "wall_GeV_per_muon": [
+   44.44444444444444,
+   80.0
+  ]
+ },
+ "deuteron_RF_only": {
+  "wall_GeV_per_particle": 24.0,
+  "wall_GeV_per_muon": [
+   33.333333333333336,
+   40.0
+  ]
+ }
+}

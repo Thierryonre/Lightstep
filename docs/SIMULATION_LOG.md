@@ -295,3 +295,30 @@ Codes (all in `sims/codes/`):
 - **Script:** `sims/phase2/fbpic_waveguide_train.py --steps 4500 --protons` (adds a 1 GeV, 16 fC proton bunch, mode-0 E_r/B_θ maps for the proton focusing force, snapshots every 250 steps after step 1500) · log `sims/phase2/fbpic_train_run2.log`
 - **What happened:** reached step 500 (t = 104 fs, train still in vacuum; max RSS 2.0 GB) before the host stopped it; no new physics information. Not restarted. The first (partial) run's snapshots are preserved in `sims/phase2/fbpic_train_out_v1partial/` (analysis S029 unchanged).
 - Analysis scripts for the full run are ready: `sims/phase2/analyse_fbpic_train_full.py`, `sims/phase2/fbpic_vs_1d_two_velocity.py`.
+
+---
+
+## Deuterium studies — 2026-10-29
+
+### S034 ✅ Multi-pulse wake with mobile deuterium ions (Hooker 2014 case) — 1D envelope PIC
+- **Script:** `sims/phase1/r2_hooker2014_multipulse.py 120 D` · data `results/data/R2_hooker2014_mobileD.json`
+- **Result:** wake behind the 120-pulse train: immobile 5.01 GV/m (S017), mobile H 4.28 GV/m (−15 %), **mobile D 4.85 GV/m (−3 %)**.
+- **Conclusion:** deuterium plasma removes ≈ 80 % of the (longitudinal) ion-motion loss in 1D; transverse ion motion (the larger effect in multi-D) is expected to improve in the same direction but is not simulated.
+
+### S035 ✅ Velocity-matched acceleration of deuterons to 3.6 GeV (1.8 GeV/u) — fluid tracker
+- **Script:** `sims/phase1/p1b_deuteron_scan.py` (tracker species = deuteron) · data `results/data/P1b_deuteron_scan.json`
+- **Sanity check:** deuterons 2.0 → 2.5 GeV vs protons 1.0 → 1.5 GeV (same initial β): length 2256 vs 2223 c/ω_p, gradient 0.435 vs 0.441 E₀, wake→beam 40.6 % vs 40.7 %.
+- **Result:** 2.0 → 3.6 GeV: 6455 / 7593 c/ω_p, 0.49 / 0.41 E₀, **η 33 % / 47 %** (load 0.3 / 0.5), spread 0.4 %; 1.5 → 3.6 GeV: 9641 / 11389 c/ω_p, η 36 % / 50 %. Protons 1 → 6 GeV: 19263 / 22916 c/ω_p, η 35 % / 50 %.
+- **Conclusion:** same wake→beam efficiency, plasma section 2–3× shorter (only 1.6–2.1 GeV to add). Injection must start at 1.5–2 GeV for deuterons (same β threshold of the guided train).
+- **Energy per muon (estimate, `design_calc.energy_per_muon`, `results/data/energy_per_muon.json`):** deuterons (RF 2 GeV + train to 3.6 GeV) 99–119 GeV (today's fibre) / 59–71 GeV (projected) wall-plug per stopped μ⁻, overall efficiency 5.0 % / 8.5 %; protons (RF 1 GeV + train to 6 GeV) 200–360 / 104–187 GeV, 3.3 % / 6.4 %; RF-only 33–40 (d) / 44–80 (p) GeV. Muon yields are literature values.
+
+### S036 ⚠️ Static channel taper (open loop) — full runs in H, D and immobile ions; 3-line comb
+- **Script:** `sims/phase1/p1g_two_velocity_train.py --taper --G 0.07 [--ion H|D|none]` · data `results/data/P1g_taper_G0.07_{Hplasma,Dplasma,immobile}.json`
+- **Result (⟨T⟩ at 900 / 1800 / 2700 c/ω_p; design 3063 / 3126 / 3189 MeV):** H plasma 3088 / 3147 / **3172**; D plasma 3070 / 3004 / **2951**; immobile ions 3010 / 2821 / **2794**.
+- **Correction to S032:** the provisional "taper keeps protons accelerating" (H run stopped at 900 c/ω_p) does **not** hold generally: identical drives succeed in H but dephase in D and with immobile ions → the protons sit at the edge of phase stability.
+- **Diagnosis (hypothesis, not confirmed):** the rigid 3-line comb has unequal spacings (0.981/1.019 ω_p). Behind an envelope moving at ≈ c, each near-resonant component leaves a free wave with a slightly different phase velocity, 1/v ≈ (ω_d/ω_p)/v_pat + (1 − ω_d/ω_p)/v_env, so the composite wave's phase drifts by ~π over ~3000 c/ω_p. In the rigid-envelope model (P1f) this cannot occur, which is why S024 succeeded.
+
+### S037 ⚠️ Fix candidates — stopped by host (low memory) at 600 c/ω_p
+- **Two lines spaced by exactly ω_p** (N = 2 beat wave in two channel modes — rigid by construction, exactly resonant), D plasma (`P1g_taper_N2_Dplasma.log`): 3030 / 3052 MeV at 300 / 600 c/ω_p (design 3021 / 3042) — on design so far.
+- **Three equally spaced lines** (diagnostic, immobile ions; `P1g_taper_N3uniform_immobile.log`): 3004 / 3008 MeV — weak gain (bunch probably in a weak phase); inconclusive.
+- Both runs stopped by the host's memory-pressure safeguard (other jobs running); not restarted. The diagnosis therefore remains unconfirmed.

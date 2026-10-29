@@ -55,7 +55,7 @@ class TaperedTwoVelocityDriver(TwoVelocityDriver):
 
 def run_taper(T_inj=3000.0, spac=(0.981, 1.019), a_avg=0.35, n_env=12.0, beta_env=0.9995,
               load_frac=0.4, sig_frac=0.04, L_acc=3000.0, G_MeV_per_cwp=0.07, dx=0.04, ppc=8,
-              tag=None):
+              tag=None, ion_qm=P.ME_OVER_MP, mobile_ions=True):
     """Open-loop static-taper design: v_pat(z) = beta of a proton gaining G per c/w_p after the
     injection point z_inj (the taper is fixed before the run; no feedback)."""
     g0 = 1 + T_inj / MP
@@ -78,7 +78,7 @@ def run_taper(T_inj=3000.0, spac=(0.981, 1.019), a_avg=0.35, n_env=12.0, beta_en
     tau_tab = np.concatenate([[0.0], np.cumsum(0.5 * (1 / vz[1:] + 1 / vz[:-1]) * np.diff(z_tab))])
     drv = TaperedTwoVelocityDriver(a_avg, Om, sig_env, beta_env, x0, z_tab, tau_tab)
     dens = lambda x, xs=xs_pl: np.sin(0.5 * np.pi * np.clip((x - xs) / Lr, 0, 1)) ** 2
-    sim = P.Sim1D(Lx, dx, dens, drv, ppc=ppc, dt=0.5 * dx, mobile_ions=True,
+    sim = P.Sim1D(Lx, dx, dens, drv, ppc=ppc, dt=0.5 * dx, mobile_ions=mobile_ions, ion_qm=ion_qm,
                   x_window0=xs_pl - Lx + 10, window_velocity=beta_env)
     t0 = time.time()
     while drv.xd - 3 * sig_env < xs_pl + Lr + 10:
@@ -117,7 +117,7 @@ def run_taper(T_inj=3000.0, spac=(0.981, 1.019), a_avg=0.35, n_env=12.0, beta_en
     # the envelope drove plasma beyond the protons' end point; count only the work done on the
     # plasma the protons actually traversed (work per unit length x proton path length)
     work_per_len = sim.pond_work / (drv.xd - xs_pl)
-    res = dict(mode="static_taper", T_inj=T_inj, G_design=G_MeV_per_cwp, n_env=n_env, a_avg=a_avg,
+    res = dict(mode="static_taper", plasma_ion_qm=ion_qm, T_inj=T_inj, G_design=G_MeV_per_cwp, n_env=n_env, a_avg=a_avg,
                load_frac=load_frac, E_peak_behind_env=float(Epk), beam_gain=float(Kb1 - Kb0),
                T_final=float(snaps[-1]["T_mean"]), T_final_std=float(snaps[-1]["T_std"]),
                work_per_length=float(work_per_len),
@@ -206,9 +206,14 @@ if __name__ == "__main__":
     ap.add_argument("--tag", default="nenv12")
     ap.add_argument("--taper", action="store_true")
     ap.add_argument("--G", type=float, default=0.07)
+    ap.add_argument("--ion", default="H")
+    ap.add_argument("--spac", type=float, nargs="+", default=[0.981, 1.019],
+                    help="frequency spacings in units of w_p (N-1 values)")
     a = ap.parse_args()
     if a.taper:
-        r = run_taper(n_env=a.nenv, L_acc=a.L, G_MeV_per_cwp=a.G, tag=a.tag)
+        r = run_taper(n_env=a.nenv, L_acc=a.L, G_MeV_per_cwp=a.G, tag=a.tag, spac=tuple(a.spac),
+                      ion_qm=P.ME_OVER_MP if a.ion in ("H", "none") else 1.0 / 3670.48296788,
+                      mobile_ions=(a.ion != "none"))
     else:
         r = run(n_env=a.nenv, L_acc=a.L, tag=a.tag)
     print(json.dumps({k: v for k, v in r.items() if k != "snaps"}, indent=1))

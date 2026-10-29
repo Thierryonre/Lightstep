@@ -18,6 +18,7 @@ import fluid1d as F
 
 ME_MP = 1.0 / 1836.15267343
 MPC2_ME = 1836.15267343          # proton rest energy in m_e c^2
+MD_ME = 3670.48296788            # deuteron rest energy in m_e c^2
 
 
 @njit(cache=True)
@@ -59,7 +60,7 @@ class Tracker:
 
     def __init__(self, xi_min, xi_max, dxi, driver_a2, beta_program, density=None,
                  species="proton"):
-        """species: 'proton' (default) or 'electron' (test/loaded electron beams)."""
+        """species: 'proton' (default), 'deuteron' or 'electron' (test/loaded beams)."""
         self.xi = np.arange(xi_min, xi_max + dxi / 2, dxi)
         self.dxi = dxi
         self.driver_a2 = driver_a2
@@ -76,6 +77,8 @@ class Tracker:
         self.static_driver = False   # if True and beam unloaded, reuse the wake between steps
         if species == "electron":
             self.qm, self.mc2_me, self.zb = -1.0, 1.0, -1.0
+        elif species == "deuteron":
+            self.qm, self.mc2_me, self.zb = 1.0 / MD_ME, MD_ME, 1.0
         else:
             self.qm, self.mc2_me, self.zb = ME_MP, MPC2_ME, 1.0
         self._cache = None

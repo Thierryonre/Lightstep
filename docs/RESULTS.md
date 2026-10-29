@@ -124,6 +124,25 @@ curvature may shorten it; mitigations are longer envelopes (multi-ps trains from
 lasers, which also keep the drive near the protons) or shorter stages. This is the main open
 physics risk of the recommended design and the purpose of the pending full FBPIC run.
 
+**Follow-up 2 (S036–S037).** Full 3000 c/ω_p runs of the static-taper design gave different
+outcomes for identical drives: success in hydrogen plasma (3000 → 3172 MeV, design 3189), but
+dephasing in deuterium plasma and with immobile ions. Probable cause: the rigid 3-line comb has
+unequal spacings (0.981/1.019 ω_p), so the free wave left behind the c-moving envelope is a sum of
+components with slightly different phase velocities. Candidate fix: **two lines spaced by exactly
+ω_p** (a beat wave in two channel modes, rigid by construction) — on design over the first
+600 c/ω_p before the host stopped the run. Until confirmed, the long-stage stability of the guided
+train is an open issue on top of the injector bunch-length problem.
+
+## 7b. Deuterium (S034–S035)
+- **Deuterium plasma:** in 1D the wake loss to ion motion in a 120-pulse train drops from 15 %
+  (H) to 3 % (D); the measured wake lifetime is ≈ 16 ps in D vs ≈ 9 ps in H [lit]. Recommended
+  in all designs; no efficiency cost.
+- **Deuteron beams (3.6 GeV, 1.8 GeV/u):** same wake→beam efficiency as protons (33–50 %), plasma
+  section 2–3× shorter, but injection must start at 1.5–2 GeV. With literature muon yields,
+  wall-plug energy per stopped muon falls from ≈ 104–360 GeV (protons) to ≈ 59–119 GeV
+  (deuterons) [est on sim]; RF-only deuterons ≈ 33–40 GeV. Each muon still returns only
+  ≈ 2.6 GeV of fusion heat at 150 fusions/μ [lit].
+
 ## 7. Rankings
 
 Wall-plug efficiencies from `sims/design/design_calc.py` (S030); multipliers are relative to a
