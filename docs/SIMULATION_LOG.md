@@ -351,4 +351,5 @@ Codes (all in `sims/codes/`):
 - **Script:** `sims/design/design_calc.revised_designs()` · data `results/data/design_calc_revised.json`
 - With wake→beam 0.25 (S038) and PV recovery (S039): RF injector + guided train, protons 1.5 % (today's fibre) / 2.9 % (projected), 3.1 % with PV; deuterons 2.5 % / 4.6 % (4.9 % with PV). All-optical (no RF injector): best 0.5 % / 1.0 % (1.2 % with PV) — self-injection with NP-like layer, transverse-flying-focus coupling [lit], hand-off to the train at 0.5 GeV; the slow section uses 62–100 % of the energy.
 
-### S042 — FBPIC full guided-train run with protons: launched 2026-11-03 (results pending)
+### S042 ❌ FBPIC full guided-train run with protons — stopped by host (low memory) after step ~500, 2026-11-03
+- Third attempt (log `sims/phase2/fbpic_train_run3.log`); only the step-500 snapshot (train still in vacuum, max RSS 2.0 GB) was saved; no new physics. Not restarted.
