@@ -334,6 +334,10 @@ protons at any speed. Write-up: `docs/research/electric-flying-focus.md`.
 - **Costs [sim/est]:** strong focusing is mandatory (≈ 10.6 T solenoid or ~200 T/m quadrupoles at
   1 MeV). Efficiency is limited by how much charge a slow bunch can carry (space charge):
   0.12 % wall-plug→beam from 1 MeV, 0.6 % if 80 % of the unused field energy is recovered.
+- **Shorter versions [sim, S047]:** same 50 MV/m with a longer flat-top: 2.2 m; 100 MV/m: 1.5 m;
+  200 MV/m: 0.56–0.76 m, all with 100 % capture. Higher gradient costs efficiency (field energy ∝ E²)
+  unless focusing, and with it bunch charge, is scaled up too (~400–800 T/m quadrupoles at
+  200 MV/m). Electrode breakdown at 100–200 MV/m for ns pulses is assumed, not verified.
 - **In the 6 GeV design [est]:** a 1 MeV DC injector + electric flying focus to 0.5 GeV + guided laser
   train gives **0.9 % (1.9 % with recovery)**, vs 1.0 % for the all-optical design and 2.9 % with
   an RF injector. It replaces the least-proven step (self-injection from rest) with pulsed-power

@@ -100,7 +100,17 @@ def part_B():
 # Part C: tracking through a programmable ring-electrode array
 # ----------------------------------------------------------------------------------------------
 P = dict(a=2e-3, pitch=2e-3, Ew=50e6, L=20e-3, w=10e-3, g_sync=0.85, T0=1.0, T1=args.T1,
-         sigz=0.5e-3, sigT_rel=2e-3, sigr=0.3e-3, emit_n=1e-7, focus_over_defocus=3.0, Np=args.Np)
+         sigz=0.5e-3, sigT_rel=2e-3, sigr=0.3e-3, emit_n=1e-7, focus_over_defocus=3.0, Np=args.Np,
+         Ew_lo=None, T_ramp=None)
+
+
+def Ew_T(T, P):
+    """Peak wall field as a function of the synchronous energy: constant, or ramped linearly from
+    Ew_lo at T0 to Ew at T_ramp (programmable - lower gradient where the protons are slowest)."""
+    if P.get("Ew_lo") is None:
+        return P["Ew"] + 0 * np.asarray(T, float)
+    f = np.clip((np.asarray(T, float) - P["T0"]) / (P["T_ramp"] - P["T0"]), 0, 1)
+    return P["Ew_lo"] + (P["Ew"] - P["Ew_lo"]) * f
 
 
 def window_fields(s, gam_s, t, jitter, P, N=1024):
@@ -112,7 +122,8 @@ def window_fields(s, gam_s, t, jitter, P, N=1024):
     zc = (j + 0.5) * p
     dt_j = jitter[np.clip(j, 0, jitter.size - 1)]
     sj = s_of_t(t + dt_j)
-    Ew = P["Ew"] * flat_top(zc - sj, L, w)
+    Tj = np.interp(t + dt_j, SYNC["t"], SYNC["T"])
+    Ew = Ew_T(Tj, P) * flat_top(zc - sj, L, w)
     k = 2 * np.pi * np.fft.rfftfreq(N, dz)
     F = np.fft.rfft(Ew) / I0(k * a / gam_s)
     E0 = np.fft.irfft(F, N); E1 = np.fft.irfft(1j * k * F, N); E2 = np.fft.irfft(-k ** 2 * F, N)
@@ -127,20 +138,22 @@ def build_sync(P):
     the axis field is g_sync of the flat-top value (longitudinally stable side)."""
     a, L, w = P["a"], P["L"], P["w"]
     xi = np.linspace(-L - 8 * w, 6 * w, 4096); dz = xi[1] - xi[0]
-    Ew = P["Ew"] * flat_top(xi, L, w)
+    Ew = flat_top(xi, L, w)                                   # unit amplitude: shape only
     # gamma ~ 1.0-1.1 over 1-100 MeV: compute xi_s and E_s at gamma = 1 (conservative) and check
     Ea, _, _ = axis_from_wall(Ew, dz, a)
     Emax = Ea.max(); i = np.argmax(Ea)
     front = np.where((xi > xi[i]) & (Ea <= P["g_sync"] * Emax))[0][0]
-    xi_s, E_s = xi[front], Ea[front]
+    xi_s, ratio = xi[front], Ea[front]
+    slope = -np.gradient(Ea, dz)[front]                        # -dEz/dxi at the synchronous point (unit amplitude)
+    E_s = ratio * float(Ew_T(P["T0"], P)); Emax = Emax * float(Ew_T(P["T0"], P))
     ts, zs, Ts = [0.0], [0.0], [P["T0"]]
     t, z, T = 0.0, 0.0, P["T0"]
     while T < P["T1"] + 2:
         g = 1 + T / MP; v = c * np.sqrt(1 - 1 / g ** 2)
         dt = 2e-4 / v
-        T += E_s * v * dt / 1e6; z += v * dt; t += dt
+        T += ratio * float(Ew_T(T, P)) * v * dt / 1e6; z += v * dt; t += dt
         ts.append(t); zs.append(z); Ts.append(T)
-    SYNC.update(t=np.array(ts), z=np.array(zs), T=np.array(Ts), xi_s=xi_s, E_s=E_s, Emax_axis=Emax)
+    SYNC.update(t=np.array(ts), z=np.array(zs), T=np.array(Ts), xi_s=xi_s, E_s=E_s, Emax_axis=Emax, ratio=ratio, slope=slope)
 
 
 def s_of_t(t):
@@ -177,8 +190,9 @@ def track(P, jitter_ps, seed=1, Ext_scale=None):
         kdef = e * e1 / (2 * gam ** 4)                          # radial force per unit r (co-moving)
         # external focusing (smooth approximation of a quadrupole/solenoid lattice), set to a multiple
         # of the defocusing at the synchronous point
-        e1s = np.interp(s + SYNC["xi_s"], zg, E1)
-        Kdef_s = max(-e * e1s / (2 * gs ** 4), 0.0)
+        # defocusing of the smooth (continuous) pattern at the synchronous point: the external lattice
+        # is programmed to this, not to electrode-to-electrode spikes
+        Kdef_s = e * SYNC["slope"] * float(Ew_T(Ts, P)) / (2 * gs ** 4)
         Kext = P["focus_over_defocus"] * Kdef_s if Ext_scale is None else Ext_scale
         Kdef_ref.append((Ts, Kdef_s, Kext))
         Fx = (-kdef - Kext) * x; Fy = (-kdef - Kext) * y
@@ -200,12 +214,16 @@ def track(P, jitter_ps, seed=1, Ext_scale=None):
     Tsf = float(np.interp(t, SYNC["t"], SYNC["T"]))
     cap = alive & (np.abs(T - Tsf) < 0.05 * Tsf)
     K = np.array(Kdef_ref)
+    gK = 1 + K[:, 0] / MP; vK = c * np.sqrt(1 - 1 / gK ** 2)
+    B_sol = np.sqrt(4 * gK * m_p * K[:, 2]) / e; G_q = K[:, 2] / (e * vK)
     return dict(jitter_ps=jitter_ps, length_m=float(s + SYNC["xi_s"]), T_sync_final=Tsf,
                 frac_captured=float(cap.mean()), frac_lost_to_wall=float(1 - alive.mean()),
                 T_mean_captured=float(T[cap].mean()) if cap.any() else None,
                 T_rel_std_captured=float(T[cap].std() / T[cap].mean()) if cap.any() else None,
                 r_rms_final_mm=float(np.sqrt(np.mean((x ** 2 + y ** 2)[alive])) * 1e3) if alive.any() else None,
-                Kdef_at_1MeV=float(K[0, 1]), Kdef_at_end=float(K[-1, 1]), steps=step, history=hist)
+                Kdef_at_1MeV=float(K[0, 1]), Kdef_at_end=float(K[-1, 1]), steps=step,
+                B_sol_max_T=float(B_sol.max()), T_at_B_sol_max=float(K[np.argmax(B_sol), 0]),
+                G_quad_max_Tpm=float(G_q.max()), T_at_G_quad_max=float(K[np.argmax(G_q), 0]), history=hist)
 
 
 def part_C():
@@ -291,6 +309,48 @@ def part_D():
     RES["D_energy"] = out
 
 
+def part_S():
+    """How short can 1 -> 100 MeV be? Gradient scan with the same geometry, a longer flat-top, and a
+    programmable gradient ramp. Efficiency estimate: field energy per energised metre scales as
+    Ew^2 (0.56 J/m at 50 MV/m, vacuum-gap rings, Part D), beam takes Q * dV with the space-charge
+    limited Q at 1 MeV (29 pC, Part D)."""
+    global P
+    base = dict(P)
+    cases = [("50 MV/m (S046 baseline)", dict()),
+             ("50 MV/m, 40 mm flat-top, sync at 0.92", dict(L=40e-3, g_sync=0.92)),
+             ("100 MV/m", dict(Ew=100e6)),
+             ("200 MV/m", dict(Ew=200e6)),
+             ("200 MV/m, 40 mm flat-top, sync at 0.92", dict(Ew=200e6, L=40e-3, g_sync=0.92)),
+             ("ramp 50 -> 200 MV/m by 20 MeV", dict(Ew=200e6, Ew_lo=50e6, T_ramp=20.0)),
+             ("ramp 50 -> 200 MV/m by 20 MeV, 20 mm edges", dict(Ew=200e6, Ew_lo=50e6, T_ramp=20.0, w=20e-3, L=40e-3))]
+    out = []
+    Q = 29e-12
+    for name, upd in cases:
+        P = dict(base); P.update(upd)
+        SYNC.clear(); build_sync(P)
+        t0 = time.time(); r = track(P, 10.0)
+        zz = SYNC["z"]; TT = SYNC["T"]; m = TT <= P["T1"]
+        U = np.trapezoid(0.56 * (Ew_T(TT[m], P) / 50e6) ** 2, zz[m])
+        eta = Q * (P["T1"] - P["T0"]) * 1e6 / U
+        L_ = float(np.interp(P["T1"], TT, zz))
+        out.append(dict(case=name, params={k: v for k, v in upd.items()}, length_m=L_,
+                        mean_gradient_MVm=float((P["T1"] - P["T0"]) / L_),
+                        frac_captured=r["frac_captured"], T_rel_std=r["T_rel_std_captured"],
+                        lost_to_wall=r["frac_lost_to_wall"], B_sol_max_T=r["B_sol_max_T"], T_at_B_max=r["T_at_B_sol_max"],
+                        G_quad_max_Tpm=r["G_quad_max_Tpm"], T_at_G_max=r["T_at_G_quad_max"],
+                        field_energy_per_shot_J=float(U), field_to_beam=float(eta), wallplug_70pct=float(0.7 * eta)))
+        o = out[-1]
+        print(f"S {name:45s}: L={L_:.2f} m (<G>={o['mean_gradient_MVm']:.0f} MV/m) captured {o['frac_captured']:.2f} "
+              f"dT/T {o['T_rel_std']} | focusing max {o['B_sol_max_T']:.1f} T sol / {o['G_quad_max_Tpm']:.0f} T/m quad "
+              f"(at {o['T_at_G_max']:.0f} MeV) | field energy {U:.2f} J/shot, wall-plug {100*o['wallplug_70pct']:.3f} % ({time.time()-t0:.0f}s)")
+    P = base
+    RES["S_shorter"] = out
+
+
+if "S" in args.parts:
+    part_S()
+    json.dump(RES, open(os.path.join(ROOT, "results", "data", "E1_shorter_scan.json"), "w"), indent=1)
+    raise SystemExit
 if "A" in args.parts:
     part_A()
 if "B" in args.parts:

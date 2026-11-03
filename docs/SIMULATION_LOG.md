@@ -388,3 +388,17 @@ Codes (all in `sims/codes/`):
 - **C (tracking 1 → 100 MeV):** a = 2 mm, 2 mm electrode pitch, 50 MV/m wall, 20 mm flat-top/10 mm edges: synchronous field 32.6 MV/m, 3.04 m, 100 % captured, ΔT/T 0.1 %; timing jitter 0/2/10/30 ps: no measurable effect; no external focusing: 100 % lost to the wall; required focusing at 1 MeV ≈ 10.6 T solenoid or ~200 T/m smooth quadrupole equivalent.
 - **D (estimate):** field energy 0.14 J/m (bore), ~0.56 J/m (vacuum-gap rings), ~8 J/m (DWA insulator wall); space-charge-limited bunch 29 pC (1 MeV) … 2.3 nC (1 GeV); wall-plug→beam 0.12 % (section from 1 MeV, vacuum gaps) / 0.6 % with 80 % field-energy recovery / 0.008 % DWA-style; 10–31 % for a section starting at 1 GeV.
 - **Conclusion:** the programmable-velocity part works (robust phase lock from 1 MeV, jitter-tolerant); the "virtual source in an inaccessible region" part gives no acceleration gain (on-axis ≤ wall field; concentrating costs exponentially). As a non-RF front end to 0.5 GeV feeding the guided train: system 0.9 % (1.9 % with recovery) vs all-optical 1.0 % and RF + train 2.9 % [est].
+
+### S047 ✅ Electric flying focus — how short can 1 → 100 MeV be? (gradient / pattern / ramp scan)
+- **Script:** `sims/phase1/e1_electric_flying_focus.py --parts S --Np 1000` · data `results/data/E1_shorter_scan.json`. Same tracking as S046 (10 ps jitter); the external focusing is now programmed to the smooth pattern's defocusing (3×), not to electrode-to-electrode spikes. Efficiency estimate: field energy per energised metre 0.56 J/m × (E_w/50 MV/m)² (vacuum-gap rings), 70 % pulsed power, no recovery, bunch charge either fixed at 29 pC or set by the focusing margin at 1 MeV.
+
+| case | length | mean gradient | captured | quad gradient (solenoid) needed at 1 MeV | wall-plug→beam, 29 pC / focusing-limited charge |
+|---|---|---|---|---|---|
+| 50 MV/m, S046 pattern | 3.03 m | 33 MV/m | 100 % | 194 T/m (10.6 T) | 0.12 % / 0.31 % (75 pC) |
+| 50 MV/m, 40 mm flat-top, sync at 92 % | 2.24 m | 44 MV/m | 100 % | 104 T/m (7.7 T) | 0.16 % / 0.22 % (40 pC) |
+| 100 MV/m | 1.52 m | 65 MV/m | 100 % | 388 T/m (15 T) | 0.06 % / 0.31 % (150 pC) |
+| 200 MV/m | 0.76 m | 131 MV/m | 100 % | 775 T/m (21 T) | 0.03 % / 0.31 % (300 pC) |
+| 200 MV/m, 40 mm flat-top, sync at 92 % | 0.56 m | 177 MV/m | 100 % | 414 T/m (15.5 T) | 0.04 % / 0.22 % (160 pC) |
+| ramp 50 → 200 MV/m by 20 MeV, 20 mm edges | 0.88 m | 113 MV/m | 100 % | 98 T/m (14.6 T) | 0.03 % / 0.04 % (38 pC) |
+
+- **Conclusion:** length scales as 1/gradient and the dynamics stay clean at every gradient tried (100 % capture, ≤ 0.6 % spread). The price: field energy per metre grows as E², so at a fixed bunch charge the efficiency falls as 1/E; it holds only if the focusing (and with it the space-charge-limited charge) is scaled up with the gradient, which at 200 MV/m means ~400–800 T/m quadrupoles at 1 MeV. The cheapest shortening is free: a longer flat-top with the protons higher on the edge (3.0 → 2.2 m at the same 50 MV/m, with *weaker* focusing). Whether 100–200 MV/m survives on ns-pulsed electrodes is an assumption, not checked here.
