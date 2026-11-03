@@ -1,0 +1,96 @@
+{
+ "wave_phase_velocity_c": [
+  1.0521549353368713,
+  1.098161710075935
+ ],
+ "target_velocity_c": 0.971,
+ "Ez_axis_max_in_train_GVm": 17.259068487499317,
+ "axis_over_wall_in_train": 1.1180592170535066,
+ "periods_behind": [
+  {
+   "period_behind": 1,
+   "Ez_axis_GVm": 6.3702292753097245,
+   "Ez_wall_GVm": 8.472229004550138
+  },
+  {
+   "period_behind": 2,
+   "Ez_axis_GVm": 5.650894736438733,
+   "Ez_wall_GVm": 6.739647592632756
+  },
+  {
+   "period_behind": 3,
+   "Ez_axis_GVm": 4.772212938417547,
+   "Ez_wall_GVm": 4.236222861782018
+  },
+  {
+   "period_behind": 4,
+   "Ez_axis_GVm": 3.035661426417336,
+   "Ez_wall_GVm": 3.2786326952327087
+  },
+  {
+   "period_behind": 5,
+   "Ez_axis_GVm": 2.2106481083543508,
+   "Ez_wall_GVm": 2.862417135098807
+  },
+  {
+   "period_behind": 6,
+   "Ez_axis_GVm": 2.316388303477005,
+   "Ez_wall_GVm": 2.434414746369865
+  },
+  {
+   "period_behind": 7,
+   "Ez_axis_GVm": 2.1631570716733886,
+   "Ez_wall_GVm": 2.852884400578836
+  },
+  {
+   "period_behind": 8,
+   "Ez_axis_GVm": 3.0458631304881916,
+   "Ez_wall_GVm": 2.0370823553156026
+  },
+  {
+   "period_behind": 9,
+   "Ez_axis_GVm": 2.678048721977515,
+   "Ez_wall_GVm": 2.997153032099711
+  },
+  {
+   "period_behind": 10,
+   "Ez_axis_GVm": 3.4017019598687743,
+   "Ez_wall_GVm": 3.024491747561113
+  },
+  {
+   "period_behind": 11,
+   "Ez_axis_GVm": 2.051623548333643,
+   "Ez_wall_GVm": 3.106970193159801
+  },
+  {
+   "period_behind": 12,
+   "Ez_axis_GVm": 3.149093623608447,
+   "Ez_wall_GVm": 2.667306709673493
+  },
+  {
+   "period_behind": 13,
+   "Ez_axis_GVm": 3.822907196008376,
+   "Ez_wall_GVm": 3.3752863806665054
+  },
+  {
+   "period_behind": 14,
+   "Ez_axis_GVm": 2.8182519885055255,
+   "Ez_wall_GVm": 2.62807121604286
+  },
+  {
+   "period_behind": 15,
+   "Ez_axis_GVm": 1.5025614631656163,
+   "Ez_wall_GVm": 1.563382163098724
+  }
+ ],
+ "proton_dT_mean_MeV": 0.003369205131978083,
+ "proton_dT_max_MeV": 2.4726729710446307,
+ "proton_dT_min_MeV": -2.1636745083401365,
+ "proton_r_rms_um": [
+  0.33481780659674876,
+  0.33866065112700017
+ ],
+ "proton_frac_inside_R": 1.0,
+ "t_fs": 667.128190396248,
+ "protons_behind_envelope_um": 74.92114493746041
+}

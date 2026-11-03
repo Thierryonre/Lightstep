@@ -1,0 +1,38 @@
+
+FBPIC (0.27.1)
+
+Running on GPU 
+
+Initializing laser pulse on the mesh...
+Done.
+
+Initializing laser pulse on the mesh...
+Done.
+
+Calculating initial space charge field...
+Done.
+
+{"n_wall_cm3": 1.023741247424007e+20, "R_um": 1.5756339366097638, "lam2_um": 1.2509476876421532, "w0_um": 1.0241620587963465, "E0_wall_GVm": 972.939726960791, "lam_sp_um": 4.8403323262839875, "grid": [5133, 220], "dz_um": 0.03333333333333333, "dr_um": 0.039390848415244095}
+step 500: t=56 fs |Ez|axis=29.2 GV/m |Ez|wall=28.9 a=0.45 T=2998.5/3000.0/3001.5 MeV r_rms=0.33um inside=1.00 (199s)
+step 1000: t=111 fs |Ez|axis=15.4 GV/m |Ez|wall=15.1 a=0.51 T=2998.5/3000.0/3001.5 MeV r_rms=0.33um inside=1.00 (398s)
+step 1500: t=167 fs |Ez|axis=17.5 GV/m |Ez|wall=19.9 a=0.48 T=2998.5/3000.0/3001.5 MeV r_rms=0.33um inside=1.00 (599s)
+step 2000: t=222 fs |Ez|axis=17.7 GV/m |Ez|wall=21.7 a=0.45 T=2998.5/3000.0/3001.5 MeV r_rms=0.33um inside=1.00 (800s)
+step 2500: t=278 fs |Ez|axis=26.3 GV/m |Ez|wall=26.2 a=0.49 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (1002s)
+step 3000: t=334 fs |Ez|axis=18.7 GV/m |Ez|wall=20.9 a=0.44 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (1204s)
+step 3500: t=389 fs |Ez|axis=16.4 GV/m |Ez|wall=15.3 a=0.42 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (1406s)
+step 4000: t=445 fs |Ez|axis=30.1 GV/m |Ez|wall=15.3 a=0.42 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (1607s)
+step 4500: t=500 fs |Ez|axis=16.3 GV/m |Ez|wall=13.4 a=0.45 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (1809s)
+step 5000: t=556 fs |Ez|axis=25.0 GV/m |Ez|wall=11.9 a=0.37 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (2010s)
+step 5500: t=612 fs |Ez|axis=13.7 GV/m |Ez|wall=12.9 a=0.42 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (2212s)
+step 6000: t=667 fs |Ez|axis=17.3 GV/m |Ez|wall=15.4 a=0.47 T=2998.5/3000.0/3001.5 MeV r_rms=0.34um inside=1.00 (2413s)
+
+--- stderr ---
+
+UserWarning: /usr/local/lib/python3.11/site-packages/fbpic/utils/mpi.py:47:
+MPI is not properly installed.
+Simulations without domain decomposition will still run properly.
+In order to diagnose the problem, type:
+mpirun -np 2 python -c "from mpi4py.MPI import COMM_WORLD"
+
+FutureWarning: <frozen importlib._bootstrap_external>:1241:
+The cuda.cuda module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.driver module instead.
