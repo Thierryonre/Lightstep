@@ -28,6 +28,7 @@ ap.add_argument("--out", default="fbpic_train_out")
 ap.add_argument("--protons", action="store_true", help="add a 1 GeV, ~16 fC proton test bunch")
 ap.add_argument("--zb_um", type=float, default=-175.0)
 ap.add_argument("--fine_after", type=int, default=1500, help="diagnose every 250 steps after this step")
+ap.add_argument("--cuda", action="store_true", help="run on an NVIDIA GPU (FBPIC CUDA backend)")
 a = ap.parse_args()
 d = json.load(open(os.path.join(here, "fbpic_train_design.json")))
 n0 = d["n_cm3"] * 1e6
@@ -58,7 +59,7 @@ def dens(z, r):
     return prof * (1.0 + dn / n0 * (r / W) ** 2)
 
 
-sim = Simulation(Nz, zmax, Nr, rmax, 2, dz / c, zmin=zmin, n_order=-1, use_cuda=False,
+sim = Simulation(Nz, zmax, Nr, rmax, 2, dz / c, zmin=zmin, n_order=-1, use_cuda=a.cuda,
                  boundaries={"z": "open", "r": "reflective"})
 sim.add_new_species(q=-e, m=m_e, n=n0, dens_func=dens, p_nz=1, p_nr=2, p_nt=4,
                     p_zmin=z_ent, p_rmax=0.95 * rmax)
@@ -88,6 +89,7 @@ while done < a.steps:
     n = min(every, a.steps - done)
     sim.step(n, show_progress=False)
     done += n
+    # (FBPIC's step() returns with all data back on the CPU, also in GPU mode)
     z = sim.fld.interp[0].z
     Ez0 = sim.fld.interp[0].Ez[:, 0].real                    # on-axis wake (mode 0)
     Er1 = sim.fld.interp[1].Er[:, 0]                         # laser field on axis (mode 1)
