@@ -207,11 +207,12 @@ if __name__ == "__main__":
     ap.add_argument("--taper", action="store_true")
     ap.add_argument("--G", type=float, default=0.07)
     ap.add_argument("--ion", default="H")
+    ap.add_argument("--ppc", type=int, default=8)
     ap.add_argument("--spac", type=float, nargs="+", default=[0.981, 1.019],
                     help="frequency spacings in units of w_p (N-1 values)")
     a = ap.parse_args()
     if a.taper:
-        r = run_taper(n_env=a.nenv, L_acc=a.L, G_MeV_per_cwp=a.G, tag=a.tag, spac=tuple(a.spac),
+        r = run_taper(n_env=a.nenv, L_acc=a.L, G_MeV_per_cwp=a.G, tag=a.tag, spac=tuple(a.spac), ppc=a.ppc,
                       ion_qm=P.ME_OVER_MP if a.ion in ("H", "none") else 1.0 / 3670.48296788,
                       mobile_ions=(a.ion != "none"))
     else:

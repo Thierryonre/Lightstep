@@ -322,3 +322,33 @@ Codes (all in `sims/codes/`):
 - **Two lines spaced by exactly ω_p** (N = 2 beat wave in two channel modes — rigid by construction, exactly resonant), D plasma (`P1g_taper_N2_Dplasma.log`): 3030 / 3052 MeV at 300 / 600 c/ω_p (design 3021 / 3042) — on design so far.
 - **Three equally spaced lines** (diagnostic, immobile ions; `P1g_taper_N3uniform_immobile.log`): 3004 / 3008 MeV — weak gain (bunch probably in a weak phase); inconclusive.
 - Both runs stopped by the host's memory-pressure safeguard (other jobs running); not restarted. The diagnosis therefore remains unconfirmed.
+
+---
+
+## Follow-up 3 — 2026-11-03
+
+### S038 ⚠️ Guided train, left-behind wave: line-spacing diagnosis and taper iteration (1D envelope PIC, D plasma)
+- **Script:** `sims/phase1/p1g_two_velocity_train.py --taper --ion D [--spac ...] [--G ...]` · logs `results/data/P1g_taper_*`
+- **Two lines spaced by exactly ω_p, G = 0.07** (`P1g_taper_N2_Dplasma`): monotonic gain 3000 → 3067 / 3082 / 3094 / 3106 / **3116 MeV** at 900 / 1500 / 2100 / 2400 / 2700 c/ω_p, spread narrowing to ±12 MeV, wake→beam **25 %** — no reversal, unlike the 3-line (0.981/1.019) D-plasma run (S036: 2951 MeV).
+- **Three equally spaced lines** (`P1g_taper_N3uniform_Dplasma`): weak wake behind the envelope (E_peak 0.066 E₀ vs ~0.27), no net gain (2997 MeV) — probably nonlinear saturation of the exactly resonant 3-line drive; inconclusive as a diagnostic.
+- **Two lines, taper re-designed for the measured gain rate G = 0.045** (`P1g_taper_N2_G0.045_Dplasma`): rises to 3051 MeV by 900 c/ω_p then oscillates (synchrotron-like) around it; final 3051 MeV — worse than the first iteration.
+- **Conclusion:** two lines (exact resonance) remove the phase-drift failure seen with the 3-line comb, but the left-behind-wave accelerator is a delicate phase-stability problem: the taper must be designed RF-linac style (stable synchronous phase, taper set from the measured imprinted-wave amplitude at that phase), not from a guessed gain rate. Best 1D result so far: +116 MeV over 2700 c/ω_p, wake→beam 25 % (vs 58.5 % in the rigid-envelope model S024). Design numbers revised accordingly (S041).
+
+### S039 ✅ Photovoltaic recovery: spectrum of the light leaving the plasma (full-EM 1D PIC)
+- **Script:** `sims/phase2/p2d_pv_recovery_spectrum.py --case beat|single` (k0/kp = 10) · data `results/data/P2d_pv_spectrum_{beat,single}.json`
+- **PV model [lit]:** best monochromatic laser power converters at ~1.07 µm 55–59 % (Broadcom multijunction InGaAsP, 2025), ~45 % at 1.55 µm, 68.9 % GaAs record near 0.85 µm (GaAs cannot absorb 1 µm light); cell bandgap 5 % below the lowest drive line, photons above it converted at η_max ω_g/ω.
+- **Two-line beat drive:** in-band (±10 %) fraction of the remaining light 77 % → 26 % → 11–15 % as absorption rises 0 → 16 % → 49–56 %; PV efficiency on the remaining light 49 % → 30 % → 21–24 %.
+- **Single resonant pulse (a0 = 1.5):** in-band 96 % → 5 %, PV efficiency on the remaining light 44 % → ~2.5 % once ≳ 25 % is absorbed (caveat: part of the up-shifted spectrum may be harmonics/numerical high-k noise; the in-band fraction is the robust number).
+- **Conclusion:** light that has driven the wake is spread far out of a PV cell's band (photon deceleration plus up-shift); only light that never interacted (coupling losses, free-space/side-pumped schemes) stays near-monochromatic. Upper bound on the wall-plug gain: 1/(1 − η_laser η_PV f_rec) ≲ 1.2× for 40 %-efficient lasers with 55 % cells (≲ 1.5× even with ideal cells). Design calculator: guided train ×1.04–1.09, free-space / side-pumped ×1.08–1.18.
+
+### S040 ✅ Beat-driven surface plasmon in a hollow channel (Lei et al., PRL 137, 105002 (2026)) — can it match protons?
+- **Script:** `sims/phase1/p1h_surface_plasmon_dispersion.py` · data `results/data/P1h_surface_plasmon_dispersion.json` (exact TM₀ dispersion of a vacuum tube of radius R in a cold plasma wall; linear, no amplitudes)
+- **Check:** large-R limit reproduces the planar result (β = 0.875: ω = 0.46 vs 0.436 ω_p; β = 0.43: 0.675 vs 0.671).
+- **Result:** curvature pushes the mode towards c, so narrow tubes (R ≤ 1 c/ω_p) carry no slow surface mode. Matched modes and on-axis/wall field ratio: 1 GeV (β 0.875) R = 3 c/ω_p → 0.75; 3 GeV → 0.94; 300 MeV → 0.32 (R = 3); 100 MeV only for R ≳ 10 c/ω_p where the on-axis field is 5×10⁻⁶ of the wall field; none for 10 MeV in the scanned range.
+- **Conclusion:** the surface-plasmon scheme cannot serve the slow low-energy proton section (field confined to the wall); it is a possible alternative structure above ~1 GeV, but slow-plasmon drive (beat with Δk > Δω/c), field per GW, efficiency and hollow-channel beam break-up would need PIC.
+
+### S041 — design calculator revision (estimates on simulated ratios)
+- **Script:** `sims/design/design_calc.revised_designs()` · data `results/data/design_calc_revised.json`
+- With wake→beam 0.25 (S038) and PV recovery (S039): RF injector + guided train, protons 1.5 % (today's fibre) / 2.9 % (projected), 3.1 % with PV; deuterons 2.5 % / 4.6 % (4.9 % with PV). All-optical (no RF injector): best 0.5 % / 1.0 % (1.2 % with PV) — self-injection with NP-like layer, transverse-flying-focus coupling [lit], hand-off to the train at 0.5 GeV; the slow section uses 62–100 % of the energy.
+
+### S042 — FBPIC full guided-train run with protons: launched 2026-11-03 (results pending)

@@ -1,0 +1,127 @@
+{
+ "case": "single",
+ "k0_over_kp": 10.0,
+ "a": 1.5,
+ "sigI": 6.0,
+ "U0": 279.0550391814883,
+ "snaps": [
+  {
+   "t": 0.019634954084936207,
+   "absorbed_frac": -2.220446049250313e-16,
+   "remaining_frac": 1.0000000000000002,
+   "PV_eff_on_remaining": 0.4395740545378316,
+   "PV_eff_on_remaining_GaAs_like": 0.5506664065028473,
+   "inband_frac_10pct": 0.9576059198156289,
+   "mean_w": 1.0048870584490048
+  },
+  {
+   "t": 166.68112522704521,
+   "absorbed_frac": 0.08471289108259827,
+   "remaining_frac": 0.9152871089174017,
+   "PV_eff_on_remaining": 0.11905905689262855,
+   "PV_eff_on_remaining_GaAs_like": 0.14914852763458375,
+   "inband_frac_10pct": 0.533936162038477,
+   "mean_w": 1.3662450442445124
+  },
+  {
+   "t": 333.34261550009774,
+   "absorbed_frac": 0.2486326924565313,
+   "remaining_frac": 0.7513673075434687,
+   "PV_eff_on_remaining": 0.04366334612971385,
+   "PV_eff_on_remaining_GaAs_like": 0.05469826451522335,
+   "inband_frac_10pct": 0.08485797143003783,
+   "mean_w": 1.9622101682160915
+  },
+  {
+   "t": 500.0041057731503,
+   "absorbed_frac": 0.4562172708393267,
+   "remaining_frac": 0.5437827291606733,
+   "PV_eff_on_remaining": 0.024011354659989822,
+   "PV_eff_on_remaining_GaAs_like": 0.03007967883769634,
+   "inband_frac_10pct": 0.08333218057434777,
+   "mean_w": 2.434440745171756
+  },
+  {
+   "t": 666.6852310002878,
+   "absorbed_frac": 0.528379506462349,
+   "remaining_frac": 0.471620493537651,
+   "PV_eff_on_remaining": 0.022650164557608776,
+   "PV_eff_on_remaining_GaAs_like": 0.02837447887307718,
+   "inband_frac_10pct": 0.05379162819356678,
+   "mean_w": 2.3183191784545647
+  },
+  {
+   "t": 833.3467212733403,
+   "absorbed_frac": 0.6146810197771244,
+   "remaining_frac": 0.38531898022287553,
+   "PV_eff_on_remaining": 0.02406761514921975,
+   "PV_eff_on_remaining_GaAs_like": 0.030150157886931653,
+   "inband_frac_10pct": 0.0521464309577033,
+   "mean_w": 1.9490014451545143
+  },
+  {
+   "t": 1000.0082115463929,
+   "absorbed_frac": 0.6643154221496648,
+   "remaining_frac": 0.3356845778503352,
+   "PV_eff_on_remaining": 0.02536487909002946,
+   "PV_eff_on_remaining_GaAs_like": 0.03177527580550963,
+   "inband_frac_10pct": 0.052456884294807396,
+   "mean_w": 1.7044516731679282
+  },
+  {
+   "t": 1166.6697018194454,
+   "absorbed_frac": 0.67406791034935,
+   "remaining_frac": 0.32593208965065,
+   "PV_eff_on_remaining": 0.02439756095154832,
+   "PV_eff_on_remaining_GaAs_like": 0.030563489992030533,
+   "inband_frac_10pct": 0.04922737929969767,
+   "mean_w": 1.5853939626691624
+  },
+  {
+   "t": 1333.350827046583,
+   "absorbed_frac": 0.68220726049774,
+   "remaining_frac": 0.31779273950225995,
+   "PV_eff_on_remaining": 0.023590671946520245,
+   "PV_eff_on_remaining_GaAs_like": 0.02955267812936808,
+   "inband_frac_10pct": 0.047270825984708505,
+   "mean_w": 1.6257108578732755
+  },
+  {
+   "t": 1500.0123173196355,
+   "absorbed_frac": 0.6981241615087546,
+   "remaining_frac": 0.3018758384912454,
+   "PV_eff_on_remaining": 0.023170762712601434,
+   "PV_eff_on_remaining_GaAs_like": 0.029026646379967977,
+   "inband_frac_10pct": 0.04676713183728602,
+   "mean_w": 1.6684993883564212
+  },
+  {
+   "t": 1666.673807592688,
+   "absorbed_frac": 0.7250859301739934,
+   "remaining_frac": 0.2749140698260067,
+   "PV_eff_on_remaining": 0.02376145123503864,
+   "PV_eff_on_remaining_GaAs_like": 0.02976661800171205,
+   "inband_frac_10pct": 0.048472475888605565,
+   "mean_w": 1.6592280402039339
+  },
+  {
+   "t": 1833.3352978657406,
+   "absorbed_frac": 0.7574130834692261,
+   "remaining_frac": 0.24258691653077397,
+   "PV_eff_on_remaining": 0.02525075546909662,
+   "PV_eff_on_remaining_GaAs_like": 0.031632310033104676,
+   "inband_frac_10pct": 0.05222660540259218,
+   "mean_w": 1.7467879916181532
+  },
+  {
+   "t": 2000.016423092878,
+   "absorbed_frac": 0.7689507428432081,
+   "remaining_frac": 0.23104925715679195,
+   "PV_eff_on_remaining": 0.02468285462578732,
+   "PV_eff_on_remaining_GaAs_like": 0.030920885158486296,
+   "inband_frac_10pct": 0.05235221257432958,
+   "mean_w": 1.7421382435292516
+  }
+ ],
+ "runtime_s": 375.59923028945923
+}

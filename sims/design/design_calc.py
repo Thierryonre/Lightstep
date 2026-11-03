@@ -227,3 +227,50 @@ def energy_per_muon(f3D=0.62, eta_couple=0.62, eta_lw=0.64):
         w = T / RF_INJECTOR["eta"]
         rows[f"{sp}_RF_only"] = dict(wall_GeV_per_particle=w, wall_GeV_per_muon=(w / mu[1], w / mu[0]))
     return rows
+
+
+def pv_recovery_factor(eta_laser, frac_unabsorbed, pv_eff_remaining, frac_uncoupled=0.0,
+                       pv_eff_uncoupled=0.55, capture=0.8):
+    """Wall-plug improvement from photovoltaic recovery of leftover laser light (P2d).
+    Recovered electrical energy (per unit laser energy) R = capture*(f_unabs*pv_rem + f_unc*pv_unc);
+    net wall-plug per unit laser energy = 1/eta_laser - R  ->  improvement = 1/(1 - eta_laser*R).
+    pv_eff_remaining: simulated PV efficiency of the light after the plasma (P2d: ~0.23 for a
+    two-line beat at ~50 % absorption, ~0.025 for a single short pulse; ~0.49-0.55 if barely absorbed)."""
+    R = capture * (frac_unabsorbed * pv_eff_remaining + frac_uncoupled * pv_eff_uncoupled)
+    return 1.0 / (1.0 - eta_laser * R), R
+
+
+def revised_designs(eta_wb_train=0.25, f3D=0.62, eta_couple=0.62, eta_lw=0.64):
+    """Revision after S031-S038: in the guided train the protons ride the wave left behind by a
+    c-moving envelope; best 1D wake->beam so far 0.25 (two-line beat, static taper, S038) instead of
+    0.585 (rigid-envelope model, S024). Returns with-RF and all-optical (no RF injector) designs,
+    with PV recovery (P2d) as an option."""
+    d1 = load("P1d_scan.json")
+    r_np = [r for r in d1 if r["n_np"] > 0][0]
+    r_0 = [r for r in d1 if r["n_np"] == 0 and abs(r["alpha_frac"] - 0.5) < 1e-6][0]
+    emb_tff, emb_tpa = 1.3e-3 / 0.286, 1.3e-5 / 0.286     # literature coupling factors (see designs())
+    out = {}
+    for las in ["fibre_today", "fibre_projected"]:
+        eL = LASERS[las]["eta"]
+        eta_tr = eL * eta_couple * eta_lw * eta_wb_train * f3D
+        pv_tr, _ = pv_recovery_factor(eL, 0.62 * (1 - eta_lw), 0.23, 1 - eta_couple)
+        pv_side, _ = pv_recovery_factor(eL, 0.99, 0.49)
+        # with RF injector
+        for sp, Ti, Tf, mu in [("proton", 1.0, 6.0, (0.5, 0.9)), ("deuteron", 2.0, 3.6, (0.6, 0.72))]:
+            wall = Ti / RF_INJECTOR["eta"] + (Tf - Ti) / eta_tr
+            wall_pv = Ti / RF_INJECTOR["eta"] + (Tf - Ti) / eta_tr / pv_tr
+            out[f"RF+train_{sp}_{las}"] = dict(eff=Tf / wall, eff_with_PV=Tf / wall_pv,
+                                               GeV_per_muon=(wall / mu[1], wall / mu[0]))
+        # all-optical: self-injection from rest (slow side-pumped driver) to T_h, then guided train
+        for tag, emb in [("TFF", emb_tff), ("TPA", emb_tpa)]:
+            for npl, r in [("NP", r_np), ("noNP", r_0)]:
+                for Th in [0.5, 1.0]:
+                    e_low = Th / (eL * r["eff_laser_to_trapped"] * emb)
+                    e_high = (6.0 - Th) / eta_tr
+                    e_low_pv = e_low / pv_side
+                    e_high_pv = e_high / pv_tr
+                    out[f"alloptical_{tag}_{npl}_handoff{Th}_{las}"] = dict(
+                        eff=6.0 / (e_low + e_high), eff_with_PV=6.0 / (e_low_pv + e_high_pv),
+                        GeV_per_muon=((e_low + e_high) / 0.9, (e_low + e_high) / 0.5),
+                        low_section_share_of_energy=e_low / (e_low + e_high))
+    return out

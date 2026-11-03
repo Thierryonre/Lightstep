@@ -4,6 +4,15 @@
 `docs/SIMULATION_LOG.md`), **[lit]** (published value, see `docs/research/`) or **[est]**
 (our estimate / assumption, not a simulation result).*
 
+> **Revision 2026-11-03 (S031–S041).** Follow-up simulations showed that in a plasma channel the
+> laser's energy envelope runs ahead at ≈ c and the protons ride the wave it leaves behind. With
+> that physics the best 1D wake→beam efficiency of the guided train so far is **25 %** (not 58.5 %),
+> and its long-stage phase stability is not yet solved (S038). Revised wall-plug efficiencies:
+> RF injector + guided train **1.5–2.9 %** (protons), **2.5–4.6 %** (deuterons); designs without an
+> RF injector **≤ 0.5–1.2 %** (§ 10). Sections 1–8 below keep the original numbers for the record;
+> the multipliers vs conventional LWFA fall by ≈ 2.3× (≈ 150× instead of ≈ 340× with the same
+> lasers).
+
 ## 1. Bottom line
 
 1. **A conventional LWFA cannot accelerate protons from any practical injector** [sim S009,
@@ -190,3 +199,45 @@ and, at projected fibre-laser costs, capital cost.
 3. The low-energy section (< 1 GeV) is the efficiency bottleneck of any all-optical design: an
    efficient slow-wave drive would remove the RF injector.
 4. Deuteron beams (≈1.6–1.9× more pions per GeV [lit]) would improve the muon cost directly.
+
+
+## 10. Designs without an RF injector (all-optical)
+
+Requested view: only designs in which every stage is laser-driven. Numbers from
+`design_calc.revised_designs()` (S041): simulated 1D plasma/beam physics (S018 self-injection,
+S038 guided train), literature coupling for the slow low-energy driver, estimated laser and
+channel-coupling factors. "PV" = with photovoltaic recovery of leftover light (S039).
+
+| All-optical design | Wall-plug → 6 GeV (today's → projected fibre) | with PV (projected) | Wall-plug GeV per muon (projected) | Share of energy spent below hand-off |
+|---|---|---|---|---|
+| Self-injection from rest (slow accelerating driver, transverse-flying-focus coupling) **+ nanoparticle-like H layer**, hand-off to guided train at **0.5 GeV** | 0.51 % → 1.01 % | 1.16 % | 660–1 190 | 62 % |
+| same, hand-off at 1 GeV | 0.32 % → 0.64 % | 0.74 % | 1 050–1 890 | 78 % |
+| same without nanoparticle layer, hand-off 0.5 GeV | 0.25 % → 0.51 % | 0.59 % | 1 320–2 370 | 81 % |
+| slow section by transverse pumping (many beamlets), with NP layer, hand-off 0.5 GeV | 0.008 % → 0.016 % | 0.019 % | ~4×10⁴–7×10⁴ | 99 % |
+| Near-critical RPA + wake (single multi-PW Ti:Sa laser) [lit, not simulated here] | ~6×10⁻⁵ | — | ~10⁵ | — |
+| **Conventional LWFA (baseline)** | **cannot capture protons from rest** (S009: 0.2 MeV per stage even from 10 MeV) | — | — | — |
+
+- **Multiplier vs conventional:** a conventional LWFA has no all-optical route to 6 GeV protons at
+  all (its wake cannot trap slow protons), so the all-optical designs are the only options in this
+  class; against the conventional LWFA *with* an injector (2×10⁻⁴ with the same fibre lasers) the
+  best all-optical design is ≈ 25–50× more efficient.
+- **What limits them:** below ~0.5–0.75 GeV no guided embodiment exists (S022), and the
+  side-pumped drivers that do work couple ~10⁻³ (transverse flying focus) to ~10⁻⁵ (transverse
+  pumping) of the laser energy into protons [lit]. Even though this section adds < 10 % of the final
+  energy, it consumes 60–100 % of the wall-plug energy. The nanoparticle layer helps (7× charge,
+  2× efficiency of that section in 1D, S018). Surface plasmons (S040) cannot fill this gap (field
+  confined to the wall at low β).
+- **Advantage:** no RF machine (hundreds of metres) and no femtosecond bunch-compression problem —
+  self-captured protons are born short and phase-locked to the driver.
+
+## 11. Additional ideas evaluated (2026-11-03)
+- **Laser-beat-driven surface plasmons in a hollow channel** (Lei et al., PRL 137, 105002 (2026),
+  electron simulations, 10 MeV in 40 µm): our dispersion analysis (S040) shows slow, proton-matched
+  surface modes exist only in tubes ≳ 3 c/ω_p, with a usable on-axis field only for protons above
+  ~1 GeV (0.75–0.94 of the wall field) and ≤ 5×10⁻⁶ at 100 MeV. A possible alternative high-energy
+  structure; does not solve the slow section. Amplitudes/efficiency need PIC.
+- **Monochromatic photovoltaic recovery** (68.9 % GaAs at ~0.85 µm; 55–59 % demonstrated at
+  ~1.07 µm, the relevant wavelength here): light that drove the wake is spread out of the cell band
+  (S039), so recovery works mainly on light that never interacted. Gain ≤ 1/(1 − η_laser η_PV f):
+  ×1.04–1.09 for the guided train, ×1.08–1.18 for free-space/side-pumped schemes; ≤ ×1.5 even with
+  ideal cells. Included in § 10.

@@ -1,0 +1,127 @@
+{
+ "case": "beat",
+ "k0_over_kp": 10.0,
+ "a": 0.7,
+ "sigI": 6.0,
+ "U0": 658.7938596728553,
+ "snaps": [
+  {
+   "t": 0.019634954084936207,
+   "absorbed_frac": 1.2477687605372267e-06,
+   "remaining_frac": 0.9999987522312395,
+   "PV_eff_on_remaining": 0.49375095586573287,
+   "PV_eff_on_remaining_GaAs_like": 0.6185352883481635,
+   "inband_frac_10pct": 0.7720213004641903,
+   "mean_w": 0.9555868753538748
+  },
+  {
+   "t": 166.68112522704521,
+   "absorbed_frac": 0.1643591011306157,
+   "remaining_frac": 0.8356408988693843,
+   "PV_eff_on_remaining": 0.30389619657739136,
+   "PV_eff_on_remaining_GaAs_like": 0.3806990535305866,
+   "inband_frac_10pct": 0.2583967559744519,
+   "mean_w": 1.1122701246819104
+  },
+  {
+   "t": 333.34261550009774,
+   "absorbed_frac": 0.26543620262123724,
+   "remaining_frac": 0.7345637973787628,
+   "PV_eff_on_remaining": 0.2663457694106049,
+   "PV_eff_on_remaining_GaAs_like": 0.33365860931619407,
+   "inband_frac_10pct": 0.2512005039903714,
+   "mean_w": 1.4560732038750595
+  },
+  {
+   "t": 500.0041057731503,
+   "absorbed_frac": 0.3021900750614669,
+   "remaining_frac": 0.6978099249385331,
+   "PV_eff_on_remaining": 0.24364937241362367,
+   "PV_eff_on_remaining_GaAs_like": 0.3052262138054303,
+   "inband_frac_10pct": 0.17208732207824634,
+   "mean_w": 1.4655500449109602
+  },
+  {
+   "t": 666.6852310002878,
+   "absorbed_frac": 0.4164098022266518,
+   "remaining_frac": 0.5835901977733482,
+   "PV_eff_on_remaining": 0.2445439490287183,
+   "PV_eff_on_remaining_GaAs_like": 0.3063468743287034,
+   "inband_frac_10pct": 0.2075698850002566,
+   "mean_w": 1.5396756267616745
+  },
+  {
+   "t": 833.3467212733403,
+   "absorbed_frac": 0.4550045569252228,
+   "remaining_frac": 0.5449954430747772,
+   "PV_eff_on_remaining": 0.23924645145953632,
+   "PV_eff_on_remaining_GaAs_like": 0.2997105546465827,
+   "inband_frac_10pct": 0.1702324756255285,
+   "mean_w": 1.571806819206738
+  },
+  {
+   "t": 1000.0082115463929,
+   "absorbed_frac": 0.4915612183360599,
+   "remaining_frac": 0.5084387816639401,
+   "PV_eff_on_remaining": 0.24195858550821742,
+   "PV_eff_on_remaining_GaAs_like": 0.30310811893665773,
+   "inband_frac_10pct": 0.10794428380434615,
+   "mean_w": 1.4832217785918438
+  },
+  {
+   "t": 1166.6697018194454,
+   "absorbed_frac": 0.5013365092437521,
+   "remaining_frac": 0.4986634907562479,
+   "PV_eff_on_remaining": 0.2318315115998376,
+   "PV_eff_on_remaining_GaAs_like": 0.29042165725870556,
+   "inband_frac_10pct": 0.17086868647313871,
+   "mean_w": 1.5478302690615582
+  },
+  {
+   "t": 1333.350827046583,
+   "absorbed_frac": 0.5079479642780993,
+   "remaining_frac": 0.49205203572190065,
+   "PV_eff_on_remaining": 0.22232591724287157,
+   "PV_eff_on_remaining_GaAs_like": 0.27851373996425177,
+   "inband_frac_10pct": 0.13504909740946475,
+   "mean_w": 1.4673286465797655
+  },
+  {
+   "t": 1500.0123173196355,
+   "absorbed_frac": 0.5119200247627184,
+   "remaining_frac": 0.48807997523728164,
+   "PV_eff_on_remaining": 0.20543797404236216,
+   "PV_eff_on_remaining_GaAs_like": 0.25735775293670454,
+   "inband_frac_10pct": 0.10855230215274625,
+   "mean_w": 1.4498228380313631
+  },
+  {
+   "t": 1666.673807592688,
+   "absorbed_frac": 0.5310630728939152,
+   "remaining_frac": 0.4689369271060848,
+   "PV_eff_on_remaining": 0.2111915699867083,
+   "PV_eff_on_remaining_GaAs_like": 0.26456543949244005,
+   "inband_frac_10pct": 0.11110433744863217,
+   "mean_w": 1.4886444424565914
+  },
+  {
+   "t": 1833.3352978657406,
+   "absorbed_frac": 0.5515641817585056,
+   "remaining_frac": 0.44843581824149437,
+   "PV_eff_on_remaining": 0.2285080010601709,
+   "PV_eff_on_remaining_GaAs_like": 0.2862582049644686,
+   "inband_frac_10pct": 0.1365033531714147,
+   "mean_w": 1.5594732342460849
+  },
+  {
+   "t": 2000.016423092878,
+   "absorbed_frac": 0.5594551841954793,
+   "remaining_frac": 0.4405448158045206,
+   "PV_eff_on_remaining": 0.2292073752420737,
+   "PV_eff_on_remaining_GaAs_like": 0.2871343300759796,
+   "inband_frac_10pct": 0.15012145765424637,
+   "mean_w": 1.5740712539349258
+  }
+ ],
+ "runtime_s": 375.1211528778076
+}

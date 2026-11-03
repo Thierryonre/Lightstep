@@ -1,0 +1,178 @@
+{
+ "RF+train_proton_fibre_today": {
+  "eff": 0.014522771063601139,
+  "eff_with_PV": 0.01514337090140613,
+  "GeV_per_muon": [
+   459.04921570894516,
+   826.2885882761013
+  ]
+ },
+ "RF+train_deuteron_fibre_today": {
+  "eff": 0.025103521671826626,
+  "eff_with_PV": 0.026089196556913802,
+  "GeV_per_muon": [
+   199.17524183913363,
+   239.01029020696035
+  ]
+ },
+ "alloptical_TFF_NP_handoff0.5_fibre_today": {
+  "eff": 0.005054507053104252,
+  "eff_with_PV": 0.005400519598265984,
+  "GeV_per_muon": [
+   1318.9548647621925,
+   2374.1187565719465
+  ],
+  "low_section_share_of_energy": 0.6233335935864147
+ },
+ "alloptical_TFF_NP_handoff1.0_fibre_today": {
+  "eff": 0.003180753298085618,
+  "eff_with_PV": 0.0034196747066532157,
+  "GeV_per_muon": [
+   2095.93955956254,
+   3772.691207212572
+  ],
+  "low_section_share_of_energy": 0.7845158243037297
+ },
+ "alloptical_TFF_noNP_handoff0.5_fibre_today": {
+  "eff": 0.002531450611089106,
+  "eff_with_PV": 0.0027244268550564673,
+  "GeV_per_muon": [
+   2633.5361383165464,
+   4740.365048969784
+  ],
+  "low_section_share_of_energy": 0.8113540262829778
+ },
+ "alloptical_TFF_noNP_handoff1.0_fibre_today": {
+  "eff": 0.0014109042547999489,
+  "eff_with_PV": 0.001523948635879666,
+  "GeV_per_muon": [
+   4725.102106671248,
+   8505.183792008247
+  ],
+  "low_section_share_of_energy": 0.9044164976532726
+ },
+ "alloptical_TPA_NP_handoff0.5_fibre_today": {
+  "eff": 8.060125939098017e-05,
+  "eff_with_PV": 8.736316803679194e-05,
+  "GeV_per_muon": [
+   82711.6935521818,
+   148881.04839392722
+  ],
+  "low_section_share_of_energy": 0.9939935217404505
+ },
+ "alloptical_TPA_NP_handoff1.0_fibre_today": {
+  "eff": 4.043309907579826e-05,
+  "eff_with_PV": 4.383074882007693e-05,
+  "GeV_per_muon": [
+   164881.41693440173,
+   296786.5504819231
+  ],
+  "low_section_share_of_energy": 0.9972608083027257
+ },
+ "alloptical_TPA_noNP_handoff0.5_fibre_today": {
+  "eff": 3.112794621769963e-05,
+  "eff_with_PV": 3.37442228416599e-05,
+  "GeV_per_muon": [
+   214169.82090761713,
+   385505.67763371085
+  ],
+  "low_section_share_of_energy": 0.9976803174834517
+ },
+ "alloptical_TPA_noNP_handoff1.0_fibre_today": {
+  "eff": 1.5583690862615613e-05,
+  "eff_with_PV": 1.689431889718498e-05,
+  "GeV_per_muon": [
+   427797.6716452724,
+   770035.8089614904
+  ],
+  "low_section_share_of_energy": 0.9989442630518194
+ },
+ "RF+train_proton_fibre_projected": {
+  "eff": 0.02858429417135209,
+  "eff_with_PV": 0.031092245901595147,
+  "GeV_per_muon": [
+   233.22831155817627,
+   419.8109608047173
+  ]
+ },
+ "RF+train_deuteron_fibre_projected": {
+  "eff": 0.04593608922722847,
+  "eff_with_PV": 0.04934769824853424,
+  "GeV_per_muon": [
+   108.84688017882605,
+   130.61625621459126
+  ]
+ },
+ "alloptical_TFF_NP_handoff0.5_fibre_projected": {
+  "eff": 0.010109014106208503,
+  "eff_with_PV": 0.01159477380883308,
+  "GeV_per_muon": [
+   659.4774323810963,
+   1187.0593782859733
+  ],
+  "low_section_share_of_energy": 0.6233335935864147
+ },
+ "alloptical_TFF_NP_handoff1.0_fibre_projected": {
+  "eff": 0.006361506596171236,
+  "eff_with_PV": 0.007394808411944475,
+  "GeV_per_muon": [
+   1047.96977978127,
+   1886.345603606286
+  ],
+  "low_section_share_of_energy": 0.7845158243037297
+ },
+ "alloptical_TFF_noNP_handoff0.5_fibre_projected": {
+  "eff": 0.005062901222178212,
+  "eff_with_PV": 0.005898505559065819,
+  "GeV_per_muon": [
+   1316.7680691582732,
+   2370.182524484892
+  ],
+  "low_section_share_of_energy": 0.8113540262829778
+ },
+ "alloptical_TFF_noNP_handoff1.0_fibre_projected": {
+  "eff": 0.0028218085095998977,
+  "eff_with_PV": 0.0033133709701586573,
+  "GeV_per_muon": [
+   2362.551053335624,
+   4252.591896004124
+  ],
+  "low_section_share_of_energy": 0.9044164976532726
+ },
+ "alloptical_TPA_NP_handoff0.5_fibre_projected": {
+  "eff": 0.00016120251878196034,
+  "eff_with_PV": 0.00019072706618054902,
+  "GeV_per_muon": [
+   41355.8467760909,
+   74440.52419696361
+  ],
+  "low_section_share_of_energy": 0.9939935217404505
+ },
+ "alloptical_TPA_NP_handoff1.0_fibre_projected": {
+  "eff": 8.086619815159653e-05,
+  "eff_with_PV": 9.570360514569636e-05,
+  "GeV_per_muon": [
+   82440.70846720086,
+   148393.27524096155
+  ],
+  "low_section_share_of_energy": 0.9972608083027257
+ },
+ "alloptical_TPA_noNP_handoff0.5_fibre_projected": {
+  "eff": 6.225589243539925e-05,
+  "eff_with_PV": 7.368129392211439e-05,
+  "GeV_per_muon": [
+   107084.91045380857,
+   192752.83881685542
+  ],
+  "low_section_share_of_energy": 0.9976803174834517
+ },
+ "alloptical_TPA_noNP_handoff1.0_fibre_projected": {
+  "eff": 3.1167381725231226e-05,
+  "eff_with_PV": 3.6891289024643645e-05,
+  "GeV_per_muon": [
+   213898.8358226362,
+   385017.9044807452
+  ],
+  "low_section_share_of_energy": 0.9989442630518194
+ }
+}
