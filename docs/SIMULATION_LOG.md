@@ -353,3 +353,15 @@ Codes (all in `sims/codes/`):
 
 ### S042 ❌ FBPIC full guided-train run with protons — stopped by host (low memory) after step ~500, 2026-11-03
 - Third attempt (log `sims/phase2/fbpic_train_run3.log`); only the step-500 snapshot (train still in vacuum, max RSS 2.0 GB) was saved; no new physics. Not restarted.
+
+
+### S043 ✅ FBPIC quasi-3D guided-train run with protons — completed on a Modal GPU — 2026-11-03
+- **Scripts:** `sims/phase2/modal_fbpic_train.py` (Modal, NVIDIA A10 via GPU fallback list, FBPIC 0.27.1 CUDA with numba-cuda + NVIDIA bindings; 4500 steps in 427 s, ≈ 0.09 s/step, ≈ $0.2), analysis `analyse_fbpic_train_full.py`, `fbpic_vs_1d_two_velocity.py` · data `results/data/FBPIC_train_analysis_full.json`, `FBPIC_vs_1D_two_velocity.json` · figure `results/figures/FBPIC_guided_train_full.png`
+- **GPU set-up failures on the way (logged):** Avast HTTPS interception blocked the Modal client (fixed with a launcher trusting the Windows root store); no L4 capacity (GPU fallback list); segfault in numba 0.60's legacy CUDA driver binding on driver 610.57 (fixed with numba-cuda + NVIDIA bindings); missing pyfftw; an unnecessary GPU→CPU copy in our diagnostics.
+- **Results (t = 938 fs, train fully in the channel):**
+  - beat-pattern velocity in the channel: mean **0.875c** (design 0.875c; snapshot scatter 0.83–0.91); energy envelope ≈ c (two-velocity kinematics confirmed in multi-D);
+  - accelerating **and** focusing region for protons exists in every period: 24–34 % of the period, within r ≲ 3 µm;
+  - on-axis wake vs the 1D two-velocity model with the same drive: **f_3D = 0.72 (field), 0.52 (energy)**;
+  - **wake left behind the envelope decays quickly:** 0.36 / 0.31 / 0.24 / 0.23 / 0.24 / 0.18 E₀ in periods 1–6 behind it, with the waveform degrading — the imprinted wave halves within ~6 plasma periods (~350 fs), versus the ~5–7 ps the left-behind-wave design needs (most likely channel-induced phase-front curvature; absent in 1D).
+  - proton test bunch: inconclusive — its emittance (normalised 1e-7 m rad at σ_r = 1.5 µm ⇒ ~37 mrad divergence) spread it to 13 µm before it reached the plasma; mean energy unchanged within 0.3 MeV.
+- **Conclusion:** the guided resonant train's optics and drive are confirmed in multi-D, and protons get a focusing+accelerating phase; but a stage cannot rely on the wave left behind the light. The drive must stay with the protons — a long (multi-ps) envelope of duration ≳ (1/β − 1)L/c — which suits ps fibre/thin-disk lasers but raises the laser energy per shot. This is now the governing design constraint.

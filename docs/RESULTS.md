@@ -201,6 +201,17 @@ and, at projected fibre-laser costs, capital cost.
 4. Deuteron beams (≈1.6–1.9× more pions per GeV [lit]) would improve the muon cost directly.
 
 
+## 9b. Full multi-D check of the guided train (S043, FBPIC on a GPU)
+- Confirmed: the beat pattern travels at the designed 0.875c in the channel while the energy
+  envelope runs at ≈ c; protons have an accelerating-and-focusing region (24–34 % of each period,
+  r ≲ 3 µm); on-axis wake = 0.72× the 1D prediction (0.52× in energy).
+- **Not viable as first conceived:** the wave left behind the light halves within ~6 plasma periods
+  (~350 fs) — 15–20× shorter than a cm-scale stage needs. The drive must stay with the protons:
+  a multi-picosecond envelope (duration ≳ (1/β − 1)L/c, e.g. ~10 ps for a 2 cm stage at β = 0.875).
+  That is compatible with efficient ps fibre/thin-disk lasers but costs more laser energy per shot;
+  the efficiency of that long-envelope regime has not yet been simulated, so the § 7–8 efficiency
+  figures for the guided train remain upper estimates.
+
 ## 10. Designs without an RF injector (all-optical)
 
 Requested view: only designs in which every stage is laser-driven. Numbers from
