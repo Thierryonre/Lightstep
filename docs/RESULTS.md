@@ -320,26 +320,27 @@ the weak link.
 - **Bottom line:** ~0.5–1 % efficient on current evidence — far better than a conventional laser
   accelerator (which cannot do this at all), but well below RF accelerators (~15 %).
 
-## 13. "Electric flying focus" — proposals only (not simulated)
-From the literature review in `docs/research/electric-field-tailoring.md` (prompted by
-Mach-Batlle et al., PRL 125, 177204 (2020)). **Nothing in this section has been simulated yet.**
-- **Key physics [inference, checked against a published design]:** a field pattern moving with
-  the proton is electrostatic in the proton's frame, so it cannot be "projected" into empty space:
-  it decays away from the structure over βγλ/2π, and a single structure cannot both accelerate and
-  focus in 3D without time-alternation (alternating-phase focusing). Hence a "wavelength ladder":
-  the driver wavelength must grow as protons get slower (RF below ~3 MeV; mm-wave/THz/pulsed walls
-  ~3–100 MeV; mid-IR near fields above ~0.1–0.2 GeV; dielectric-laser or plasma above ~1 GeV).
-- **Programmable speed is real:** set by the firing times of the surrounding sources (precedents:
-  LLNL dielectric-wall accelerator, travelling-wave Stark decelerators, pulse-front-tilted
-  dielectric laser accelerators).
-- **Proposed concepts (estimates, not results):** C1 laser-switched dielectric-wall accelerator
-  (2–200 MeV, ~20–50 MV/m); C2 timed THz-emitter array (1–100 MeV); C3 inverse-designed
-  alternating-phase-focusing proton dielectric laser accelerator with tilted pulse fronts
-  (0.2–3 GeV, ~0.2–1 GV/m); C4 hollow plasma channel with a chirped laser-imprinted grating
-  (0.3–6 GeV, unverified 3–20 GV/m); C5 hybrid ladder of the above.
-- **Assessment:** below ~100 MeV none is expected to beat RF quadrupole/drift-tube linacs on
-  efficiency; the concept is most promising as a programmable-speed booster at β ≈ 0.5–0.95 — the
-  same range where the laser-plasma options here are weakest.
-- **Proposed first simulations:** (0) a laptop model of required wall field per unit gradient
-  vs speed, wavelength and aperture; (1) 2D adjoint inverse design + FDTD + proton tracking of
-  concept C3 (~2–24 CPU-h, plus ~$5–30 of GPU for a 3D check).
+## 13. "Electric flying focus" (S046) — simulated
+Electric version of Mach-Batlle et al., PRL 125, 177204 (2020): ring electrodes around the beam
+bore, fired in a programmed sequence, make a field pattern ("virtual charge") that travels with the
+protons at any speed. Write-up: `docs/research/electric-flying-focus.md`.
+- **What works [sim]:** protons phase-locked from 1 MeV to 100 MeV in 3.0 m (50 MV/m peak wall
+  field, 32.6 MV/m on the protons), 100 % captured, 0.1 % energy spread, unaffected by 30 ps
+  switch-timing jitter. This covers the slow-proton range that lasers and plasma waves cannot follow.
+- **What does not [sim]:** the "field in an inaccessible region" trick gives no extra gradient. The
+  field on the axis can never exceed the field at the electrodes, and imitating a concentrated
+  charge inside the bore needs electrode fields 10–10⁴× (or more) higher than the field it makes.
+  The best pattern is a long, flat moving field region.
+- **Costs [sim/est]:** strong focusing is mandatory (≈ 10.6 T solenoid or ~200 T/m quadrupoles at
+  1 MeV). Efficiency is limited by how much charge a slow bunch can carry (space charge):
+  0.12 % wall-plug→beam from 1 MeV, 0.6 % if 80 % of the unused field energy is recovered.
+- **In the 6 GeV design [est]:** a 1 MeV DC injector + electric flying focus to 0.5 GeV + guided laser
+  train gives **0.9 % (1.9 % with recovery)**, vs 1.0 % for the all-optical design and 2.9 % with
+  an RF injector. It replaces the least-proven step (self-injection from rest) with pulsed-power
+  hardware.
+- *Side note — broader concepts from the first review (not simulated):* wavelength ladder (driver
+  wavelength must grow as protons slow down, since a co-moving pattern decays over βγλ/2π);
+  laser-switched dielectric-wall accelerator (C1); timed THz-emitter array (C2); tilted-pulse-front
+  alternating-phase-focusing proton dielectric laser accelerator (C3, 0.2–3 GeV); hollow plasma
+  channel with a chirped laser-imprinted grating (C4); hybrid ladder (C5). Details:
+  `docs/research/electric-field-tailoring.md`.

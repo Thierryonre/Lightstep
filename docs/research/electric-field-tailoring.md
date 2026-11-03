@@ -1,5 +1,11 @@
 # Electric-field tailoring in inaccessible regions -> an "electric flying focus" for protons?
 
+> **Side note (2026-11-03).** This is the first, broader review. The focused follow-up — the
+> electric version of Mach-Batlle's active shell as a moving virtual charge, with simulations
+> (S046) — is in `electric-flying-focus.md`. The concepts below (wavelength ladder, proton DLA,
+> THz arrays, plasma gratings) are kept as background and are not simulated.
+
+
 Started 2026-11-03. Literature review + theory proposal. Labels: [paper] = read full text/open version,
 [abstract only], [press], [inference/estimate] = my reasoning or rough numbers.
 
