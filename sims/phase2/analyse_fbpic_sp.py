@@ -6,27 +6,35 @@ import matplotlib.pyplot as plt
 from scipy.constants import c
 
 here = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(here, "..", "..")
-out_dir = os.path.join(here, "fbpic_sp_out")
+out_name = sys.argv[1] if len(sys.argv) > 1 else "fbpic_sp_out"
+tag = sys.argv[2] if len(sys.argv) > 2 else "FBPIC_surface_plasmon"
+out_dir = os.path.join(here, out_name)
 summ = json.load(open(os.path.join(out_dir, "summary.json")))
 d = summ["design"]; E0w = d["E0_wall_GVm"] * 1e9; R = d["R_um"] * 1e-6; lam_sp = d["lam_sp_um"] * 1e-6
-files = sorted(glob.glob(os.path.join(out_dir, "snap_*.npz")))
+# only this run's snapshots (an earlier aborted attempt left snap_000050/100/200 in fbpic_sp_out)
+files = [os.path.join(out_dir, f"snap_{r['step']:06d}.npz") for r in summ["snaps"]]
 S = [np.load(f) for f in files]
 
 
-def crossings(s, field="Ez_axis"):
-    z, E = s["z"], s[field]
-    m = np.abs(E) > 0.05 * np.abs(E).max()
-    idx = np.where((E[:-1] > 0) & (E[1:] <= 0) & m[:-1])[0]
-    return z[idx] - c * float(s["t"])
+def xcorr_velocity(s1, s2, half_width=12e-6):
+    """Speed of the E_z pattern near the laser envelope: cross-correlate on-axis E_z of two
+    snapshots in lab coordinates, searching displacements c*dt +- lam_sp/2."""
+    z1, z2 = s1["z"], s2["z"]; dzg = z1[1] - z1[0]; dt = float(s2["t"] - s1["t"])
+    env = s2["env_a"]; ze = np.sum(z2 * env ** 2) / np.sum(env ** 2)
+    m = np.where(np.abs(z2 - ze) < half_width)[0]; a_ = s2["Ez_axis"][m]
+    lags = np.arange(-int(0.5 * lam_sp / dzg), int(0.5 * lam_sp / dzg) + 1); cc = []
+    for L in lags:
+        b = np.interp(z2[m] - c * dt - L * dzg, z1, s1["Ez_axis"])
+        cc.append(np.dot(a_, b) / np.sqrt(np.dot(a_, a_) * np.dot(b, b) + 1e-30))
+    i = int(np.argmax(cc))
+    return 1 + lags[i] * dzg / (c * dt), float(cc[i])
 
 
 vel = []
 for s1, s2 in zip(S[:-1], S[1:]):
-    z1, z2 = crossings(s1), crossings(s2)
-    dt = float(s2["t"] - s1["t"])
-    dz = [q - z1[np.argmin(np.abs(z1 - q))] for q in z2 if z1.size and np.min(np.abs(z1 - q)) < 0.4 * lam_sp]
-    if dz:
-        vel.append(1 + np.median(dz) / (c * dt))
+    v_, q_ = xcorr_velocity(s1, s2)
+    if q_ > 0.5:
+        vel.append(v_)
 s = S[-1]
 z, Ea, Ew, env = s["z"], s["Ez_axis"], s["Ez_wall"], s["env_a"]
 ze = np.sum(z * env ** 2) / np.sum(env ** 2)
@@ -43,16 +51,19 @@ if behind.any():
 inside = np.abs(z - ze) < 2 * we
 ratio_axis_wall = float(np.abs(Ea[inside]).max() / max(np.abs(Ew[inside]).max(), 1e-9))
 T0 = S[0]["pT"]; T1 = s["pT"]; r0 = S[0]["pr"]; r1 = s["pr"]
-dT = T1 - T0
-res = dict(wave_phase_velocity_c=[float(v) for v in vel], target_velocity_c=0.971,
+res = dict(wave_phase_velocity_c=[float(v) for v in vel], wave_velocity_mean_c=float(np.mean(vel)) if vel else None,
+           wave_velocity_std_c=float(np.std(vel)) if vel else None, target_velocity_c=0.9712,
            Ez_axis_max_in_train_GVm=float(np.abs(Ea[inside]).max() / 1e9),
            axis_over_wall_in_train=ratio_axis_wall, periods_behind=per,
-           proton_dT_mean_MeV=float(dT.mean()), proton_dT_max_MeV=float(dT.max()), proton_dT_min_MeV=float(dT.min()),
+           # particle order is not preserved between GPU snapshots -> compare distributions, not particles
+           proton_T_mean_change_MeV=float(T1.mean() - T0.mean()),
+           proton_T_std_MeV=[float(T0.std()), float(T1.std())],
+           proton_T_range_MeV=[[float(T0.min()), float(T0.max())], [float(T1.min()), float(T1.max())]],
            proton_r_rms_um=[float(np.sqrt(np.mean(r0 ** 2)) * 1e6), float(np.sqrt(np.mean(r1 ** 2)) * 1e6)],
            proton_frac_inside_R=float(np.mean(r1 < R)), t_fs=float(s["t"] * 1e15),
            protons_behind_envelope_um=float((ze - np.mean(s["pz"])) * 1e6))
 print(json.dumps(res, indent=1))
-json.dump(res, open(os.path.join(ROOT, "results", "data", "FBPIC_surface_plasmon_analysis.json"), "w"), indent=1)
+json.dump(res, open(os.path.join(ROOT, "results", "data", f"{tag}_analysis.json"), "w"), indent=1)
 fig, ax = plt.subplots(3, 1, figsize=(10, 8.5))
 zz = z * 1e6
 ax[0].plot(zz, env, color="#2a78d6", lw=1); ax[0].set_ylabel("laser a (axis)")
@@ -68,4 +79,4 @@ ax[2].axhline(R * 1e6, color="k", lw=0.6, ls="--"); ax[2].set_ylabel("r [µm]");
 ax[2].set_title("E_z map (dashed: channel wall)")
 for a_ in ax[:2]:
     a_.set_xlim(zz[0], zz[-1])
-plt.tight_layout(); plt.savefig(os.path.join(ROOT, "results", "figures", "FBPIC_surface_plasmon.png"), dpi=110)
+plt.tight_layout(); plt.savefig(os.path.join(ROOT, "results", "figures", f"{tag}.png"), dpi=110)

@@ -27,6 +27,8 @@ ap.add_argument("--w_ratio", type=float, default=3.3, help="w_laser / w_pw(wall)
 ap.add_argument("--R_cwp", type=float, default=3.0)
 ap.add_argument("--wsp", type=float, default=0.662, help="surface-mode frequency / w_pw")
 ap.add_argument("--tau_fs", type=float, default=100.0, help="intensity FWHM of each colour")
+ap.add_argument("--w0_R", type=float, default=0.65, help="laser waist / R (LP01 match ~ 0.65+1.619V^-1.5)")
+ap.add_argument("--bunch", default="behind", choices=["behind", "centre"], help="proton bunch behind the envelope (S044) or at its centre, inside the beat (S045)")
 ap.add_argument("--cuda", action="store_true")
 ap.add_argument("--out", default="fbpic_sp_out")
 a = ap.parse_args()
@@ -39,14 +41,14 @@ cwp = c / wpw
 R = a.R_cwp * cwp
 w2 = w1 - a.wsp * wpw
 lam2 = 2 * np.pi * c / w2
-w0 = 0.65 * R                                   # fundamental hollow-core mode ~ 0.65 R
+w0 = a.w0_R * R                                 # S044: 0.65 R; S045: LP01 mode-field radius
 tau = a.tau_fs * 1e-15 / np.sqrt(2 * np.log(2))
 
 dz = lam1 / 30
 dr = R / 40
 rmax = 3.5 * R + 6 * cwp
 Nr = int(rmax / dr)
-lam_sp = 2 * np.pi * cwp / (a.wsp / 0.971)
+lam_sp = 2 * np.pi * cwp / (a.wsp / 0.9712)
 Lz = 2.6 * c * tau * 2 + 8 * lam_sp
 Nz = int(Lz / dz)
 zmax, zmin = 0.0, -Lz
@@ -71,7 +73,7 @@ sim.add_new_species(q=e, m=m_p, n=n_w, dens_func=dens, p_nz=2, p_nr=2, p_nt=4,
 for lam in (lam1, lam2):
     add_laser_pulse(sim, GaussianLaser(a0=a.a0, waist=w0, tau=tau, z0=z0, zf=z0, lambda0=lam))
 g0 = 1 + 3000.0 / 938.272
-zb = z0 - 2.6 * c * tau - 2 * lam_sp
+zb = z0 - 2.6 * c * tau - 2 * lam_sp if a.bunch == "behind" else z0
 bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=0.15 * R, sig_z=0.5 * lam_sp, n_emit=2e-10,
                                     gamma0=g0, sig_gamma=1e-4 * g0, n_physical_particles=1e4,
                                     n_macroparticles=20000, tf=0.0, zf=zb)

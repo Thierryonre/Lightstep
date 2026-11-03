@@ -248,10 +248,11 @@ channel-coupling factors. "PV" = with photovoltaic recovery of leftover light (S
   ~1 GeV (0.75–0.94 of the wall field) and ≤ 5×10⁻⁶ at 100 MeV. A possible alternative high-energy
   structure; does not solve the slow section. Amplitudes/efficiency need PIC.
   *First quasi-3D PIC test at 3 GeV (S044, FBPIC on GPU) [sim]:* the two-colour beat is guided and
-  gives ~17 GV/m on axis (~0.02 of the wall wave-breaking field), but its measured speed was ≈1.05–1.1c
-  instead of 0.971c, the wave did not persist behind the laser, and the 3 GeV test protons gained no
-  measurable energy. It does not beat the guided train; matching 0.971c needs a beat with Δk > Δω/c
-  (e.g. two different guided modes) and an envelope long enough to stay with the protons.
+  gives ~17 GV/m on axis (~0.02 of the wall wave-breaking field), moving at 0.979c (0.971c needed;
+  0.980c predicted by guided-mode theory — an earlier version of this note wrongly said 1.05–1.1c).
+  The wave did not persist behind the laser, and test protons placed there gained no energy. It does
+  not yet beat the guided train; follow-up (S045) puts the protons inside the beat with the speed
+  retuned by a smaller channel radius.
 - **Monochromatic photovoltaic recovery** (68.9 % GaAs at ~0.85 µm; 55–59 % demonstrated at
   ~1.07 µm, the relevant wavelength here): light that drove the wake is spread out of the cell band
   (S039), so recovery works mainly on light that never interacted. Gain ≤ 1/(1 − η_laser η_PV f):
