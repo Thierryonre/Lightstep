@@ -252,3 +252,64 @@ channel-coupling factors. "PV" = with photovoltaic recovery of leftover light (S
   (S039), so recovery works mainly on light that never interacted. Gain ≤ 1/(1 − η_laser η_PV f):
   ×1.04–1.09 for the guided train, ×1.08–1.18 for free-space/side-pumped schemes; ≤ ×1.5 even with
   ideal cells. Included in § 10.
+
+## 12. Optical-only accelerator — plain-language summary
+
+*This section restates the all-optical (no RF accelerator) design in simple terms. It changes no
+numbers above. Labels: **[simulated]** = we ran a simulation; **[estimate]** = calculation or
+assumption; **[literature]** = published value.*
+
+### What it is
+A machine that takes protons from **rest** to **6 GeV** using only lasers and plasma — no
+conventional (RF) accelerator at all.
+
+### How it works, step by step
+1. **Catch protons from rest (0 → ~0.5 GeV).** A laser focus is made to sweep sideways across a
+   thin gas jet, starting slowly and speeding up (a *transverse flying focus*). Its light pressure
+   pushes electrons aside, and the resulting electric field drags nearby protons along with it.
+   A tiny hydrogen-rich layer (standing in for nanoparticles) supplies extra protons to catch.
+2. **Hand over to a guided plasma accelerator (0.5 → 6 GeV).** Two or three fibre-laser beams of
+   slightly different colours are sent down a plasma "fibre" (channel). Where they overlap they
+   beat into a train of bright pulses spaced exactly one plasma wave apart, which builds a strong
+   plasma wave. By choosing which channel mode each colour uses, and by slowly widening the channel,
+   the pulse train is made to travel at the protons' speed (slower than light), so the protons
+   never fall out of step.
+
+### Numbers
+| | Value | Basis |
+|---|---|---|
+| Protons caught from rest in step 1 (1D) | to 321 MeV, 74 % of the driver's energy into protons | [simulated, 1D] |
+| Same, real optics (transverse flying focus) | ~0.3 % laser → protons | [estimate from literature: Gong et al. 2024 got 0.13 % in 3D] |
+| Step 2 speed matching | peak train moves at the designed 0.875c in a 3D simulation | [simulated, quasi-3D] |
+| Step 2 field strength | ~0.4 of the plasma's natural limit (≈ 60 GV/m at the design density) | [simulated, quasi-3D] |
+| Step 2 protons focused as well as accelerated | yes, in ~¼ of each plasma wave | [simulated, quasi-3D] |
+| **Overall wall-plug efficiency** | **≈ 0.5 % (today's fibre lasers) to ≈ 1 % (projected); ≈ 1.2 % with solar-cell-style light recovery** | [estimate, chain of simulated + literature factors] |
+| Conventional laser accelerator, same job | **cannot do it** — it cannot catch protons from rest | [simulated, 1D] |
+| Conventional RF accelerator, for comparison | ≈ 15 % | [literature] |
+
+### Where 100 J of electricity goes (projected fibre lasers)
+| Destination | Step 1 (catching, ~62 J) | Step 2 (guided, ~38 J) |
+|---|---|---|
+| Lost inside the lasers | ~37 J | ~23 J |
+| Light that never enters/couples into the plasma | most of the remaining ~25 J (passes through the sweeping focus) | ~6 J |
+| Light that crosses the plasma unabsorbed | — | ~3 J |
+| Left in the plasma (heat, unused wave) | — | ~5 J |
+| **Ends up in the protons** | **~0.08 J** | **~0.9 J** |
+| **Total in protons** | **≈ 1 J out of 100 J (≈ 1 %)** | |
+
+Step 1 adds less than 10 % of the protons' final energy but uses most of the electricity — it is
+the weak link.
+
+### What is proven and what is not
+- **Proven by simulation:** protons can be caught from rest by a speeding-up focus (1D); a laser
+  pulse train can be made to travel slower than light inside a plasma channel and drive a wave
+  that both accelerates and focuses protons (quasi-3D); the pulse train needs only two or three
+  narrow-band fibre lasers.
+- **Not yet proven:** that real optics can make the speeding-up focus efficiently (efficiency is
+  borrowed from another group's 3D result); that the guided stage works over centimetres — the 3D
+  run showed the plasma wave fades within ~6 waves once the light has passed, so the laser pulses
+  must be several picoseconds long to stay with the protons, and that version has not been simulated.
+- **Advantages over the RF-injector version:** no large RF machine, and no need to compress proton
+  bunches to femtoseconds (protons caught in step 1 are automatically short and in step).
+- **Bottom line:** ~0.5–1 % efficient on current evidence — far better than a conventional laser
+  accelerator (which cannot do this at all), but well below RF accelerators (~15 %).
