@@ -354,3 +354,37 @@ protons at any speed. Write-up: `docs/research/electric-flying-focus.md`.
   alternating-phase-focusing proton dielectric laser accelerator (C3, 0.2–3 GeV); hollow plasma
   channel with a chirped laser-imprinted grating (C4); hybrid ladder (C5). Details:
   `docs/research/electric-field-tailoring.md`.
+
+## 14. Combining everything — staged design (proposal; partly simulated, S045–S049)
+Each technique works best over a different proton speed range, so the strongest machine is a
+relay. What decides the order is physics checked in simulation:
+- **Slow protons (1 MeV → ~0.1–0.5 GeV): electric flying focus** [sim S046/S047]. Electrodes can
+  follow any speed. Laser-plasma waves and surface plasmons cannot help here: a field pattern moving
+  as slowly as the protons stays stuck to whatever makes it. The best on-axis/wall field of a
+  surface plasmon is 10⁻⁷ at 30 MeV and 0.03 at 100 MeV, whatever the channel size. A flying focus
+  changes how fast the light moves, not this (S049).
+- **Middle (≈0.5 → 1.5 GeV): guided resonant train** [sim S043, 1D S038]. Its field pattern speed is
+  programmable down to these speeds, but its light runs ahead at ≈c, so it needs long pulses (the
+  governing constraint from S043).
+- **Fast (≳1.5 → 6 GeV): surface plasmon in a hollow channel** [sim S045]. ≈40 GV/m on 3 GeV
+  protons. Its big advantage over the train: in the narrow channel the light itself slows to the
+  proton speed (measured 0.966c vs 0.971c), so the protons stay inside the drive. This
+  works only above ~1–2 GeV (S049).
+- **Train and surface plasmon together:** the surface plasmon driven by two colours is a train with
+  two lines. Using more lines spaced at the surface-wave frequency (a resonant surface-plasmon train)
+  should build the wave up the way multi-pulse trains do — proposed GPU test.
+- **PV cells at the end:** recover leftover light; ×1.04–1.09 for guided stages (S039), because light
+  that drove a wave comes out spectrally spread.
+
+| Front end (projected fibre lasers) | train 0.5→1.5 GeV + SP 1.5→6 GeV | with PV |
+|---|---|---|
+| RF linac to 0.5 GeV | 2.6–4.9 % | 2.9–5.4 % |
+| Electric flying focus to 0.5 GeV (no / 80 % energy recovery) | 1.4–1.8 % / 2.0–3.0 % | 1.4–1.8 % / 2.1–3.1 % |
+| RF linac to 1.5 GeV, then SP only | 3.1–6.8 % | 3.4–7.4 % |
+
+[est] The ranges are set by the one unmeasured number: the surface plasmon's laser→proton
+efficiency (low end = as good as the train; high end = without the train's left-behind-wave loss).
+RF proton linacs reach ~15 %. The slow section dominates the energy bill in every non-RF version.
+**Open issues:** surface-plasmon efficiency (beam-loaded run needed); its 1.3 µm channel accepts
+only extremely low-emittance beams; the electric front end needs energy recovery to compete.
+

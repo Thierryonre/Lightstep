@@ -1,0 +1,245 @@
+{
+ "best_axis_over_wall": [
+  {
+   "T_MeV": 10,
+   "beta": 0.1448440108232829,
+   "R_cwp": 10.237763155407583,
+   "axis_over_wall": 5.9349420702922434e-21
+  },
+  {
+   "T_MeV": 30,
+   "beta": 0.24699415175879452,
+   "R_cwp": 5.980630756112935,
+   "axis_over_wall": 6.374573687490459e-07
+  },
+  {
+   "T_MeV": 100,
+   "beta": 0.42819550223817915,
+   "R_cwp": 3.4937264808740314,
+   "axis_over_wall": 0.03045778116488159
+  },
+  {
+   "T_MeV": 300,
+   "beta": 0.6525717966706412,
+   "R_cwp": 2.670298781100729,
+   "axis_over_wall": 0.3837256144884571
+  },
+  {
+   "T_MeV": 1000,
+   "beta": 0.8750256596748323,
+   "R_cwp": 2.530544906968014,
+   "axis_over_wall": 0.7966813126246814
+  },
+  {
+   "T_MeV": 3000,
+   "beta": 0.9712051869134142,
+   "R_cwp": 2.3981052500582316,
+   "axis_over_wall": 0.9581295053865245
+  }
+ ],
+ "slow_light_match": [
+  {
+   "T_MeV": 300,
+   "beta": 0.6525717966706412,
+   "match": null
+  },
+  {
+   "T_MeV": 1000,
+   "beta": 0.8750256596748323,
+   "R_cwp": 2.45,
+   "w_laser_over_wp": 1.7946583838761383,
+   "w_sp": 0.7059180625227418,
+   "pulse_speed": 0.9262044842738066,
+   "slip_per_length": 0.06314844190193547,
+   "axis_over_wall": 0.8049647334834497
+  },
+  {
+   "T_MeV": 3000,
+   "beta": 0.9712051869134142,
+   "R_cwp": 2.55,
+   "w_laser_over_wp": 3.1233545791184554,
+   "w_sp": 0.6947746254789546,
+   "pulse_speed": 0.9774633875473561,
+   "slip_per_length": 0.006592315589682096,
+   "axis_over_wall": 0.9543978429099126
+  }
+ ],
+ "staged": [
+  {
+   "laser": "today",
+   "front_end": "RF linac 15 % to 0.5 GeV",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.013319755365575232,
+   "eff_with_PV": 0.014520468210810204,
+   "GeV_wall_per_muon": [
+    500.5096928353952,
+    900.9174471037113
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric flying focus to 0.5 GeV, no recovery (0.23 %)",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.009029118529392992,
+   "eff_with_PV": 0.009565292722891507,
+   "GeV_wall_per_muon": [
+    738.3518828514982,
+    1329.0333891326968
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric flying focus to 0.5 GeV, 80 % recovery (0.6 %)",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.011310964894356125,
+   "eff_with_PV": 0.012165207997418147,
+   "GeV_wall_per_muon": [
+    589.3985817242841,
+    1060.9174471037113
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF linac 15 % to 1.5 GeV (no train)",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.01596467062137898,
+   "eff_with_PV": 0.017373503508899324,
+   "GeV_wall_per_muon": [
+    417.58873858249507,
+    751.6597294484911
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF linac 15 % to 0.5 GeV",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.024899736247090635,
+   "eff_with_PV": 0.027128479506111452,
+   "GeV_wall_per_muon": [
+    267.740453172295,
+    481.932815710131
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric flying focus to 0.5 GeV, no recovery (0.23 %)",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.013186106676099697,
+   "eff_with_PV": 0.013785885451447386,
+   "GeV_wall_per_muon": [
+    505.5826431883981,
+    910.0487577391166
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric flying focus to 0.5 GeV, 80 % recovery (0.6 %)",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.01869354503512199,
+   "eff_with_PV": 0.01992231719103,
+   "GeV_wall_per_muon": [
+    356.62934206118393,
+    641.9328157101311
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF linac 15 % to 1.5 GeV (no train)",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.036071230068501554,
+   "eff_with_PV": 0.039135508224366886,
+   "GeV_wall_per_muon": [
+    184.81949891939487,
+    332.6750980549108
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF linac 15 % to 0.5 GeV",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.02644382998320317,
+   "eff_with_PV": 0.028808540038383075,
+   "GeV_wall_per_muon": [
+    252.10669826954944,
+    453.792056885189
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric flying focus to 0.5 GeV, no recovery (0.23 %)",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.013606861503438768,
+   "eff_with_PV": 0.014206915097923968,
+   "GeV_wall_per_muon": [
+    489.9488882856525,
+    881.9079989141745
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric flying focus to 0.5 GeV, 80 % recovery (0.6 %)",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.019550595132977786,
+   "eff_with_PV": 0.02081370667653968,
+   "GeV_wall_per_muon": [
+    340.99558715843835,
+    613.792056885189
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF linac 15 % to 1.5 GeV (no train)",
+   "sp_scenario": "SP = train (0.25 wake->beam)",
+   "eff": 0.031101791481528928,
+   "eff_with_PV": 0.03376919173269746,
+   "GeV_wall_per_muon": [
+    214.34992484680308,
+    385.82986472424557
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF linac 15 % to 0.5 GeV",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.04911998654450416,
+   "eff_with_PV": 0.05345137318881935,
+   "GeV_wall_per_muon": [
+    135.72207843799936,
+    244.29974118839885
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric flying focus to 0.5 GeV, no recovery (0.23 %)",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.01784610368185082,
+   "eff_with_PV": 0.018387449455748734,
+   "GeV_wall_per_muon": [
+    373.56426845410243,
+    672.4156832173844
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric flying focus to 0.5 GeV, 80 % recovery (0.6 %)",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.029680949002656283,
+   "eff_with_PV": 0.0312091096392451,
+   "GeV_wall_per_muon": [
+    224.61096732688824,
+    404.29974118839885
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF linac 15 % to 1.5 GeV (no train)",
+   "sp_scenario": "SP without slippage loss (0.585, S024 rigid envelope)",
+   "eff": 0.06805130311826907,
+   "eff_with_PV": 0.0734783301270662,
+   "GeV_wall_per_muon": [
+    97.965305015253,
+    176.3375490274554
+   ]
+  }
+ ]
+}
