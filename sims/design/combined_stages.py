@@ -60,3 +60,37 @@ for las, e in eL.items():
             out["staged"].append(row)
             print(f"{las:9s} {front:55s} {sp_name[:22]:22s} {100*row['eff']:.2f} % ({100*row['eff_with_PV']:.2f} % with PV)")
 json.dump(out, open(os.path.join(ROOT, "results", "data", "combined_stages.json"), "w"), indent=1)
+
+# ---- (4) per-section efficiencies, energy-bill shares, and PV recovery of the leftover light ----
+chain = 0.62 * 0.64 * 0.62            # coupling into channel x laser->wake x f3D (S041 inputs); x wake->beam below
+f_left = (1 - 0.62) + 0.62 * (1 - 0.64)   # laser light not used: never coupled + leaves the plasma
+out["sections"] = {}
+for las, e in eL.items():
+    sec = {"RF linac [lit]": 0.15, "electric flying focus, no recovery [est on sim S046/S047]": 0.0023,
+           "electric flying focus, 80 % recovery [est]": 0.006,
+           "laser slow section (self-injection, TFF) [est on sim S041]": e * 0.0033786,
+           "guided train [est on sim S038/S043]": e * chain * 0.25,
+           "surface plasmon, low scenario": e * chain * 0.25, "surface plasmon, high scenario": e * chain * 0.585}
+    rows = {}
+    for name, eta in sec.items():
+        laser = "RF" not in name and "electric" not in name
+        L = 1 / (eta / e) if laser else 0.0             # laser energy per unit beam energy
+        pv69 = 1 / (1 / eta - f_left * 0.69 * L) if laser else eta
+        rows[name] = dict(eff=eta, eff_PV_realistic=eta * (pv if laser else 1), eff_PV_69pct_all_leftover=pv69)
+    out["sections"][las] = rows
+    print(f"\n{las}: leftover light {100*f_left:.0f} % of the laser energy")
+    for k, v in rows.items():
+        print(f"  {k:62s} {100*v['eff']:6.3f} %  PV(S039) {100*v['eff_PV_realistic']:6.3f} %  PV 69% all {100*v['eff_PV_69pct_all_leftover']:6.3f} %")
+    # staged machine with 69 % PV on all leftover light, and energy-bill shares
+    S = rows
+    for front, Tf, key in [("electric FF (no recovery)", 0.5, "electric flying focus, no recovery [est on sim S046/S047]"),
+                           ("electric FF (80 % recovery)", 0.5, "electric flying focus, 80 % recovery [est]"), ("RF", 0.5, "RF linac [lit]")]:
+        for spk in ["surface plasmon, low scenario", "surface plasmon, high scenario"]:
+            for pvk in ["eff", "eff_PV_realistic", "eff_PV_69pct_all_leftover"]:
+                parts = [Tf / S[key][pvk], 1.0 / S["guided train [est on sim S038/S043]"][pvk], 4.5 / S[spk][pvk]]
+                tot = sum(parts)
+                out["staged"].append(dict(laser=las, front_end=front, sp_scenario=spk, pv=pvk, eff=6 / tot,
+                                          shares=[p_ / tot for p_ in parts]))
+                print(f"  {front:28s} {spk[17:]:15s} {pvk:26s} system {100*6/tot:5.2f} %  bill shares slow/train/SP = "
+                      + "/".join(f"{100*p_/tot:.0f}" for p_ in parts))
+json.dump(out, open(os.path.join(ROOT, "results", "data", "combined_stages.json"), "w"), indent=1)

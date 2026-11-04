@@ -27,6 +27,9 @@ ap.add_argument("--diag_every", type=int, default=500)
 ap.add_argument("--out", default="fbpic_train_out")
 ap.add_argument("--protons", action="store_true", help="add a 1 GeV, ~16 fC proton test bunch")
 ap.add_argument("--zb_um", type=float, default=-175.0)
+ap.add_argument("--p_sigr", type=float, default=1.5e-6)
+ap.add_argument("--p_sigz", type=float, default=8e-6)
+ap.add_argument("--p_emit", type=float, default=1e-7, help="normalised emittance of the proton test bunch [m rad]")
 ap.add_argument("--fine_after", type=int, default=1500, help="diagnose every 250 steps after this step")
 ap.add_argument("--cuda", action="store_true", help="run on an NVIDIA GPU (FBPIC CUDA backend)")
 a = ap.parse_args()
@@ -71,7 +74,7 @@ for lam, p in zip(d["lambdas"], d["p_modes"]):
 bunch = None
 if a.protons:
     g0 = 1 + 1000.0 / 938.272
-    bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=1.5e-6, sig_z=8e-6, n_emit=1e-7,
+    bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=a.p_sigr, sig_z=a.p_sigz, n_emit=a.p_emit,
                                         gamma0=g0, sig_gamma=1e-3 * g0, n_physical_particles=1e5,
                                         n_macroparticles=20000, tf=0.0, zf=a.zb_um * 1e-6)
     if bunch is None:
@@ -82,6 +85,7 @@ print(f"n0={n0/1e6:.3e}, W={W*1e6:.2f} um, dn/n0={dn/n0:.2f}, lam_p={lam_p*1e6:.
 
 out = dict(design=d, a0=a.a0, fwhm_periods=a.fwhm_periods, snaps=[])
 os.makedirs(os.path.join(here, a.out), exist_ok=True)
+print(json.dumps(dict(z0_envelope_centre_um=z0 * 1e6, c_tau_um=c * tau * 1e6, lam_p_um=lam_p * 1e6)), flush=True)
 t0 = time.time()
 done = 0
 while done < a.steps:

@@ -52,7 +52,7 @@ inside = np.abs(z - ze) < 2 * we
 ratio_axis_wall = float(np.abs(Ea[inside]).max() / max(np.abs(Ew[inside]).max(), 1e-9))
 T0 = S[0]["pT"]; T1 = s["pT"]; r0 = S[0]["pr"]; r1 = s["pr"]
 res = dict(wave_phase_velocity_c=[float(v) for v in vel], wave_velocity_mean_c=float(np.mean(vel)) if vel else None,
-           wave_velocity_std_c=float(np.std(vel)) if vel else None, target_velocity_c=0.9712,
+           wave_velocity_std_c=float(np.std(vel)) if vel else None, target_velocity_c=float(d.get("beta_p", 0.9712)),
            Ez_axis_max_in_train_GVm=float(np.abs(Ea[inside]).max() / 1e9),
            axis_over_wall_in_train=ratio_axis_wall, periods_behind=per,
            # particle order is not preserved between GPU snapshots -> compare distributions, not particles

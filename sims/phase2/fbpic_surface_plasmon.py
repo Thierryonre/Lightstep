@@ -16,7 +16,7 @@ from scipy.constants import c, e, m_e, m_p, epsilon_0
 from scipy.signal import hilbert
 from fbpic.main import Simulation
 from fbpic.lpa_utils.laser import add_laser_pulse, GaussianLaser
-from fbpic.lpa_utils.bunch import add_particle_bunch_gaussian
+from fbpic.lpa_utils.bunch import add_particle_bunch_gaussian, add_particle_bunch_from_arrays
 
 here = os.path.dirname(os.path.abspath(__file__))
 ap = argparse.ArgumentParser()
@@ -30,6 +30,12 @@ ap.add_argument("--tau_fs", type=float, default=100.0, help="intensity FWHM of e
 ap.add_argument("--w0_R", type=float, default=0.65, help="laser waist / R (LP01 match ~ 0.65+1.619V^-1.5)")
 ap.add_argument("--bunch", default="behind", choices=["behind", "centre"], help="proton bunch behind the envelope (S044) or at its centre, inside the beat (S045)")
 ap.add_argument("--rmax_R", type=float, default=None, help="radial box size / R (default 3.5 R + 6 c/w_pw)")
+ap.add_argument("--T_MeV", type=float, default=3000.0, help="proton energy (sets the target wave speed)")
+ap.add_argument("--nlines", type=int, default=2, choices=[2, 3], help="2 colours (w1, w1-w_sp) or 3 (w1+w_sp, w1, w1-w_sp)")
+ap.add_argument("--equal_energy", action="store_true", help="scale a0 per line so the total laser energy equals the 2-colour run with --a0")
+ap.add_argument("--bunch_dz_um", type=float, default=0.0, help="bunch centre offset from the envelope centre (centre mode)")
+ap.add_argument("--bunch_file", default="", help="npz with x,y,z,ux,uy,uz,w of an incoming bunch (z relative to its mean)")
+ap.add_argument("--match_sigr_R", type=float, default=0.15, help="incoming bunch rescaled (emittance-preserving) to this rms radius / R")
 ap.add_argument("--cuda", action="store_true")
 ap.add_argument("--out", default="fbpic_sp_out")
 a = ap.parse_args()
@@ -49,7 +55,9 @@ dz = lam1 / 30
 dr = R / 40
 rmax = 3.5 * R + 6 * cwp if a.rmax_R is None else a.rmax_R * R
 Nr = int(rmax / dr)
-lam_sp = 2 * np.pi * cwp / (a.wsp / 0.9712)
+gT = 1 + a.T_MeV / 938.272
+beta_p = np.sqrt(1 - 1 / gT ** 2)
+lam_sp = 2 * np.pi * cwp / (a.wsp / beta_p)
 Lz = 2.6 * c * tau * 2 + 8 * lam_sp
 Nz = int(Lz / dz)
 zmax, zmin = 0.0, -Lz
@@ -71,18 +79,30 @@ sim.add_new_species(q=-e, m=m_e, n=n_w, dens_func=dens, p_nz=2, p_nr=2, p_nt=4,
                     p_zmin=z_ent, p_rmin=0.8 * R, p_rmax=0.95 * rmax)
 sim.add_new_species(q=e, m=m_p, n=n_w, dens_func=dens, p_nz=2, p_nr=2, p_nt=4,
                     p_zmin=z_ent, p_rmin=0.8 * R, p_rmax=0.95 * rmax)
-for lam in (lam1, lam2):
-    add_laser_pulse(sim, GaussianLaser(a0=a.a0, waist=w0, tau=tau, z0=z0, zf=z0, lambda0=lam))
-g0 = 1 + 3000.0 / 938.272
-zb = z0 - 2.6 * c * tau - 2 * lam_sp if a.bunch == "behind" else z0
-bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=0.15 * R, sig_z=0.5 * lam_sp, n_emit=2e-10,
-                                    gamma0=g0, sig_gamma=1e-4 * g0, n_physical_particles=1e4,
-                                    n_macroparticles=20000, tf=0.0, zf=zb)
+lams = [lam1, lam2] if a.nlines == 2 else [2 * np.pi * c / (w1 + a.wsp * wpw), lam1, lam2]
+if a.equal_energy:
+    E_ref = a.a0 ** 2 * (1 / lam1 ** 2 + 1 / lam2 ** 2)          # pulse energy ~ (a0/lambda)^2 at fixed waist, duration
+    a0s = [lam * np.sqrt(E_ref / len(lams)) for lam in lams]
+else:
+    a0s = [a.a0] * len(lams)
+for lam, a0_ in zip(lams, a0s):
+    add_laser_pulse(sim, GaussianLaser(a0=a0_, waist=w0, tau=tau, z0=z0, zf=z0, lambda0=lam))
+g0 = gT
+zb = z0 - 2.6 * c * tau - 2 * lam_sp if a.bunch == "behind" else z0 + a.bunch_dz_um * 1e-6
+if a.bunch_file:
+    B = np.load(a.bunch_file)
+    sx = np.sqrt(np.mean(B["x"] ** 2 + B["y"] ** 2) / 2); f = a.match_sigr_R * R / sx      # x -> f x, u -> u / f
+    bunch = add_particle_bunch_from_arrays(sim, q=e, m=m_p, x=B["x"] * f, y=B["y"] * f, z=B["z"] + zb,
+                                           ux=B["ux"] / f, uy=B["uy"] / f, uz=B["uz"], w=B["w"])
+else:
+    bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=0.15 * R, sig_z=0.5 * lam_sp, n_emit=2e-10,
+                                        gamma0=g0, sig_gamma=1e-4 * g0, n_physical_particles=1e4,
+                                        n_macroparticles=20000, tf=0.0, zf=zb)
 if bunch is None:
     bunch = sim.ptcl[-1]
 sim.set_moving_window(v=c)
 E0w = m_e * c * wpw / e
-info = dict(n_wall_cm3=n_w / 1e6, R_um=R * 1e6, lam2_um=lam2 * 1e6, w0_um=w0 * 1e6, E0_wall_GVm=E0w / 1e9,
+info = dict(T_MeV=a.T_MeV, beta_p=beta_p, lams_um=[l * 1e6 for l in lams], a0s=a0s, n_wall_cm3=n_w / 1e6, R_um=R * 1e6, lam2_um=lam2 * 1e6, w0_um=w0 * 1e6, E0_wall_GVm=E0w / 1e9,
             lam_sp_um=lam_sp * 1e6, grid=[Nz, Nr], dz_um=dz * 1e6, dr_um=dr * 1e6)
 print(json.dumps(info), flush=True)
 
@@ -102,7 +122,7 @@ while done < a.steps:
     Ez_wall = f0.Ez[:, iw].real
     env = 2 * np.abs(hilbert(sim.fld.interp[1].Er[:, 0].real)) / E0las
     g = np.sqrt(1 + bunch.ux ** 2 + bunch.uy ** 2 + bunch.uz ** 2)
-    T = (g - 1) * 938.272
+    T = (g - 1) * 938.272   # MeV
     rr = np.sqrt(bunch.x ** 2 + bunch.y ** 2)
     np.savez_compressed(os.path.join(here, a.out, f"snap_{done:06d}.npz"), z=z, r=r, Ez_axis=Ez_axis,
                         Ez_wall=Ez_wall, env_a=env, Ez_map=f0.Ez.real[::2, ::2], Er_map=f0.Er.real[::2, ::2],

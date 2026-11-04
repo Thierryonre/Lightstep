@@ -384,7 +384,26 @@ relay. What decides the order is physics checked in simulation:
 
 [est] The ranges are set by the one unmeasured number: the surface plasmon's laser→proton
 efficiency (low end = as good as the train; high end = without the train's left-behind-wave loss).
-RF proton linacs reach ~15 %. The slow section dominates the energy bill in every non-RF version.
+RF proton linacs reach ~15 %. *(Corrected 2026-11-04: an earlier version said the slow section
+dominates the energy bill in every non-RF version. It takes 27–69 % — the largest share only
+without energy recovery in the electric front end; otherwise the surface-plasmon stage is.)*
+
+**Efficiency of each section** [lit / est on sim; wall-plug → beam, today / projected lasers]:
+
+| Section | Today | Projected | With PV (realistic, S039) | With PV at 69 % on all leftover light |
+|---|---|---|---|---|
+| RF linac | 15 % | 15 % | – | – |
+| Electric flying focus (no / 80 % energy recovery) | 0.23 / 0.6 % | 0.23 / 0.6 % | – | – |
+| Laser slow section (self-injection from rest) | 0.07 % | 0.14 % | ×1.09 | ×1.09 / ×1.20 |
+| Guided train | 1.2 % | 2.5 % | ×1.09 | ×1.09 / ×1.20 |
+| Surface plasmon (scenario) | 1.2–2.9 % | 2.5–5.8 % | ×1.09 | ×1.09 / ×1.20 |
+
+About 60 % of the laser light is never used: 38 % fails to couple into the channel and 22 % leaves
+after driving the wave. Even recovering all of it at 69 % (the GaAs record, which in practice needs
+~0.85 µm light) gains only ×1.2, because the laser that made the light was itself only 40 %
+efficient. Example: electric front end with recovery + train + surface plasmon, projected lasers:
+2.0–3.0 % → 2.2–3.3 %.
+
 **Open issues:** surface-plasmon efficiency (beam-loaded run needed); its 1.3 µm channel accepts
 only extremely low-emittance beams; the electric front end needs energy recovery to compete.
 

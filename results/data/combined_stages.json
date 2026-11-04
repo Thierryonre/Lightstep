@@ -240,6 +240,514 @@
     97.965305015253,
     176.3375490274554
    ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff",
+   "eff": 0.009029118529392992,
+   "shares": [
+    0.32714197570264464,
+    0.12233782259951916,
+    0.5505202016978362
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.009565292722891507,
+   "shares": [
+    0.3465685769163589,
+    0.11880571328793475,
+    0.5346257097957063
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.009564843283220196,
+   "shares": [
+    0.34655229287029693,
+    0.11880867402358236,
+    0.5346390331061207
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff",
+   "eff": 0.013186106676099697,
+   "shares": [
+    0.4777574882644818,
+    0.17866191190951936,
+    0.34358059982599887
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.013785885451447386,
+   "shares": [
+    0.4994886033133111,
+    0.17122758307702513,
+    0.32928381360966374
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.013785389285978854,
+   "shares": [
+    0.4994706263035817,
+    0.1712337331066694,
+    0.32929564058974886
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff",
+   "eff": 0.011310964894356125,
+   "shares": [
+    0.15709673464383506,
+    0.15325513915566635,
+    0.6896481262004986
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.012165207997418147,
+   "shares": [
+    0.16896122218636314,
+    0.15109795960247943,
+    0.6799408182111574
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.012164481040949903,
+   "shares": [
+    0.16895112556874864,
+    0.1510997953511366,
+    0.6799490790801147
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff",
+   "eff": 0.01869354503512199,
+   "shares": [
+    0.25963256993224987,
+    0.25328359449686183,
+    0.48708383557088825
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.019922317191029996,
+   "shares": [
+    0.2766988498754166,
+    0.24744513030577847,
+    0.4758560198188049
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.019921281023574367,
+   "shares": [
+    0.2766844586607551,
+    0.24745005361605743,
+    0.47586548772318743
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff",
+   "eff": 0.01331975536557523,
+   "shares": [
+    0.00739986409198624,
+    0.1804727519832752,
+    0.8121273839247385
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.014520468210810204,
+   "shares": [
+    0.008066926783783446,
+    0.18035146785749392,
+    0.8115816053587226
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.01451943253091953,
+   "shares": [
+    0.008066351406066406,
+    0.18035157247162428,
+    0.8115820761223094
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff",
+   "eff": 0.024899736247090635,
+   "shares": [
+    0.013833186803939242,
+    0.3373728571460207,
+    0.6487939560500401
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.027128479506111452,
+   "shares": [
+    0.015071377503395251,
+    0.3369492655909437,
+    0.6479793569056611
+   ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.027126558215843203,
+   "shares": [
+    0.01507031011991289,
+    0.33694963074845086,
+    0.6479800591316363
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff",
+   "eff": 0.013606861503438768,
+   "shares": [
+    0.4930022283854626,
+    0.09218141302082498,
+    0.4148163585937124
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.014206915097923968,
+   "shares": [
+    0.5147433006494191,
+    0.0882284907910147,
+    0.39702820855956616
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.01486124918880401,
+   "shares": [
+    0.5384510575653627,
+    0.08391798953357041,
+    0.3776309529010668
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff",
+   "eff": 0.01784610368185082,
+   "shares": [
+    0.6465979594873487,
+    0.12090069807011752,
+    0.23250134244253376
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.018387449455748734,
+   "shares": [
+    0.6662119368024904,
+    0.11419065319914799,
+    0.21959740999836158
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (no recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.018961726383625917,
+   "shares": [
+    0.6870190718705043,
+    0.10707242278114328,
+    0.20590850534835248
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff",
+   "eff": 0.019550595132977786,
+   "shares": [
+    0.27153604351358035,
+    0.13244799208843994,
+    0.5960159643979798
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.02081370667653968,
+   "shares": [
+    0.28907925939638446,
+    0.12925831647338465,
+    0.5816624241302308
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.022248871792291132,
+   "shares": [
+    0.30901210822626574,
+    0.125634162140679,
+    0.5653537296330554
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff",
+   "eff": 0.029680949002656283,
+   "shares": [
+    0.4122354028146706,
+    0.2010773621949811,
+    0.3866872349903483
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.031209109639245097,
+   "shares": [
+    0.4334598561006263,
+    0.19381636501820676,
+    0.3727237788811669
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF (80 % recovery)",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.03290034410365055,
+   "shares": [
+    0.45694922366181323,
+    0.1857805287472744,
+    0.35727024759091236
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff",
+   "eff": 0.02644382998320317,
+   "shares": [
+    0.014691016657335096,
+    0.17914708788048453,
+    0.8061618954621804
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.02880854003838308,
+   "shares": [
+    0.016004744465768377,
+    0.17890822827895123,
+    0.8050870272552805
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, low scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.0316327904467071,
+   "shares": [
+    0.017573772470392837,
+    0.1786229504599286,
+    0.8038032770696786
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff",
+   "eff": 0.04911998654450416,
+   "shares": [
+    0.027288881413613422,
+    0.3327695932006059,
+    0.6399415253857806
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_realistic",
+   "eff": 0.053451373188819346,
+   "shares": [
+    0.02969520732712186,
+    0.3319463764407214,
+    0.6383584162321567
+   ]
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF",
+   "sp_scenario": "surface plasmon, high scenario",
+   "pv": "eff_PV_69pct_all_leftover",
+   "eff": 0.05861154337814329,
+   "shares": [
+    0.03256196854341294,
+    0.33096564234041137,
+    0.6364723891161758
+   ]
   }
- ]
+ ],
+ "sections": {
+  "today": {
+   "RF linac [lit]": {
+    "eff": 0.15,
+    "eff_PV_realistic": 0.15,
+    "eff_PV_69pct_all_leftover": 0.15
+   },
+   "electric flying focus, no recovery [est on sim S046/S047]": {
+    "eff": 0.0023,
+    "eff_PV_realistic": 0.0023,
+    "eff_PV_69pct_all_leftover": 0.0023
+   },
+   "electric flying focus, 80 % recovery [est]": {
+    "eff": 0.006,
+    "eff_PV_realistic": 0.006,
+    "eff_PV_69pct_all_leftover": 0.006
+   },
+   "laser slow section (self-injection, TFF) [est on sim S041]": {
+    "eff": 0.00067572,
+    "eff_PV_realistic": 0.000737128333375223,
+    "eff_PV_69pct_all_leftover": 0.0007370753297706353
+   },
+   "guided train [est on sim S038/S043]": {
+    "eff": 0.0123008,
+    "eff_PV_realistic": 0.013418676675519364,
+    "eff_PV_69pct_all_leftover": 0.013417711798441118
+   },
+   "surface plasmon, low scenario": {
+    "eff": 0.0123008,
+    "eff_PV_realistic": 0.013418676675519364,
+    "eff_PV_69pct_all_leftover": 0.013417711798441118
+   },
+   "surface plasmon, high scenario": {
+    "eff": 0.028783872,
+    "eff_PV_realistic": 0.031399703420715304,
+    "eff_PV_69pct_all_leftover": 0.03139744560835221
+   }
+  },
+  "projected": {
+   "RF linac [lit]": {
+    "eff": 0.15,
+    "eff_PV_realistic": 0.15,
+    "eff_PV_69pct_all_leftover": 0.15
+   },
+   "electric flying focus, no recovery [est on sim S046/S047]": {
+    "eff": 0.0023,
+    "eff_PV_realistic": 0.0023,
+    "eff_PV_69pct_all_leftover": 0.0023
+   },
+   "electric flying focus, 80 % recovery [est]": {
+    "eff": 0.006,
+    "eff_PV_realistic": 0.006,
+    "eff_PV_69pct_all_leftover": 0.006
+   },
+   "laser slow section (self-injection, TFF) [est on sim S041]": {
+    "eff": 0.00135144,
+    "eff_PV_realistic": 0.001474256666750446,
+    "eff_PV_69pct_all_leftover": 0.0016213710389520644
+   },
+   "guided train [est on sim S038/S043]": {
+    "eff": 0.0246016,
+    "eff_PV_realistic": 0.026837353351038727,
+    "eff_PV_69pct_all_leftover": 0.02951542188471786
+   },
+   "surface plasmon, low scenario": {
+    "eff": 0.0246016,
+    "eff_PV_realistic": 0.026837353351038727,
+    "eff_PV_69pct_all_leftover": 0.02951542188471786
+   },
+   "surface plasmon, high scenario": {
+    "eff": 0.057567744,
+    "eff_PV_realistic": 0.06279940684143061,
+    "eff_PV_69pct_all_leftover": 0.06906608721023978
+   }
+  }
+ }
 }
