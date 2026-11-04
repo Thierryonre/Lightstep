@@ -253,6 +253,12 @@ channel-coupling factors. "PV" = with photovoltaic recovery of leftover light (S
   The wave did not persist behind the laser, and test protons placed there gained no energy. It does
   not yet beat the guided train; follow-up (S045) puts the protons inside the beat with the speed
   retuned by a smaller channel radius.
+  *Follow-up (S045) [sim]:* with the protons inside the beat and the channel narrowed to retune the
+  speed (measured 0.971c, matched), 3 GeV protons are accelerated/decelerated coherently at
+  **≈ 40 GV/m** (best-phase +15 MeV in 0.36 mm) — comparable to the guided train. Open issues before
+  it can enter the design: efficiency not yet measured (needs a beam-loaded run), the wave dies
+  behind the light (ps envelopes needed), and the 1.3 µm-radius channel only accepts proton beams
+  with ~500× smaller emittance than today's.
 - **Monochromatic photovoltaic recovery** (68.9 % GaAs at ~0.85 µm; 55–59 % demonstrated at
   ~1.07 µm, the relevant wavelength here): light that drove the wake is spread out of the cell band
   (S039), so recovery works mainly on light that never interacted. Gain ≤ 1/(1 − η_laser η_PV f):
