@@ -1,0 +1,54 @@
+
+UserWarning: /usr/local/lib/python3.11/site-packages/fbpic/utils/mpi.py:47:
+MPI is not properly installed.
+Simulations without domain decomposition will still run properly.
+In order to diagnose the problem, type:
+mpirun -np 2 python -c "from mpi4py.MPI import COMM_WORLD"
+
+FutureWarning: <frozen importlib._bootstrap_external>:1241:
+The cuda.cuda module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.driver module instead.
+
+FBPIC (0.27.1)
+
+Running on GPU 
+
+Initializing laser pulse on the mesh...
+Done.
+
+Initializing laser pulse on the mesh...
+Done.
+
+Calculating initial space charge field...
+Done.
+
+{"n_wall_cm3": 1.023741247424007e+20, "R_um": 1.260507149287811, "lam2_um": 1.2716763005780345, "w0_um": 1.3865578642165923, "E0_wall_GVm": 972.939726960791, "lam_sp_um": 4.54604255319149, "grid": [7049, 240], "dz_um": 0.03333333333333333, "dr_um": 0.03151267873219527}
+step 2000: t=222 fs |Ez|axis=79.7 GV/m |Ez|wall=84.0 a=0.63 T=2994.9/3000.0/3005.6 MeV r_rms=0.27um inside=1.00 (567s)
+step 4000: t=445 fs |Ez|axis=46.2 GV/m |Ez|wall=46.2 a=0.59 T=2991.6/3000.0/3008.1 MeV r_rms=0.27um inside=1.00 (1139s)
+step 6000: t=667 fs |Ez|axis=44.5 GV/m |Ez|wall=31.2 a=0.63 T=2990.0/3000.1/3009.4 MeV r_rms=0.28um inside=1.00 (1712s)
+step 8000: t=890 fs |Ez|axis=71.7 GV/m |Ez|wall=64.5 a=0.61 T=2987.8/3000.1/3011.4 MeV r_rms=0.28um inside=1.00 (2282s)
+step 10000: t=1112 fs |Ez|axis=47.1 GV/m |Ez|wall=38.8 a=0.68 T=2985.4/3000.1/3013.8 MeV r_rms=0.29um inside=1.00 (2852s)
+step 12000: t=1334 fs |Ez|axis=59.1 GV/m |Ez|wall=42.7 a=0.57 T=2984.1/3000.2/3015.2 MeV r_rms=0.30um inside=1.00 (3421s)
+step 14000: t=1557 fs |Ez|axis=67.5 GV/m |Ez|wall=42.4 a=0.62 T=2983.1/3000.2/3016.5 MeV r_rms=0.31um inside=1.00 (3989s)
+step 16000: t=1779 fs |Ez|axis=53.8 GV/m |Ez|wall=31.6 a=0.54 T=2982.4/3000.3/3017.5 MeV r_rms=0.33um inside=1.00 (4556s)
+step 18000: t=2001 fs |Ez|axis=58.4 GV/m |Ez|wall=25.7 a=0.63 T=2981.8/3000.4/3018.3 MeV r_rms=0.34um inside=1.00 (5122s)
+step 20000: t=2224 fs |Ez|axis=69.4 GV/m |Ez|wall=28.5 a=0.62 T=2981.3/3000.5/3019.0 MeV r_rms=0.36um inside=1.00 (5687s)
+step 22000: t=2446 fs |Ez|axis=73.1 GV/m |Ez|wall=23.1 a=0.59 T=2981.2/3000.6/3020.1 MeV r_rms=0.37um inside=1.00 (6252s)
+step 24000: t=2669 fs |Ez|axis=80.4 GV/m |Ez|wall=28.8 a=0.56 T=2981.1/3000.6/3020.4 MeV r_rms=0.39um inside=1.00 (6817s)
+step 26000: t=2891 fs |Ez|axis=71.8 GV/m |Ez|wall=20.2 a=0.62 T=2980.7/3000.7/3021.1 MeV r_rms=0.41um inside=1.00 (7381s)
+step 28000: t=3113 fs |Ez|axis=92.1 GV/m |Ez|wall=29.0 a=0.68 T=2980.4/3000.7/3021.8 MeV r_rms=0.43um inside=1.00 (7944s)
+step 30000: t=3336 fs |Ez|axis=111.6 GV/m |Ez|wall=35.4 a=0.59 T=2979.9/3000.7/3022.0 MeV r_rms=0.45um inside=1.00 (8507s)
+step 32000: t=3558 fs |Ez|axis=125.4 GV/m |Ez|wall=35.1 a=0.67 T=2979.5/3000.6/3022.3 MeV r_rms=0.46um inside=1.00 (9069s)
+step 34000: t=3780 fs |Ez|axis=122.2 GV/m |Ez|wall=36.2 a=0.71 T=2979.3/3000.6/3022.5 MeV r_rms=0.48um inside=1.00 (9632s)
+step 36000: t=4003 fs |Ez|axis=110.0 GV/m |Ez|wall=37.4 a=0.64 T=2979.2/3000.6/3022.2 MeV r_rms=0.50um inside=1.00 (10194s)
+step 38000: t=4225 fs |Ez|axis=109.4 GV/m |Ez|wall=36.3 a=0.59 T=2979.4/3000.6/3022.3 MeV r_rms=0.52um inside=1.00 (10756s)
+step 40000: t=4448 fs |Ez|axis=107.5 GV/m |Ez|wall=30.8 a=0.48 T=2979.5/3000.6/3021.8 MeV r_rms=0.55um inside=1.00 (11317s)
+step 42000: t=4670 fs |Ez|axis=93.6 GV/m |Ez|wall=26.4 a=0.52 T=2979.7/3000.7/3021.6 MeV r_rms=0.57um inside=0.99 (11879s)
+step 44000: t=4892 fs |Ez|axis=91.7 GV/m |Ez|wall=27.0 a=0.49 T=2980.1/3000.7/3021.8 MeV r_rms=0.59um inside=0.99 (12439s)
+step 46000: t=5115 fs |Ez|axis=85.3 GV/m |Ez|wall=24.2 a=0.44 T=2980.2/3000.7/3021.3 MeV r_rms=0.61um inside=0.98 (13000s)
+step 48000: t=5337 fs |Ez|axis=79.1 GV/m |Ez|wall=23.0 a=0.45 T=2980.5/3000.8/3021.3 MeV r_rms=0.63um inside=0.98 (13560s)
+step 50000: t=5559 fs |Ez|axis=75.6 GV/m |Ez|wall=20.9 a=0.38 T=2980.6/3000.8/3021.4 MeV r_rms=0.66um inside=0.97 (14119s)
+step 52000: t=5782 fs |Ez|axis=76.6 GV/m |Ez|wall=18.6 a=0.30 T=2980.5/3000.8/3021.4 MeV r_rms=0.68um inside=0.97 (14679s)
+step 54000: t=6004 fs |Ez|axis=67.7 GV/m |Ez|wall=18.8 a=0.36 T=2980.4/3000.9/3021.4 MeV r_rms=0.71um inside=0.96 (15237s)
+step 56000: t=6227 fs |Ez|axis=71.8 GV/m |Ez|wall=17.5 a=0.32 T=2980.4/3000.9/3021.4 MeV r_rms=0.73um inside=0.95 (15794s)
+step 58000: t=6449 fs |Ez|axis=72.4 GV/m |Ez|wall=17.3 a=0.30 T=2980.4/3001.0/3021.6 MeV r_rms=0.76um inside=0.94 (16351s)
+step 60000: t=6671 fs |Ez|axis=71.8 GV/m |Ez|wall=18.5 a=0.28 T=2980.4/3001.0/3021.6 MeV r_rms=0.78um inside=0.93 (16909s)
