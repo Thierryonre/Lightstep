@@ -29,6 +29,7 @@ ap.add_argument("--wsp", type=float, default=0.662, help="surface-mode frequency
 ap.add_argument("--tau_fs", type=float, default=100.0, help="intensity FWHM of each colour")
 ap.add_argument("--w0_R", type=float, default=0.65, help="laser waist / R (LP01 match ~ 0.65+1.619V^-1.5)")
 ap.add_argument("--bunch", default="behind", choices=["behind", "centre"], help="proton bunch behind the envelope (S044) or at its centre, inside the beat (S045)")
+ap.add_argument("--rmax_R", type=float, default=None, help="radial box size / R (default 3.5 R + 6 c/w_pw)")
 ap.add_argument("--cuda", action="store_true")
 ap.add_argument("--out", default="fbpic_sp_out")
 a = ap.parse_args()
@@ -46,7 +47,7 @@ tau = a.tau_fs * 1e-15 / np.sqrt(2 * np.log(2))
 
 dz = lam1 / 30
 dr = R / 40
-rmax = 3.5 * R + 6 * cwp
+rmax = 3.5 * R + 6 * cwp if a.rmax_R is None else a.rmax_R * R
 Nr = int(rmax / dr)
 lam_sp = 2 * np.pi * cwp / (a.wsp / 0.9712)
 Lz = 2.6 * c * tau * 2 + 8 * lam_sp
