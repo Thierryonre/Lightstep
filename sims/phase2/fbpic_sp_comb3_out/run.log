@@ -1,0 +1,39 @@
+
+UserWarning: /usr/local/lib/python3.11/site-packages/fbpic/utils/mpi.py:47:
+MPI is not properly installed.
+Simulations without domain decomposition will still run properly.
+In order to diagnose the problem, type:
+mpirun -np 2 python -c "from mpi4py.MPI import COMM_WORLD"
+
+FutureWarning: <frozen importlib._bootstrap_external>:1241:
+The cuda.cuda module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.driver module instead.
+
+FBPIC (0.27.1)
+
+Running on GPU 
+
+Initializing laser pulse on the mesh...
+Done.
+
+Initializing laser pulse on the mesh...
+Done.
+
+Initializing laser pulse on the mesh...
+Done.
+
+Calculating initial space charge field...
+Done.
+
+{"T_MeV": 3000.0, "beta_p": 0.9712051869134142, "lams_um": [0.8239700374531834, 1.0, 1.2716763005780345], "a0s": [0.24207469517103125, 0.2937906527757516, 0.3736066104662737], "n_wall_cm3": 1.023741247424007e+20, "R_um": 1.260507149287811, "lam2_um": 1.2716763005780345, "w0_um": 1.3865578642165923, "E0_wall_GVm": 972.939726960791, "lam_sp_um": 4.546066832360663, "grid": [7049, 240], "dz_um": 0.03333333333333333, "dr_um": 0.03151267873219527}
+step 1000: t=111 fs |Ez|axis=105.7 GV/m |Ez|wall=115.4 a=0.79 T=2996.8/3000.0/3003.3 MeV r_rms=0.27um inside=1.00 (657s)
+step 2000: t=222 fs |Ez|axis=85.9 GV/m |Ez|wall=87.1 a=0.66 T=2994.2/3000.0/3005.6 MeV r_rms=0.27um inside=1.00 (1320s)
+step 3000: t=334 fs |Ez|axis=57.0 GV/m |Ez|wall=53.2 a=0.64 T=2992.2/3000.0/3007.5 MeV r_rms=0.27um inside=1.00 (1987s)
+step 4000: t=445 fs |Ez|axis=37.5 GV/m |Ez|wall=31.4 a=0.63 T=2991.2/3000.1/3008.8 MeV r_rms=0.27um inside=1.00 (2657s)
+step 5000: t=556 fs |Ez|axis=35.2 GV/m |Ez|wall=31.6 a=0.61 T=2990.7/3000.1/3009.2 MeV r_rms=0.27um inside=1.00 (3329s)
+step 6000: t=667 fs |Ez|axis=54.0 GV/m |Ez|wall=45.6 a=0.62 T=2990.1/3000.1/3009.8 MeV r_rms=0.28um inside=1.00 (3997s)
+step 7000: t=778 fs |Ez|axis=45.0 GV/m |Ez|wall=45.5 a=0.69 T=2989.5/3000.1/3010.3 MeV r_rms=0.28um inside=1.00 (4663s)
+step 8000: t=890 fs |Ez|axis=40.9 GV/m |Ez|wall=37.7 a=0.77 T=2988.9/3000.1/3010.5 MeV r_rms=0.28um inside=1.00 (5329s)
+step 9000: t=1001 fs |Ez|axis=28.8 GV/m |Ez|wall=20.4 a=0.59 T=2988.7/3000.1/3010.7 MeV r_rms=0.29um inside=1.00 (5995s)
+step 10000: t=1112 fs |Ez|axis=32.9 GV/m |Ez|wall=23.8 a=0.67 T=2988.8/3000.1/3010.8 MeV r_rms=0.29um inside=1.00 (6660s)
+step 11000: t=1223 fs |Ez|axis=39.3 GV/m |Ez|wall=25.9 a=0.62 T=2988.7/3000.1/3010.5 MeV r_rms=0.30um inside=1.00 (7322s)
+step 12000: t=1334 fs |Ez|axis=34.0 GV/m |Ez|wall=29.2 a=0.68 T=2988.6/3000.1/3010.7 MeV r_rms=0.30um inside=1.00 (7984s)

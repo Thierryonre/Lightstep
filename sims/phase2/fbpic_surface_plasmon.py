@@ -91,9 +91,14 @@ g0 = gT
 zb = z0 - 2.6 * c * tau - 2 * lam_sp if a.bunch == "behind" else z0 + a.bunch_dz_um * 1e-6
 if a.bunch_file:
     B = np.load(a.bunch_file)
-    sx = np.sqrt(np.mean(B["x"] ** 2 + B["y"] ** 2) / 2); f = a.match_sigr_R * R / sx      # x -> f x, u -> u / f
-    bunch = add_particle_bunch_from_arrays(sim, q=e, m=m_p, x=B["x"] * f, y=B["y"] * f, z=B["z"] + zb,
-                                           ux=B["ux"] / f, uy=B["uy"] / f, uz=B["uz"], w=B["w"])
+    # ideal transfer optics: a thin lens removes the linear x-ux correlation (beam brought to a waist),
+    # then an emittance-preserving demagnification x -> f x, u -> u / f matches the channel
+    xx, yy = B["x"] - B["x"].mean(), B["y"] - B["y"].mean()
+    ux = B["ux"] - B["ux"].mean() - np.mean(xx * B["ux"]) / np.mean(xx ** 2) * xx
+    uy = B["uy"] - B["uy"].mean() - np.mean(yy * B["uy"]) / np.mean(yy ** 2) * yy
+    sx = np.sqrt(np.mean(xx ** 2 + yy ** 2) / 2); f = a.match_sigr_R * R / sx
+    bunch = add_particle_bunch_from_arrays(sim, q=e, m=m_p, x=xx * f, y=yy * f, z=B["z"] + zb,
+                                           ux=ux / f, uy=uy / f, uz=B["uz"], w=B["w"])
 else:
     bunch = add_particle_bunch_gaussian(sim, q=e, m=m_p, sig_r=0.15 * R, sig_z=0.5 * lam_sp, n_emit=2e-10,
                                         gamma0=g0, sig_gamma=1e-4 * g0, n_physical_particles=1e4,

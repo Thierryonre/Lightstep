@@ -1,0 +1,139 @@
+{
+ "wave_phase_velocity_c": [
+  0.9719993232926584,
+  0.9739993716288969,
+  0.9749993957970163,
+  0.9799995166376049,
+  0.9769994441332457,
+  0.959999033275218,
+  0.9569989607708604,
+  0.9549989124346248,
+  0.9759994199651307,
+  0.9579989849389703,
+  0.976999444133255
+ ],
+ "wave_velocity_mean_c": 0.9691810733643164,
+ "wave_velocity_std_c": 0.009093855730749487,
+ "target_velocity_c": 0.9712051869134142,
+ "Ez_axis_max_in_train_GVm": 33.9650770656651,
+ "axis_over_wall_in_train": 1.1621415222869482,
+ "periods_behind": [
+  {
+   "period_behind": 1,
+   "Ez_axis_GVm": 13.477048346692689,
+   "Ez_wall_GVm": 5.7748890566955255
+  },
+  {
+   "period_behind": 2,
+   "Ez_axis_GVm": 8.391983768995606,
+   "Ez_wall_GVm": 5.27487667318815
+  },
+  {
+   "period_behind": 3,
+   "Ez_axis_GVm": 9.105052873185759,
+   "Ez_wall_GVm": 5.397745916490371
+  },
+  {
+   "period_behind": 4,
+   "Ez_axis_GVm": 5.069548154548935,
+   "Ez_wall_GVm": 3.3448539690324286
+  },
+  {
+   "period_behind": 5,
+   "Ez_axis_GVm": 6.48884401163881,
+   "Ez_wall_GVm": 3.9014977534676167
+  },
+  {
+   "period_behind": 6,
+   "Ez_axis_GVm": 6.4619012046013955,
+   "Ez_wall_GVm": 2.7849569565932693
+  },
+  {
+   "period_behind": 7,
+   "Ez_axis_GVm": 6.478811150509888,
+   "Ez_wall_GVm": 2.974743200701465
+  },
+  {
+   "period_behind": 8,
+   "Ez_axis_GVm": 3.50493577058542,
+   "Ez_wall_GVm": 2.4137721881138936
+  },
+  {
+   "period_behind": 9,
+   "Ez_axis_GVm": 6.110163959729542,
+   "Ez_wall_GVm": 2.657388142363403
+  },
+  {
+   "period_behind": 10,
+   "Ez_axis_GVm": 4.33420229258471,
+   "Ez_wall_GVm": 3.201122654770774
+  },
+  {
+   "period_behind": 11,
+   "Ez_axis_GVm": 3.79489116133498,
+   "Ez_wall_GVm": 3.860461876030275
+  },
+  {
+   "period_behind": 12,
+   "Ez_axis_GVm": 3.8156421163109018,
+   "Ez_wall_GVm": 2.934974699234562
+  },
+  {
+   "period_behind": 13,
+   "Ez_axis_GVm": 6.278825215452653,
+   "Ez_wall_GVm": 1.6676303427247783
+  },
+  {
+   "period_behind": 14,
+   "Ez_axis_GVm": 3.3590566772465986,
+   "Ez_wall_GVm": 2.749250854838225
+  },
+  {
+   "period_behind": 15,
+   "Ez_axis_GVm": 5.928245665853669,
+   "Ez_wall_GVm": 1.8168111885227287
+  },
+  {
+   "period_behind": 16,
+   "Ez_axis_GVm": 4.8818061610352474,
+   "Ez_wall_GVm": 3.346648752572785
+  },
+  {
+   "period_behind": 17,
+   "Ez_axis_GVm": 6.541412178016809,
+   "Ez_wall_GVm": 2.657455709372503
+  },
+  {
+   "period_behind": 18,
+   "Ez_axis_GVm": 22.434664911666147,
+   "Ez_wall_GVm": 2.6974329897594185
+  },
+  {
+   "period_behind": 19,
+   "Ez_axis_GVm": 11.70156086184756,
+   "Ez_wall_GVm": 2.6345298189924637
+  }
+ ],
+ "proton_T_mean_change_MeV": 0.08142652099604675,
+ "proton_T_std_MeV": [
+  1.3235603977697725,
+  6.555666610015674
+ ],
+ "proton_T_range_MeV": [
+  [
+   2996.787283966773,
+   3003.3160267277635
+  ],
+  [
+   2988.5958664650057,
+   3010.7213191837495
+  ]
+ ],
+ "proton_r_rms_um": [
+  0.26751838403329026,
+  0.3020609885716477
+ ],
+ "proton_frac_inside_R": 1.0,
+ "t_fs": 1334.2563807924832,
+ "protons_behind_envelope_um": -0.5749858391079234
+}
