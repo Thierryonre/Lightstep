@@ -370,6 +370,13 @@ relay. What decides the order is physics checked in simulation:
   protons. Its big advantage over the train: in the narrow channel the light itself slows to the
   proton speed (measured 0.966c vs 0.971c), so the protons stay inside the drive. This
   works only above ~1–2 GeV (S049).
+- **Simulated since (S050–S052):** the guided train gives **16 GV/m** on 1 GeV protons (first measurement
+  with protons; the surface plasmon gives 31 GV/m by the same metric at 3 GeV). A 3-line
+  surface-plasmon comb beats two colours only for the first ~0.1 mm, then falls out of step (single-mode
+  channel); at 0.39 mm two colours are 38 % ahead. Feeding the train's output bunch into a 1 GeV
+  surface plasmon failed: the 0.7 µm channel needs ~10× lower emittance than the train delivers, and
+  at 1 GeV the dense wall absorbs the light in < 0.1 mm. So the surface plasmon is a ≳ 3 GeV option
+  whose narrow channel is the main obstacle to combining it with other stages.
 - **Train and surface plasmon together:** the surface plasmon driven by two colours is a train with
   two lines. Using more lines spaced at the surface-wave frequency (a resonant surface-plasmon train)
   should build the wave up the way multi-pulse trains do — proposed GPU test.

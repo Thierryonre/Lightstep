@@ -1,0 +1,127 @@
+{
+ "wave_phase_velocity_c": [],
+ "wave_velocity_mean_c": null,
+ "wave_velocity_std_c": null,
+ "target_velocity_c": 0.8750256596748323,
+ "Ez_axis_max_in_train_GVm": 35.07034481573745,
+ "axis_over_wall_in_train": 1.8742490056480576,
+ "periods_behind": [
+  {
+   "period_behind": 1,
+   "Ez_axis_GVm": 25.735683873819745,
+   "Ez_wall_GVm": 9.22462614863788
+  },
+  {
+   "period_behind": 2,
+   "Ez_axis_GVm": 32.37378968093207,
+   "Ez_wall_GVm": 12.499816760743917
+  },
+  {
+   "period_behind": 3,
+   "Ez_axis_GVm": 26.743229831272387,
+   "Ez_wall_GVm": 8.907281468966955
+  },
+  {
+   "period_behind": 4,
+   "Ez_axis_GVm": 20.846942177912318,
+   "Ez_wall_GVm": 6.868216206314738
+  },
+  {
+   "period_behind": 5,
+   "Ez_axis_GVm": 35.11980083651387,
+   "Ez_wall_GVm": 9.838505147124852
+  },
+  {
+   "period_behind": 6,
+   "Ez_axis_GVm": 23.664958342692188,
+   "Ez_wall_GVm": 6.053384346023405
+  },
+  {
+   "period_behind": 7,
+   "Ez_axis_GVm": 7.611741725212506,
+   "Ez_wall_GVm": 4.244613376553236
+  },
+  {
+   "period_behind": 8,
+   "Ez_axis_GVm": 20.205979414014674,
+   "Ez_wall_GVm": 6.772858223531399
+  },
+  {
+   "period_behind": 9,
+   "Ez_axis_GVm": 21.305946463909304,
+   "Ez_wall_GVm": 7.760053076481448
+  },
+  {
+   "period_behind": 10,
+   "Ez_axis_GVm": 22.29068723755456,
+   "Ez_wall_GVm": 4.337346707228572
+  },
+  {
+   "period_behind": 11,
+   "Ez_axis_GVm": 31.533594067576747,
+   "Ez_wall_GVm": 13.042424613490867
+  },
+  {
+   "period_behind": 12,
+   "Ez_axis_GVm": 31.24263626594173,
+   "Ez_wall_GVm": 13.518629846508247
+  },
+  {
+   "period_behind": 13,
+   "Ez_axis_GVm": 9.845788731481383,
+   "Ez_wall_GVm": 4.400739822662756
+  },
+  {
+   "period_behind": 14,
+   "Ez_axis_GVm": 21.01360883464045,
+   "Ez_wall_GVm": 7.017893453806577
+  },
+  {
+   "period_behind": 15,
+   "Ez_axis_GVm": 22.131647055312122,
+   "Ez_wall_GVm": 7.039638783056766
+  },
+  {
+   "period_behind": 16,
+   "Ez_axis_GVm": 7.306929197517233,
+   "Ez_wall_GVm": 4.332449359514751
+  },
+  {
+   "period_behind": 17,
+   "Ez_axis_GVm": 9.46765343369446,
+   "Ez_wall_GVm": 6.05224557319134
+  },
+  {
+   "period_behind": 18,
+   "Ez_axis_GVm": 10.181711318767954,
+   "Ez_wall_GVm": 3.732577282991295
+  },
+  {
+   "period_behind": 19,
+   "Ez_axis_GVm": 0.0003780862862070957,
+   "Ez_wall_GVm": 0.002715119914893854
+  }
+ ],
+ "proton_T_mean_change_MeV": 0.0011885523042565183,
+ "proton_T_std_MeV": [
+  6.916764325800356,
+  6.916299333453081
+ ],
+ "proton_T_range_MeV": [
+  [
+   987.9245030650059,
+   1058.8580653987317
+  ],
+  [
+   987.9522864236823,
+   1058.8580653987317
+  ]
+ ],
+ "proton_r_rms_um": [
+  2.479835392124695,
+  29.70534459094791
+ ],
+ "proton_frac_inside_R": 0.00055,
+ "t_fs": 1334.2563807924832,
+ "protons_behind_envelope_um": -4.236197310046033
+}
