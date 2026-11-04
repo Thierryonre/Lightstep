@@ -94,3 +94,25 @@ for las, e in eL.items():
                 print(f"  {front:28s} {spk[17:]:15s} {pvk:26s} system {100*6/tot:5.2f} %  bill shares slow/train/SP = "
                       + "/".join(f"{100*p_/tot:.0f}" for p_ in parts))
 json.dump(out, open(os.path.join(ROOT, "results", "data", "combined_stages.json"), "w"), indent=1)
+
+# ---- (5) surface-plasmon efficiency MEASURED (S053, beam-loaded FBPIC, 1 pC, 0.65 mm) ----
+sp_meas = json.load(open(os.path.join(ROOT, "sims", "phase2", "fbpic_sp_loaded_out", "summary.json")))
+U0 = sp_meas["design"]["U_laser_expected_mJ"]; last = sp_meas["snaps"][-1]
+dU_beam = (last["T_mean"] - 3000.0) * 1e6 * 1e-12 * 1e3               # mJ  (1 pC x mean gain)
+dU_las = U0 - last["U_laser_mode1_mJ"]
+eta_pass = dU_beam / U0; eta_consumed = dU_beam / dU_las
+out["sp_measured"] = dict(U_laser0_mJ=U0, U_laser_end_mJ=last["U_laser_mode1_mJ"], beam_gain_mJ=dU_beam,
+                          laser_to_beam_single_pass=eta_pass, laser_to_beam_of_consumed=eta_consumed)
+print(f"\nSP measured: laser->beam {100*eta_pass:.2f} % of the injected laser per 0.65 mm pass, "
+      f"{100*eta_consumed:.1f} % of the laser energy consumed ({U0 - last['U_laser_mode1_mJ']:.2f} of {U0:.2f} mJ)")
+for las, e in eL.items():
+    tr = e * chain * 0.25
+    for tag, eta_sp in [("no reuse of leftover light", e * 0.62 * eta_pass), ("leftover light fully reused", e * 0.62 * eta_consumed)]:
+        for front, Tf, ef in [("RF to 0.5 GeV", 0.5, 0.15), ("electric FF 80 % rec. to 0.5 GeV", 0.5, 0.006)]:
+            w_sp = Tf / ef + 1.0 / tr + 4.5 / eta_sp
+            w_tr = Tf / ef + 5.5 / tr
+            out["staged"].append(dict(laser=las, front_end=front, sp="measured, " + tag, eta_sp_wallplug=eta_sp,
+                                      eff_with_SP=6 / w_sp, eff_train_to_6GeV=6 / w_tr))
+            print(f"  {las:9s} {front:32s} SP {tag:28s}: SP section {100*eta_sp:.2f} % -> system {100*6/w_sp:.2f} % "
+                  f"(train all the way instead: {100*6/w_tr:.2f} %)")
+json.dump(out, open(os.path.join(ROOT, "results", "data", "combined_stages.json"), "w"), indent=1)

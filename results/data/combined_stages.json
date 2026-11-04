@@ -672,6 +672,70 @@
     0.33096564234041137,
     0.6364723891161758
    ]
+  },
+  {
+   "laser": "today",
+   "front_end": "RF to 0.5 GeV",
+   "sp": "measured, no reuse of leftover light",
+   "eta_sp_wallplug": 0.000932013126175889,
+   "eff_with_SP": 0.0012212778256467168,
+   "eff_train_to_6GeV": 0.013319755365575232
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF 80 % rec. to 0.5 GeV",
+   "sp": "measured, no reuse of leftover light",
+   "eta_sp_wallplug": 0.000932013126175889,
+   "eff_with_SP": 0.0012017095427477057,
+   "eff_train_to_6GeV": 0.011310964894356125
+  },
+  {
+   "laser": "today",
+   "front_end": "RF to 0.5 GeV",
+   "sp": "measured, leftover light fully reused",
+   "eta_sp_wallplug": 0.0032318732769722005,
+   "eff_with_SP": 0.004062260409707664,
+   "eff_train_to_6GeV": 0.013319755365575232
+  },
+  {
+   "laser": "today",
+   "front_end": "electric FF 80 % rec. to 0.5 GeV",
+   "sp": "measured, leftover light fully reused",
+   "eta_sp_wallplug": 0.0032318732769722005,
+   "eff_with_SP": 0.003853539339113886,
+   "eff_train_to_6GeV": 0.011310964894356125
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF to 0.5 GeV",
+   "sp": "measured, no reuse of leftover light",
+   "eta_sp_wallplug": 0.001864026252351778,
+   "eff_with_SP": 0.0024408995310312783,
+   "eff_train_to_6GeV": 0.02644382998320317
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF 80 % rec. to 0.5 GeV",
+   "sp": "measured, no reuse of leftover light",
+   "eta_sp_wallplug": 0.001864026252351778,
+   "eff_with_SP": 0.0023639635636462236,
+   "eff_train_to_6GeV": 0.019550595132977786
+  },
+  {
+   "laser": "projected",
+   "front_end": "RF to 0.5 GeV",
+   "sp": "measured, leftover light fully reused",
+   "eta_sp_wallplug": 0.006463746553944401,
+   "eff_with_SP": 0.008106226595320723,
+   "eff_train_to_6GeV": 0.02644382998320317
+  },
+  {
+   "laser": "projected",
+   "front_end": "electric FF 80 % rec. to 0.5 GeV",
+   "sp": "measured, leftover light fully reused",
+   "eta_sp_wallplug": 0.006463746553944401,
+   "eff_with_SP": 0.007315540839190089,
+   "eff_train_to_6GeV": 0.019550595132977786
   }
  ],
  "sections": {
@@ -749,5 +813,12 @@
     "eff_PV_69pct_all_leftover": 0.06906608721023978
    }
   }
+ },
+ "sp_measured": {
+  "U_laser0_mJ": 1.7082669434033402,
+  "U_laser_end_mJ": 1.215634009553944,
+  "beam_gain_mJ": 0.012839735598905463,
+  "laser_to_beam_single_pass": 0.007516234888515234,
+  "laser_to_beam_of_consumed": 0.02606349416913065
  }
 }

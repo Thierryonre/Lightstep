@@ -395,6 +395,15 @@ RF proton linacs reach ~15 %. *(Corrected 2026-11-04: an earlier version said th
 dominates the energy bill in every non-RF version. It takes 27–69 % — the largest share only
 without energy recovery in the electric front end; otherwise the surface-plasmon stage is.)*
 
+**Surface-plasmon efficiency measured (S048, S053) [sim]:** over 2 mm the 3 GeV protons gain ≈ 18 MeV,
+saturating at ~1.1 mm (the wave slows to 0.968c, the laser depletes, the protons drift ahead of the pulse).
+With a real 1 pC bunch: +12.8 MeV per proton in 0.65 mm; laser→protons **0.75 % of the injected light per
+pass** (2.6 % of the light actually consumed; 71 % is left). Wall-plug for that section: 0.19 % (0.65 % if
+all leftover light is reused). That is well below the 2.5–5.8 % scenario in the table above, and makes
+the combined design *worse* (0.24–0.81 %) than RF + guided train alone (2.6 %, projected lasers).
+**On current evidence the surface plasmon should not be used as a stage.** The train's 2.5 % is still a
+chain estimate, not an end-to-end loaded 3D measurement — that comparison is the next test.
+
 **Efficiency of each section** [lit / est on sim; wall-plug → beam, today / projected lasers]:
 
 | Section | Today | Projected | With PV (realistic, S039) | With PV at 69 % on all leftover light |
